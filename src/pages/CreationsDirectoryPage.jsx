@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Search, MapPin, Palette, Hammer, Sparkles, Mail, Phone, Brush } from 'lucide-react';
+import { Search, MapPin, Palette, Hammer, Sparkles, Mail, Phone, Brush, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 import { getAllCreators } from '@/lib/creators';
 
 const categoriesConfig = {
@@ -19,6 +20,7 @@ const CreationsDirectoryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [creators, setCreators] = useState([]);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setCreators(getAllCreators());
@@ -56,11 +58,20 @@ const CreationsDirectoryPage = () => {
       </Helmet>
 
       <section className="py-16 mystical-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Button
+            onClick={() => navigate(-1)}
+            variant="outline"
+            className="mb-6 border-2 border-primary text-primary hover:bg-secondary"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour
+          </Button>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="text-center"
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               <span className="aura-text font-['Dancing_Script']">
