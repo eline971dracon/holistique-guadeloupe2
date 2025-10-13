@@ -53,7 +53,7 @@ const ElinePage = () => {
         price: "333€"
       }
     ],
-    aboutImage: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/131e7588c8e62709cefcef4ce33640bd.jpg"
+    aboutImage: "/moi 2 copy.jpg"
   };
 
   return (
