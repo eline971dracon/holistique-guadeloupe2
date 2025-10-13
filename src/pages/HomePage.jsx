@@ -14,9 +14,9 @@ const HomePage = () => {
     }} transition={{
       duration: 1
     }} className="py-20 md:py-32 flex items-center justify-center text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-transparent to-background z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-background/40 via-background/20 to-background/40 z-10"></div>
         <div className="absolute inset-0">
-          <img class="object-cover w-full h-full opacity-30" alt="Paysage mystique de Guadeloupe avec une lumière douce et éthérée" src="https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/img_2048-rMI6J.jpeg" />
+          <img class="object-cover w-full h-full opacity-60" alt="Lacs en forme de cœurs dans les montagnes" src="/unnamed (6) copy.jpg" />
         </div>
 
         <div className="relative z-20 max-w-4xl mx-auto px-4">
