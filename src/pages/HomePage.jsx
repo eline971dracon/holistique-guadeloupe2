@@ -186,7 +186,7 @@ Que chaque journée, même ordinaire, devienne un rappel à l’essentiel : éco
         }} transition={{
           duration: 0.8
         }} className="relative h-96 md:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
-            <img className="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" alt="Portrait d'Éline Dracon, thérapeute holistique, souriant avec une lumière douce en arrière-plan." src="https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/f62eb04fbb796f7fa1fa717d0cc99cd2.jpg" />
+            <img className="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" alt="Portrait d'Éline Dracon, thérapeute holistique, assise sur un rocher dans un jardin verdoyant en Guadeloupe." src="/moi 3.jpg" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           </motion.div>
         </div>
