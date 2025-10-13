@@ -94,81 +94,84 @@ const JourneyResultsPage = () => {
           className="crystal-card rounded-3xl p-8 md:p-12"
         >
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 aura-text font-['Dancing_Script']">
-              Votre Voyage Intérieur
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 font-['Dancing_Script']">
+              <span className="text-emerald-500">Votre</span>{' '}
+              <span className="text-teal-500">Voyage</span>{' '}
+              <span className="text-rose-500">Intérieur</span>
             </h1>
-            <p className="text-xl text-foreground/80">
-              Voici le parcours holistique que vous avez composé
+            <p className="text-2xl md:text-3xl text-foreground/90 font-light">
+              Récapitulatif de votre parcours personnalisé
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="crystal-card rounded-2xl p-6 border-2 border-primary/30">
+          <div className="space-y-8 mb-12">
+            <div className="crystal-card rounded-2xl p-8 border-l-4 border-teal-500">
               <div className="flex items-center gap-3 mb-4">
-                {IntentionIcon && <IntentionIcon className={`w-8 h-8 ${intentionInfo.color}`} />}
-                <h3 className="text-2xl font-semibold">Intention</h3>
+                <Waves className="w-10 h-10 text-teal-500" />
+                <h3 className="text-3xl font-bold">Intention</h3>
               </div>
-              <p className="text-lg">{intentionInfo?.label}</p>
+              <p className="text-xl text-foreground/80">{intentionInfo?.label}</p>
             </div>
 
-            <div className="crystal-card rounded-2xl p-6 border-2 border-primary/30">
+            <div className="crystal-card rounded-2xl p-8 border-l-4 border-emerald-500">
               <div className="flex items-center gap-3 mb-4">
-                <Clock className="w-8 h-8 text-primary" />
-                <h3 className="text-2xl font-semibold">Durée</h3>
+                <Sparkles className="w-10 h-10 text-emerald-500" />
+                <h3 className="text-3xl font-bold">Expériences Choisies</h3>
               </div>
-              <p className="text-lg">{durationLabels[formData.duration] || 'Non spécifiée'}</p>
-            </div>
-
-            <div className="crystal-card rounded-2xl p-6 border-2 border-primary/30">
-              <div className="flex items-center gap-3 mb-4">
-                <MapPin className="w-8 h-8 text-primary" />
-                <h3 className="text-2xl font-semibold">Lieu</h3>
-              </div>
-              <p className="text-lg font-bold text-primary text-xl">{locationLabels[formData.location] || 'Non spécifié'}</p>
-            </div>
-          </div>
-
-          {selectedExperiences.length > 0 && (
-            <div className="mb-12">
-              <h2 className="text-3xl font-bold mb-6 aura-text font-['Dancing_Script']">
-                Expériences sélectionnées
-              </h2>
+              {selectedExperiences.length > 0 ? (
+                <div className="space-y-4">
+                  {selectedExperiences.slice(0, 5).map((exp, index) => {
+                    const CategoryIcon = exp.categoryIcon;
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="border-l-2 border-emerald-500/30 pl-6"
+                      >
+                        <div className="flex items-start gap-3">
+                          <CategoryIcon className="w-6 h-6 text-emerald-500 mt-1" />
+                          <div>
+                            <p className="font-semibold text-lg">{exp.categoryTitle}</p>
+                            <p className="text-emerald-600">• {exp.label}</p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-foreground/60">Aucune expérience sélectionnée</p>
+              )}
               {selectedExperiences.length > 5 && (
-                <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                   <p className="text-amber-800 text-sm">
-                    <strong>Note :</strong> Vous avez sélectionné {selectedExperiences.length} expériences. Pour une journée optimale, nous vous recommandons de limiter à 5 expériences maximum.
+                    Vous avez sélectionné {selectedExperiences.length} expériences. Les 5 premières seront priorisées.
                   </p>
                 </div>
               )}
-              <div className="grid md:grid-cols-2 gap-4">
-                {selectedExperiences.slice(0, 5).map((exp, index) => {
-                  const CategoryIcon = exp.categoryIcon;
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="crystal-card rounded-xl p-4 flex items-start gap-3"
-                    >
-                      <div className="flex-shrink-0">
-                        <CategoryIcon className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-primary/80 text-sm">{exp.categoryTitle}</p>
-                        <p className="text-base">{exp.label}</p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-              {selectedExperiences.length > 5 && (
-                <p className="mt-4 text-sm text-foreground/60 text-center">
-                  Les 5 premières expériences seront priorisées dans votre voyage
-                </p>
-              )}
             </div>
-          )}
+
+            <div className="crystal-card rounded-2xl p-8 border-l-4 border-amber-500">
+              <div className="flex items-center gap-3 mb-4">
+                <Clock className="w-10 h-10 text-amber-500" />
+                <h3 className="text-3xl font-bold">Durée</h3>
+              </div>
+              <p className="text-xl text-foreground/80">{durationLabels[formData.duration] || 'Non spécifiée'}</p>
+            </div>
+
+            {formData.location && (
+              <div className="crystal-card rounded-2xl p-8 border-l-4 border-purple-500">
+                <div className="flex items-center gap-3 mb-4">
+                  <MapPin className="w-10 h-10 text-purple-500" />
+                  <h3 className="text-3xl font-bold">Lieu</h3>
+                </div>
+                <p className="text-xl text-foreground/80">{locationLabels[formData.location]}</p>
+              </div>
+            )}
+          </div>
+
 
           <div className="crystal-card rounded-2xl p-8 bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/30">
             <div className="text-center">
