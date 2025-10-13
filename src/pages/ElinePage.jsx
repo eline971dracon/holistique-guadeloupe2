@@ -53,7 +53,7 @@ const ElinePage = () => {
         price: "333€"
       }
     ],
-    aboutImage: "/moi 2 copy.jpg"
+    aboutImage: "/unnamed.png"
   };
 
   return (
