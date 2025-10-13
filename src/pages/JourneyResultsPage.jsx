@@ -102,7 +102,7 @@ const JourneyResultsPage = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="crystal-card rounded-2xl p-6 border-2 border-primary/30">
               <div className="flex items-center gap-3 mb-4">
                 {IntentionIcon && <IntentionIcon className={`w-8 h-8 ${intentionInfo.color}`} />}
@@ -124,89 +124,53 @@ const JourneyResultsPage = () => {
                 <MapPin className="w-8 h-8 text-primary" />
                 <h3 className="text-2xl font-semibold">Lieu</h3>
               </div>
-              <p className="text-lg">{locationLabels[formData.location] || 'Non spécifié'}</p>
+              <p className="text-lg font-bold text-primary text-xl">{locationLabels[formData.location] || 'Non spécifié'}</p>
             </div>
+          </div>
 
-            <div className="crystal-card rounded-2xl p-6 border-2 border-primary/30">
-              <div className="flex items-center gap-3 mb-4">
-                <Sparkles className="w-8 h-8 text-primary" />
-                <h3 className="text-2xl font-semibold">Expériences</h3>
+          {selectedExperiences.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold mb-6 aura-text font-['Dancing_Script']">
+                Expériences sélectionnées
+              </h2>
+              {selectedExperiences.length > 5 && (
+                <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p className="text-amber-800 text-sm">
+                    <strong>Note :</strong> Vous avez sélectionné {selectedExperiences.length} expériences. Pour une journée optimale, nous vous recommandons de limiter à 5 expériences maximum.
+                  </p>
+                </div>
+              )}
+              <div className="grid md:grid-cols-2 gap-4">
+                {selectedExperiences.slice(0, 5).map((exp, index) => {
+                  const CategoryIcon = exp.categoryIcon;
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="crystal-card rounded-xl p-4 flex items-start gap-3"
+                    >
+                      <div className="flex-shrink-0">
+                        <CategoryIcon className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-primary/80 text-sm">{exp.categoryTitle}</p>
+                        <p className="text-base">{exp.label}</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
-              <p className="text-lg">{selectedExperiences.length} expérience{selectedExperiences.length > 1 ? 's' : ''} sélectionnée{selectedExperiences.length > 1 ? 's' : ''}</p>
+              {selectedExperiences.length > 5 && (
+                <p className="mt-4 text-sm text-foreground/60 text-center">
+                  Les 5 premières expériences seront priorisées dans votre voyage
+                </p>
+              )}
             </div>
-          </div>
-
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-6 aura-text font-['Dancing_Script']">
-              Expériences sélectionnées
-            </h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {selectedExperiences.map((exp, index) => {
-                const CategoryIcon = exp.categoryIcon;
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="crystal-card rounded-xl p-4 flex items-start gap-3"
-                  >
-                    <div className="flex-shrink-0">
-                      <CategoryIcon className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-primary/80 text-sm">{exp.categoryTitle}</p>
-                      <p className="text-base">{exp.label}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
+          )}
 
           <div className="crystal-card rounded-2xl p-8 bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/30">
-            <h2 className="text-3xl font-bold mb-6 aura-text font-['Dancing_Script'] text-center">
-              Prochaines étapes
-            </h2>
-
-            <div className="space-y-6 mb-8">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                  1
-                </div>
-                <div>
-                  <h4 className="font-semibold text-lg mb-1">Consultation personnalisée</h4>
-                  <p className="text-foreground/80">
-                    Eline vous contactera pour affiner votre voyage et créer un programme sur mesure adapté à vos besoins.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                  2
-                </div>
-                <div>
-                  <h4 className="font-semibold text-lg mb-1">Sélection des praticiens</h4>
-                  <p className="text-foreground/80">
-                    Nous identifierons les thérapeutes et créateurs en harmonie avec vos intentions.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                  3
-                </div>
-                <div>
-                  <h4 className="font-semibold text-lg mb-1">Réservation et préparation</h4>
-                  <p className="text-foreground/80">
-                    Nous organiserons votre journée avec tous les détails pratiques pour une expérience fluide et magique.
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <div className="text-center">
               <Link to="/contact">
                 <Button size="lg" className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-lg px-8 py-4 rounded-full shadow-lg energy-pulse">
