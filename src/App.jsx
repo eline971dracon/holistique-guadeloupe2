@@ -17,6 +17,7 @@ import DirectoryGatePage from '@/pages/DirectoryGatePage';
 import RegistrationTypePage from '@/pages/RegistrationTypePage';
 import EditTherapistProfilePage from '@/pages/EditTherapistProfilePage';
 import MyInnerJourneyPage from '@/pages/MyInnerJourneyPage';
+import JourneyResultsPage from '@/pages/JourneyResultsPage';
 import ServiceDetailPage from '@/pages/ServiceDetailPage';
 import RituelDomeEauTerrePage from '@/pages/RituelDomeEauTerrePage';
 import TerrePage from '@/pages/TerrePage';
@@ -59,6 +60,7 @@ function App() {
         <Route path="/blog/eau-memoire" element={<EauMemoirePage />} />
         <Route path="/mon-compte/modifier-profil" element={<EditTherapistProfilePage />} />
         <Route path="/mon-voyage-interieur" element={<MyInnerJourneyPage />} />
+        <Route path="/mon-voyage-interieur/resultats" element={<JourneyResultsPage />} />
         <Route path="/porte/terre" element={<TerrePage />} />
         <Route path="/porte/eau" element={<EauPage />} />
         <Route path="/porte/feu" element={<FeuPage />} />

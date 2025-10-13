@@ -195,9 +195,7 @@ const MyInnerJourneyPage = () => {
     if (currentStepIndex < journeySteps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     } else {
-      // Final step: navigate to results
-      console.log("Final form data:", formData);
-      // navigate('/mon-voyage-interieur/resultats'); // Example of final navigation
+      navigate('/mon-voyage-interieur/resultats', { state: { formData } });
     }
   };
 
@@ -281,7 +279,7 @@ const MyInnerJourneyPage = () => {
                         Précédent
                     </Button>
                     <Button onClick={handleNext} size="lg" className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white" disabled={isNextDisabled()}>
-                        {currentStepIndex === journeySteps.length - 1 ? '🚧 Voir les résultats' : 'Suivant'}
+                        {currentStepIndex === journeySteps.length - 1 ? 'Voir les résultats' : 'Suivant'}
                         <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
                 </div>
