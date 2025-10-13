@@ -40,6 +40,7 @@ const JourneyResultsPage = () => {
     }
 
     const { formData } = location.state;
+    console.log('Form Data:', formData);
     const experiences = [];
 
     if (formData.experience) {
