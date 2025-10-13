@@ -1,0 +1,200 @@
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Mountain, ArrowLeft, ChevronDown, Footprints, Leaf, Wind, Sprout, Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const mantras = [
+  "Je suis racine, je suis solide, je suis Terre.",
+  "Chaque souffle m’ancre dans le présent.",
+  "Je fais confiance à la stabilité de la Vie.",
+  "Mes racines nourrissent ma force intérieure."
+];
+
+const rituals = [
+  "Ferme les yeux, inspire profondément et visualise des racines sous tes pieds.",
+  "Pose ta main sur ton ventre, respire lentement et sens la lourdeur bienveillante de la Terre.",
+  "Penche-toi en avant, touche le sol et imagine que tu déposes tes fardeaux à la Terre.",
+  "Assieds-toi quelques instants en silence, le dos droit, et ressens la stabilité de ton axe."
+];
+
+const parcoursData = [
+  {
+    id: 'ancrage',
+    title: "Une journée d’ancrage",
+    icon: Footprints,
+    details: [
+      "Marche pieds nus en forêt ou au jardin médicinal",
+      "Bain de pieds aux plantes racinaires (goyave, vétiver)",
+      "Repas végétal nourrissant (igname, patate douce, lentilles)"
+    ]
+  },
+  {
+    id: 'sensoriel',
+    title: "Un parcours sensoriel dans la forêt",
+    icon: Leaf,
+    details: [
+      "Marche méditative pieds nus",
+      "Pause assise contre un arbre sacré",
+      "Cercle de tambour ou méditation guidée"
+    ]
+  },
+  {
+    id: 'matiere',
+    title: "Un soin & un atelier matière",
+    icon: Wind,
+    details: [
+      "Massage à l’argile rouge ou pierres volcaniques",
+      "Atelier artisanal : modelage d’argile, poterie, sculpture bois"
+    ]
+  },
+  {
+    id: 'racines',
+    title: "Une immersion “retour aux racines”",
+    icon: Sprout,
+    details: [
+      "Cueillette de plantes médicinales locales",
+      "Atelier cuisine avec racines et tubercules",
+      "Rituel collectif d’ancrage (tambour, silence partagé)"
+    ]
+  }
+];
+
+const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+const ParcoursAccordion = ({ parcours, isOpen, onToggle }) => {
+  const Icon = parcours.icon;
+  return (
+    <motion.div layout className="crystal-card rounded-2xl overflow-hidden border border-white/20">
+      <button onClick={onToggle} className="w-full p-6 text-left flex justify-between items-center hover:bg-white/10 transition-colors">
+        <div className="flex items-center gap-4">
+          <Icon className="w-8 h-8 text-emerald-400" />
+          <h3 className="text-xl font-semibold text-white">{parcours.title}</h3>
+        </div>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
+          <ChevronDown className="w-6 h-6 text-white/70" />
+        </motion.div>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-6">
+              <ul className="space-y-3 list-disc list-inside text-white/80 pl-4">
+                {parcours.details.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+              <div className="mt-6">
+                <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-full">
+                  Choisir ce parcours <Heart className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
+const TerrePage = () => {
+  const [mantra, setMantra] = useState('');
+  const [ritual, setRitual] = useState('');
+  const [openParcours, setOpenParcours] = useState(null);
+
+  useEffect(() => {
+    setMantra(getRandomItem(mantras));
+    setRitual(getRandomItem(rituals));
+  }, []);
+
+  const handleToggle = (id) => {
+    setOpenParcours(openParcours === id ? null : id);
+  };
+
+  return (
+    <div className={`pt-24 pb-12 min-h-screen bg-cover bg-center bg-fixed`} style={{ backgroundImage: `url('https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/4b14d4d42e8c4c50eca0e27511199bd8.jpg')` }}>
+      <Helmet>
+        <title>Porte de la Terre - Retour aux Racines</title>
+        <meta name="description" content="Explorez l'ancrage et la guérison à travers des rituels et parcours connectés à l'élément Terre." />
+      </Helmet>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Link to="/" className="inline-flex items-center text-primary hover:text-emerald-300 transition-colors mb-8 group">
+            <ArrowLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
+            Retour aux Portes
+          </Link>
+        </motion.div>
+
+        <motion.header
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-block p-4 rounded-full bg-emerald-900/50 border-2 border-emerald-500 mb-4">
+            <Mountain className="w-12 h-12 text-emerald-300" />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+            <span className="aura-text font-['Dancing_Script']">Porte de la Terre</span>
+          </h1>
+          <p className="text-2xl text-emerald-200">Retour aux Racines</p>
+        </motion.header>
+
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          className="mb-16 p-8 crystal-card rounded-3xl text-center"
+        >
+          <h2 className="text-3xl font-bold mb-6 font-['Dancing_Script'] aura-text">Motivation du Jour</h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-emerald-300 mb-2">Mantra d'Ancrage</h3>
+              <p className="text-2xl italic text-white">"{mantra}"</p>
+            </div>
+            <div className="w-1/2 h-px bg-white/20 mx-auto"></div>
+            <div>
+              <h3 className="text-lg font-semibold text-emerald-300 mb-2">Rituel d'Ancrage</h3>
+              <p className="text-xl text-white/90">{ritual}</p>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+        >
+          <h2 className="text-4xl font-bold mb-8 text-center">
+            <span className="aura-text font-['Dancing_Script']">Choisissez votre Parcours Terre</span>
+          </h2>
+          <div className="space-y-6">
+            {parcoursData.map(p => (
+              <ParcoursAccordion
+                key={p.id}
+                parcours={p}
+                isOpen={openParcours === p.id}
+                onToggle={() => handleToggle(p.id)}
+              />
+            ))}
+          </div>
+        </motion.section>
+      </div>
+    </div>
+  );
+};
+
+export default TerrePage;

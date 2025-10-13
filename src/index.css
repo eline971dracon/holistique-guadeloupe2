@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: 148 39% 48%; /* Element Bois */
+  --primary-foreground: 40 33% 96%;
+  --secondary: 30 31% 89%; /* Element Terre (Beige) */
+  --secondary-foreground: 25 55% 25%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 202 65% 43%; /* Element Eau */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 358 96% 61%; /* Element Feu */
+  --destructive-foreground: 0 0% 100%;
+  --border: 30 20% 80%;
+  --input: 30 20% 85%;
+  --ring: 148 39% 48%;
+  --background: 220 15% 25%; /* Fond sombre pastel */
+  --foreground: 210 40% 98%; /* Texte clair */
+  --card: 220 15% 30%; /* Cartes légèrement plus claires */
+  --card-foreground: 210 40% 98%;
+  --popover: 220 15% 20%;
+  --popover-foreground: 210 40% 98%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  @apply bg-background text-foreground;
+  min-height: 100vh;
+}
+
+.mystical-gradient {
+  background: linear-gradient(135deg, 
+    hsla(148, 39%, 48%, 0.1) 0%,
+    hsla(202, 65%, 43%, 0.1) 25%,
+    hsla(358, 96%, 61%, 0.1) 50%,
+    hsla(30, 54%, 51%, 0.1) 75%,
+    hsla(0, 0%, 95%, 0.1) 100%);
+}
+
+.chakra-glow {
+  box-shadow: 0 0 30px hsla(148, 39%, 48%, 0.3), 
+              0 0 60px hsla(202, 65%, 43%, 0.2), 
+              0 0 90px hsla(358, 96%, 61%, 0.1);
+}
+
+.energy-pulse {
+  animation: energyPulse 3s ease-in-out infinite;
+}
+
+@keyframes energyPulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.9; 
+  }
+  50% { 
+    transform: scale(1.05); 
+    opacity: 1; 
+  }
+}
+
+.floating-animation {
+  animation: floating 6s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.crystal-card {
+  background: linear-gradient(145deg, 
+    hsla(var(--card), 0.8), 
+    hsla(var(--card), 0.6));
+  backdrop-filter: blur(10px);
+  border: 1px solid hsla(var(--border), 0.2);
+  @apply shadow-lg;
+}
+
+.crystal-card-dark {
+  background-color: rgba(36, 41, 51, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.therapy-card {
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, hsla(var(--card), 0.8), hsla(var(--card), 0.6));
+  backdrop-filter: blur(15px);
+  border: 1px solid hsla(var(--border), 0.1);
+}
+
+.therapy-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px hsla(148, 39%, 48%, 0.2);
+}
+
+.quiz-option {
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, hsla(var(--card), 0.9), hsla(var(--card), 0.7));
+  backdrop-filter: blur(10px);
+  border: 2px solid transparent;
+}
+
+.quiz-option:hover {
+  border-color: hsla(148, 39%, 48%, 0.5);
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px hsla(148, 39%, 48%, 0.15);
+}
+
+.quiz-option.selected {
+  border-color: hsl(var(--primary));
+  background: linear-gradient(145deg, hsla(148, 39%, 48%, 0.1), hsla(148, 39%, 48%, 0.05));
+}
+
+.mandala-bg {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2385CB33' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3Ccircle cx='30' cy='30' r='12'/%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Aura Text - moved here for global access */
+.aura-text {
+  background: linear-gradient(135deg, #85CB33, #56CFE1, #F94144, #F8961E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
