@@ -12,7 +12,7 @@ const Navigation = () => {
     { to: '/mon-voyage-interieur', text: 'Mon Voyage Intérieur', icon: Compass },
     { to: '/annuaire-gate', text: 'Annuaire', icon: Users },
     { to: '/rejoindre-aventure', text: 'Artiste Thérapeute', icon: Feather },
-    { to: '/eline-dracon', text: 'Éline Dracon', icon: Heart },
+    { to: '/eline-dracon', text: 'A propos', icon: Heart },
     { to: '/blog', text: 'Blog', icon: BookOpen },
   ];
 
