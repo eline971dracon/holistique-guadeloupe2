@@ -37,7 +37,7 @@ const ElineAboutSection = ({
         }} transition={{
           duration: 0.8
         }} className="relative h-96 md:h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-            <img className="absolute inset-0 w-full h-full object-cover" src="https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/fef0c7ad45e6c0415e2936b54f0b1262.jpg" alt="Éline Dracon dans un cadre naturel, connectée à l'environnement." />
+            <img className="absolute inset-0 w-full h-full object-cover" src={image} alt="Éline Dracon dans un cadre naturel, connectée à l'environnement." />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div className="absolute bottom-0 left-0 p-8 text-white">
               <h3 className="text-3xl font-bold font-['Dancing_Script'] aura-text">Éline Dracon</h3>
