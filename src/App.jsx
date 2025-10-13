@@ -25,7 +25,6 @@ import EauPage from '@/pages/EauPage';
 import FeuPage from '@/pages/FeuPage';
 import AirPage from '@/pages/AirPage';
 import EtherPage from '@/pages/EtherPage';
-import TherapistGatePage from '@/pages/TherapistGatePage';
 import ContactPage from '@/pages/ContactPage';
 import { Toaster } from '@/components/ui/toaster';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -51,7 +50,6 @@ function App() {
         <Route path="/soin/rituel-dome-eau-terre" element={<RituelDomeEauTerrePage />} />
         <Route path="/soin/:serviceId" element={<ServiceDetailPage />} />
         <Route path="/therapeute/:id" element={<TherapistProfile />} />
-        <Route path="/rejoindre-aventure" element={<TherapistGatePage />} />
         <Route path="/inscription-type" element={<RegistrationTypePage />} />
         <Route path="/inscription-formulaire" element={<RegisterTherapistPage />} />
         <Route path="/blog" element={<BlogPage />} />
