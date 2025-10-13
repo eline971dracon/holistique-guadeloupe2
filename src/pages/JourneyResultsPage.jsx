@@ -161,15 +161,13 @@ const JourneyResultsPage = () => {
               <p className="text-xl text-foreground/80">{durationLabels[formData.duration] || 'Non spécifiée'}</p>
             </div>
 
-            {formData.location && (
-              <div className="crystal-card rounded-2xl p-8 border-l-4 border-purple-500">
-                <div className="flex items-center gap-3 mb-4">
-                  <MapPin className="w-10 h-10 text-purple-500" />
-                  <h3 className="text-3xl font-bold">Lieu</h3>
-                </div>
-                <p className="text-xl text-foreground/80">{locationLabels[formData.location]}</p>
+            <div className="crystal-card rounded-2xl p-8 border-l-4 border-purple-500">
+              <div className="flex items-center gap-3 mb-4">
+                <MapPin className="w-10 h-10 text-purple-500" />
+                <h3 className="text-3xl font-bold">Lieu</h3>
               </div>
-            )}
+              <p className="text-xl text-foreground/80">{locationLabels[formData.location] || 'Non spécifié'}</p>
+            </div>
           </div>
 
 
