@@ -9,7 +9,7 @@ import ElineContactSection from '@/components/eline/ElineContactSection';
 const ElinePage = () => {
   const elineData = {
     name: "Éline",
-    image: "/moi 2.jpg",
+    image: "/unnamed.png",
     mantra: "L'eau se souvient de tout, ton corps aussi.",
     stats: {
       location: "Pointe-à-Pitre, Nature ou Capesterre Belle Eau"
@@ -41,19 +41,19 @@ const ElinePage = () => {
         icon: Waves,
         title: "Rituel entre Terre, Vagues et Feu",
         description: "Rituel sensoriel au cœur des éléments",
-        duration: "120 minutes", 
+        duration: "120 minutes",
         price: "222€"
       },
       {
         id: "rituel-terre-feu",
         icon: Sparkles,
         title: "Rituel Roots Renaissance",
-        description: "Rituel de transmutation, d’ancrage et de renaissance.",
+        description: "Rituel de transmutation, d'ancrage et de renaissance.",
         duration: "Demi-journée",
         price: "333€"
       }
     ],
-    aboutImage: "/unnamed.png"
+    aboutImage: "/moi 2.jpg"
   };
 
   return (
