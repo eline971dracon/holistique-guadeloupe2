@@ -9,7 +9,7 @@ import ElineContactSection from '@/components/eline/ElineContactSection';
 const ElinePage = () => {
   const elineData = {
     name: "Éline",
-    image: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/edc3b0d882ea62edde7b49eef530a893.jpg",
+    image: "/moi 2.jpg",
     mantra: "L'eau se souvient de tout, ton corps aussi.",
     stats: {
       location: "Pointe-à-Pitre, Nature ou Capesterre Belle Eau"
