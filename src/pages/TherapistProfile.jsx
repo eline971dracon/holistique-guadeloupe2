@@ -60,8 +60,8 @@ const TherapistProfile = () => {
         approach: data.approach || '',
         messageBienvenue: data.message_bienvenue || '',
         mantra: data.mantra || '',
-        image: data.portrait_photo_url || '/placeholder-therapist.jpg',
-        artPhoto: data.art_photo_url || '',
+        image: data.profile_photo_url || data.portrait_photo_url || '/placeholder-therapist.jpg',
+        practicePhotos: data.practice_photos || [],
         elements: data.elements || [],
         experiences: data.experiences || {},
         intentions: data.intentions || [],
@@ -218,6 +218,34 @@ const TherapistProfile = () => {
 
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+            {therapist.practicePhotos && therapist.practicePhotos.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl md:text-5xl font-bold mb-10 text-center">
+                  <span className="aura-text font-['Dancing_Script']">Mon Univers</span>
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {therapist.practicePhotos.map((photo, index) => (
+                    <motion.img
+                      key={index}
+                      src={photo}
+                      alt={`Pratique ${index + 1}`}
+                      className="w-full h-64 object-cover rounded-2xl shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                      onClick={() => window.open(photo, '_blank')}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}

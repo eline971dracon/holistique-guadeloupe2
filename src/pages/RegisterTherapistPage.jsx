@@ -47,8 +47,8 @@ const RegisterTherapistPage = () => {
     approach: '',
     messageBienvenue: '',
     mantra: '',
-    portraitPhoto: null,
-    artPhoto: null,
+    profilePhoto: null,
+    practicePhotos: [null, null, null, null],
     elements: [],
     experiences: {},
   });
@@ -62,16 +62,31 @@ const RegisterTherapistPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    if (files.length > 0) {
-      const file = files[0];
+  const handleFileChange = (e, isProfile = false, index = null) => {
+    const file = e.target.files[0];
+    if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({ ...prev, [name]: reader.result }));
+        if (isProfile) {
+          setFormData(prev => ({ ...prev, profilePhoto: reader.result }));
+        } else if (index !== null) {
+          setFormData(prev => {
+            const newPracticePhotos = [...prev.practicePhotos];
+            newPracticePhotos[index] = reader.result;
+            return { ...prev, practicePhotos: newPracticePhotos };
+          });
+        }
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const removePracticePhoto = (index) => {
+    setFormData(prev => {
+      const newPracticePhotos = [...prev.practicePhotos];
+      newPracticePhotos[index] = null;
+      return { ...prev, practicePhotos: newPracticePhotos };
+    });
   };
 
   const handleElementChange = (elementId) => {
@@ -116,6 +131,16 @@ const RegisterTherapistPage = () => {
       return;
     }
 
+    const uploadedPracticePhotos = formData.practicePhotos.filter(photo => photo !== null);
+    if (uploadedPracticePhotos.length < 4) {
+      toast({
+        variant: "destructive",
+        title: "Photos manquantes",
+        description: "Veuillez ajouter au moins 4 photos de votre pratique ou espace de soin."
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -133,8 +158,8 @@ const RegisterTherapistPage = () => {
           approach: formData.approach,
           message_bienvenue: formData.messageBienvenue,
           mantra: formData.mantra,
-          portrait_photo_url: formData.portraitPhoto,
-          art_photo_url: formData.artPhoto,
+          profile_photo_url: formData.profilePhoto,
+          practice_photos: uploadedPracticePhotos,
           elements: formData.elements,
           experiences: formData.experiences,
           is_approved: true
@@ -310,43 +335,94 @@ const RegisterTherapistPage = () => {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold aura-text flex items-center gap-2">
                 <ImageIcon className="w-6 h-6 text-rose-500" />
-                Photos
+                Photos de votre Pratique
               </h2>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="portraitPhoto" className="text-lg mb-2 block">
-                    Photo Portrait
-                  </Label>
-                  {formData.portraitPhoto && (
-                    <img src={formData.portraitPhoto} alt="Aperçu portrait" className="w-full h-48 object-cover rounded-xl mb-3" />
+              <div>
+                <Label className="text-lg mb-3 block">
+                  Photo de Profil (optionnel)
+                </Label>
+                <div className="grid gap-4">
+                  {formData.profilePhoto ? (
+                    <div className="relative">
+                      <img
+                        src={formData.profilePhoto}
+                        alt="Aperçu profil"
+                        className="w-full h-64 object-cover rounded-xl"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setFormData(prev => ({ ...prev, profilePhoto: null }))}
+                        className="absolute top-2 right-2"
+                      >
+                        Retirer
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary transition-colors cursor-pointer">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileChange(e, true)}
+                        className="hidden"
+                        id="profile-photo"
+                      />
+                      <label htmlFor="profile-photo" className="cursor-pointer">
+                        <ImageIcon className="w-12 h-12 mx-auto mb-3 text-foreground/40" />
+                        <p className="text-foreground/70">Cliquez pour ajouter votre photo</p>
+                      </label>
+                    </div>
                   )}
-                  <Input
-                    id="portraitPhoto"
-                    name="portraitPhoto"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="h-12"
-                  />
                 </div>
+              </div>
 
-                <div>
-                  <Label htmlFor="artPhoto" className="text-lg mb-2 block">
-                    Photo Art / Univers
-                  </Label>
-                  {formData.artPhoto && (
-                    <img src={formData.artPhoto} alt="Aperçu art" className="w-full h-48 object-cover rounded-xl mb-3" />
-                  )}
-                  <Input
-                    id="artPhoto"
-                    name="artPhoto"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="h-12"
-                  />
+              <div>
+                <Label className="text-lg mb-3 block">
+                  Photos de votre Pratique ou Espace de Soin * (minimum 4)
+                </Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {formData.practicePhotos.map((photo, index) => (
+                    <div key={index} className="relative">
+                      {photo ? (
+                        <div className="relative group">
+                          <img
+                            src={photo}
+                            alt={`Pratique ${index + 1}`}
+                            className="w-full h-48 object-cover rounded-xl"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => removePracticePhoto(index)}
+                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            ×
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="border-2 border-dashed border-border rounded-xl h-48 flex flex-col items-center justify-center hover:border-primary transition-colors cursor-pointer">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e, false, index)}
+                            className="hidden"
+                            id={`practice-photo-${index}`}
+                          />
+                          <label htmlFor={`practice-photo-${index}`} className="cursor-pointer text-center p-4">
+                            <ImageIcon className="w-8 h-8 mx-auto mb-2 text-foreground/40" />
+                            <p className="text-sm text-foreground/70">Photo {index + 1}</p>
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
+                <p className="text-sm text-foreground/60 mt-2">
+                  {formData.practicePhotos.filter(p => p !== null).length} / 4 photos ajoutées (minimum requis)
+                </p>
               </div>
             </div>
 

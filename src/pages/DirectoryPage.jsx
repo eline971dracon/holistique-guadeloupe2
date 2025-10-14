@@ -50,7 +50,7 @@ const DirectoryPage = () => {
         name: t.name,
         commune: t.commune,
         vibrationalPhrase: t.vibrational_phrase || '',
-        portraitPhoto: t.portrait_photo_url || '',
+        portraitPhoto: (t.practice_photos && t.practice_photos.length > 0) ? t.practice_photos[0] : (t.profile_photo_url || t.portrait_photo_url || ''),
         elements: t.elements || [],
         experiences: t.experiences || {}
       }));
