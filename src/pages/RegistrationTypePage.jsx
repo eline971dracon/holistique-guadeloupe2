@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { Heart, Palette, Lock, Eye, EyeOff } from 'lucide-react';
@@ -13,9 +13,16 @@ const RegistrationTypePage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
-  const correctPassword = 'SIRIUS 2025';
+  useEffect(() => {
+    if (location.state?.authenticated) {
+      setIsUnlocked(true);
+    }
+  }, [location.state]);
+
+  const correctPassword = 'Sirius2025';
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();

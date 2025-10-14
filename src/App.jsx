@@ -54,6 +54,7 @@ function App() {
         <Route path="/therapeute/:id" element={<TherapistProfile />} />
         <Route path="/rejoindre-aventure" element={<TherapistGatePage />} />
         <Route path="/inscription-type" element={<RegistrationTypePage />} />
+        <Route path="/choix-inscription" element={<RegistrationTypePage />} />
         <Route path="/inscription-therapeute" element={<RegisterTherapistPage />} />
         <Route path="/inscription-artiste" element={<CreatorRegistrationPage />} />
         <Route path="/blog" element={<BlogPage />} />

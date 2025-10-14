@@ -5,7 +5,7 @@ import { Search, MapPin, Palette, Hammer, Sparkles, Mail, Phone, Brush, ArrowLef
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
-import { getAllCreators } from '@/lib/creators';
+import { supabase } from '@/lib/customSupabaseClient';
 
 const categoriesConfig = {
   "Peinture": { icon: Palette, label: "Peinture" },
@@ -23,8 +23,39 @@ const CreationsDirectoryPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCreators(getAllCreators());
-  }, []);
+    const fetchCreators = async () => {
+      const { data, error } = await supabase
+        .from('creators')
+        .select('*')
+        .eq('is_approved', true);
+
+      if (error) {
+        console.error('Error fetching creators:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Erreur',
+          description: 'Impossible de charger les créateurs'
+        });
+        return;
+      }
+
+      const formattedCreators = data.map(c => ({
+        id: c.id,
+        name: c.name,
+        commune: c.commune,
+        craft: c.art_type,
+        category: c.art_type,
+        description: c.description || '',
+        image: c.portfolio_url || '/placeholder-art.jpg',
+        inspiration: c.inspiration || '',
+        message: c.message || ''
+      }));
+
+      setCreators(formattedCreators);
+    };
+
+    fetchCreators();
+  }, [toast]);
 
   const filteredCreators = useMemo(() => {
     return creators.filter(creator => {

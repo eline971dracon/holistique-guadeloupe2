@@ -71,7 +71,7 @@ const CreatorRegistrationPage = () => {
           description: formData.description,
           inspiration: formData.inspiration,
           message: formData.message,
-          is_approved: false
+          is_approved: true
         }])
         .select();
 
@@ -80,13 +80,13 @@ const CreatorRegistrationPage = () => {
       }
 
       toast({
-        title: 'Inscription envoyée avec succès !',
-        description: 'Votre fiche créateur sera visible après validation. Nous vous contacterons très prochainement.',
+        title: 'Fiche créée avec succès !',
+        description: 'Votre fiche créateur est maintenant visible dans l\'annuaire.',
       });
 
       setTimeout(() => {
         navigate('/annuaire-creations');
-      }, 2000);
+      }, 1500);
     } catch (error) {
       console.error('Error submitting creator:', error);
       toast({

@@ -22,7 +22,7 @@ const TherapistGatePage = () => {
     e.preventDefault();
     if (password === 'Sirius2025') {
       setError('');
-      navigate('/inscription-therapeute');
+      navigate('/choix-inscription', { state: { authenticated: true } });
     } else {
       setError('Cette clé n\'ouvre pas la porte. Êtes-vous sûr(e) d\'être au bon endroit ?');
     }
