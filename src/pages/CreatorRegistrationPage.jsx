@@ -31,6 +31,7 @@ const CreatorRegistrationPage = () => {
     phone: '',
     commune: '',
     artType: '',
+    artTypeOther: '',
     description: '',
     inspiration: '',
     message: '',
@@ -86,6 +87,15 @@ const CreatorRegistrationPage = () => {
       return;
     }
 
+    if (formData.artType === 'Autre' && !formData.artTypeOther) {
+      toast({
+        title: 'Informations manquantes',
+        description: 'Veuillez préciser votre type d\'art.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     const uploadedArtPhotos = formData.artPhotos.filter(photo => photo !== null);
     if (uploadedArtPhotos.length < 4) {
       toast({
@@ -99,6 +109,8 @@ const CreatorRegistrationPage = () => {
     setIsSubmitting(true);
 
     try {
+      const finalArtType = formData.artType === 'Autre' ? formData.artTypeOther : formData.artType;
+
       const { data, error } = await supabase
         .from('creators')
         .insert([{
@@ -106,7 +118,7 @@ const CreatorRegistrationPage = () => {
           email: formData.email,
           phone: formData.phone,
           commune: formData.commune,
-          art_type: formData.artType,
+          art_type: finalArtType,
           description: formData.description,
           inspiration: formData.inspiration,
           message: formData.message,
@@ -354,17 +366,44 @@ const CreatorRegistrationPage = () => {
                 <Label htmlFor="artType" className="text-lg mb-2">
                   Type d'Art / Création *
                 </Label>
-                <Input
-                  id="artType"
-                  name="artType"
-                  type="text"
-                  placeholder="Ex: Peinture, Sculpture, Photographie, Art textile..."
-                  value={formData.artType}
-                  onChange={handleChange}
-                  required
-                  className="h-12 text-lg"
-                />
+                <Select value={formData.artType} onValueChange={(value) => handleSelectChange('artType', value)}>
+                  <SelectTrigger className="h-12 text-lg">
+                    <SelectValue placeholder="Sélectionnez votre type d'art" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Peinture">Peinture</SelectItem>
+                    <SelectItem value="Sculpture">Sculpture</SelectItem>
+                    <SelectItem value="Bijoux">Bijoux</SelectItem>
+                    <SelectItem value="Tissage">Tissage</SelectItem>
+                    <SelectItem value="Poterie">Poterie</SelectItem>
+                    <SelectItem value="Photographie">Photographie</SelectItem>
+                    <SelectItem value="Art Textile">Art Textile</SelectItem>
+                    <SelectItem value="Art Floral">Art Floral</SelectItem>
+                    <SelectItem value="Autre">Autre</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+
+              {formData.artType === 'Autre' && (
+                <div>
+                  <Label htmlFor="artTypeOther" className="text-lg mb-2">
+                    Précisez votre type d'art *
+                  </Label>
+                  <Input
+                    id="artTypeOther"
+                    name="artTypeOther"
+                    type="text"
+                    placeholder="Décrivez votre type d'art..."
+                    value={formData.artTypeOther}
+                    onChange={handleChange}
+                    required
+                    className="h-12 text-lg"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-6">
 
               <div>
                 <Label htmlFor="description" className="text-lg mb-2">
