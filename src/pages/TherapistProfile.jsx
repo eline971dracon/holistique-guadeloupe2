@@ -148,33 +148,33 @@ const TherapistProfile = () => {
                 })}
               </div>
 
-              <p className="text-lg text-slate-600 leading-relaxed italic">
+              <p className="text-lg text-white leading-relaxed italic">
                 "{therapist.vibrationalPhrase}"
               </p>
-              
+
               {therapist.mantra && (
-                <p className="text-xl text-emerald-600 font-semibold">
+                <p className="text-xl text-white font-semibold">
                   Mantra: "{therapist.mantra}"
                 </p>
               )}
 
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center space-x-3 text-slate-700">
-                  <Star className="w-5 h-5 text-amber-500" />
+                <div className="flex items-center space-x-3 text-white">
+                  <Star className="w-5 h-5 text-amber-400" />
                   <span>{therapist.rating > 0 ? `${therapist.rating}/5` : 'Nouveau membre'}</span>
                 </div>
-                <div className="flex items-center space-x-3 text-slate-700">
-                  <MapPin className="w-5 h-5 text-teal-500" />
+                <div className="flex items-center space-x-3 text-white">
+                  <MapPin className="w-5 h-5 text-teal-400" />
                   <span>Terre d'Ancrage: {therapist.commune}</span>
                 </div>
-                <div className="flex items-center space-x-3 text-slate-700">
-                  <Phone className="w-5 h-5 text-purple-500" />
+                <div className="flex items-center space-x-3 text-white">
+                  <Phone className="w-5 h-5 text-purple-400" />
                   <span>Reliance directe: {therapist.relianceDirecte}</span>
                 </div>
                 {therapist.presenceInspirante && (
-                  <div className="flex items-center space-x-3 text-slate-700">
-                    <Globe className="w-5 h-5 text-cyan-500" />
+                  <div className="flex items-center space-x-3 text-white">
+                    <Globe className="w-5 h-5 text-cyan-400" />
                     <span>Présence inspirante: {therapist.presenceInspirante}</span>
                   </div>
                 )}
@@ -231,7 +231,7 @@ const TherapistProfile = () => {
                 </span>
                 </h2>
                 {therapist.mission && (
-                    <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                    <p className="text-xl text-foreground max-w-3xl mx-auto">
                         {therapist.mission}
                     </p>
                 )}
@@ -260,7 +260,7 @@ const TherapistProfile = () => {
                         </div>
                         <ul className="space-y-2 list-inside">
                           {subcategories.map(subcategoryId => (
-                            <li key={subcategoryId} className="flex items-center text-slate-700">
+                            <li key={subcategoryId} className="flex items-center text-foreground">
                                 <Heart className="w-4 h-4 mr-3 text-emerald-400 flex-shrink-0" />
                                 {getSubcategoryLabel(categoryId, subcategoryId)}
                             </li>
@@ -286,7 +286,7 @@ const TherapistProfile = () => {
                       Mon Approche
                   </span>
                   </h2>
-                  <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                  <p className="text-xl text-foreground max-w-3xl mx-auto">
                       {therapist.approach}
                   </p>
               </motion.div>
@@ -305,7 +305,7 @@ const TherapistProfile = () => {
                       Un Message Pour Toi
                   </span>
                   </h2>
-                  <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                  <p className="text-xl text-foreground max-w-3xl mx-auto">
                       "{therapist.messageBienvenue}"
                   </p>
               </motion.div>
