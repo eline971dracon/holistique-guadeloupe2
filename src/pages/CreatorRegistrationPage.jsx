@@ -33,7 +33,9 @@ const CreatorRegistrationPage = () => {
     artType: '',
     description: '',
     inspiration: '',
-    message: ''
+    message: '',
+    profilePhoto: null,
+    artPhotos: [null, null, null, null]
   });
 
   const handleChange = (e) => {
@@ -45,6 +47,33 @@ const CreatorRegistrationPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e, isProfile = false, index = null) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (isProfile) {
+          setFormData(prev => ({ ...prev, profilePhoto: reader.result }));
+        } else if (index !== null) {
+          setFormData(prev => {
+            const newArtPhotos = [...prev.artPhotos];
+            newArtPhotos[index] = reader.result;
+            return { ...prev, artPhotos: newArtPhotos };
+          });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeArtPhoto = (index) => {
+    setFormData(prev => {
+      const newArtPhotos = [...prev.artPhotos];
+      newArtPhotos[index] = null;
+      return { ...prev, artPhotos: newArtPhotos };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -52,6 +81,16 @@ const CreatorRegistrationPage = () => {
       toast({
         title: 'Informations manquantes',
         description: 'Veuillez remplir tous les champs obligatoires.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    const uploadedArtPhotos = formData.artPhotos.filter(photo => photo !== null);
+    if (uploadedArtPhotos.length < 4) {
+      toast({
+        title: 'Photos manquantes',
+        description: 'Veuillez ajouter au moins 4 photos de vos créations artistiques.',
         variant: 'destructive'
       });
       return;
@@ -71,6 +110,8 @@ const CreatorRegistrationPage = () => {
           description: formData.description,
           inspiration: formData.inspiration,
           message: formData.message,
+          profile_photo_url: formData.profilePhoto,
+          art_photos: uploadedArtPhotos,
           is_approved: true
         }])
         .select();
@@ -206,6 +247,100 @@ const CreatorRegistrationPage = () => {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold aura-text flex items-center gap-2">
+                <ImageIcon className="w-6 h-6 text-purple-500" />
+                Photos de vos Créations
+              </h2>
+
+              <div>
+                <Label className="text-lg mb-3 block">
+                  Photo de Profil (optionnel)
+                </Label>
+                <div className="grid gap-4">
+                  {formData.profilePhoto ? (
+                    <div className="relative">
+                      <img
+                        src={formData.profilePhoto}
+                        alt="Aperçu profil"
+                        className="w-full h-64 object-cover rounded-xl"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setFormData(prev => ({ ...prev, profilePhoto: null }))}
+                        className="absolute top-2 right-2"
+                      >
+                        Retirer
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary transition-colors cursor-pointer">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileChange(e, true)}
+                        className="hidden"
+                        id="profile-photo"
+                      />
+                      <label htmlFor="profile-photo" className="cursor-pointer">
+                        <ImageIcon className="w-12 h-12 mx-auto mb-3 text-foreground/40" />
+                        <p className="text-foreground/70">Cliquez pour ajouter votre photo</p>
+                      </label>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-lg mb-3 block">
+                  Photos de vos Créations * (minimum 4)
+                </Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {formData.artPhotos.map((photo, index) => (
+                    <div key={index} className="relative">
+                      {photo ? (
+                        <div className="relative group">
+                          <img
+                            src={photo}
+                            alt={`Création ${index + 1}`}
+                            className="w-full h-48 object-cover rounded-xl"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => removeArtPhoto(index)}
+                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            ×
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="border-2 border-dashed border-border rounded-xl h-48 flex flex-col items-center justify-center hover:border-primary transition-colors cursor-pointer">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e, false, index)}
+                            className="hidden"
+                            id={`art-photo-${index}`}
+                          />
+                          <label htmlFor={`art-photo-${index}`} className="cursor-pointer text-center p-4">
+                            <ImageIcon className="w-8 h-8 mx-auto mb-2 text-foreground/40" />
+                            <p className="text-sm text-foreground/70">Photo {index + 1}</p>
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-foreground/60 mt-2">
+                  {formData.artPhotos.filter(p => p !== null).length} / 4 photos ajoutées (minimum requis)
+                </p>
               </div>
             </div>
 

@@ -48,7 +48,7 @@ const CreationsDirectoryPage = () => {
         craft: c.art_type,
         category: c.art_type,
         description: c.description || '',
-        image: c.portfolio_url || '/placeholder-art.jpg',
+        image: (c.art_photos && c.art_photos.length > 0) ? c.art_photos[0] : (c.profile_photo_url || '/placeholder-art.jpg'),
         inspiration: c.inspiration || '',
         message: c.message || ''
       }));

@@ -89,9 +89,9 @@ const CreatorProfile = () => {
             className="lg:col-span-1"
           >
             <div className="crystal-card rounded-3xl p-6 sticky top-24">
-              {creator.portfolio_url && (
+              {creator.profile_photo_url && (
                 <img
-                  src={creator.portfolio_url}
+                  src={creator.profile_photo_url}
                   alt={creator.name}
                   className="w-full h-64 object-cover rounded-2xl mb-6 shadow-lg"
                 />
@@ -142,6 +142,26 @@ const CreatorProfile = () => {
             transition={{ delay: 0.2 }}
             className="lg:col-span-2 space-y-8"
           >
+            {creator.art_photos && creator.art_photos.length > 0 && (
+              <div className="crystal-card rounded-3xl p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <Palette className="w-8 h-8 text-purple-500" />
+                  <h2 className="text-2xl font-bold aura-text">Galerie de Créations</h2>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {creator.art_photos.map((photo, index) => (
+                    <img
+                      key={index}
+                      src={photo}
+                      alt={`Création ${index + 1}`}
+                      className="w-full h-48 object-cover rounded-xl shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                      onClick={() => window.open(photo, '_blank')}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
             {creator.description && (
               <div className="crystal-card rounded-3xl p-8">
                 <div className="flex items-center gap-3 mb-6">
