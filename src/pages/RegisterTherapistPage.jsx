@@ -189,7 +189,7 @@ const RegisterTherapistPage = () => {
           intentions: formData.intentions,
           durations: formData.durations,
           locations: formData.locations,
-          is_approved: false
+          is_approved: true
         }])
         .select();
 
@@ -199,7 +199,7 @@ const RegisterTherapistPage = () => {
 
       toast({
         title: "Fiche créée avec succès !",
-        description: "Votre fiche vibratoire rayonne maintenant dans l'annuaire. Elle sera visible après validation.",
+        description: "Votre fiche vibratoire rayonne maintenant dans l'annuaire et est immédiatement visible !",
       });
 
       navigate('/annuaire');
