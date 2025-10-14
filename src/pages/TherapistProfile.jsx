@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 import { ArrowLeft, Star, Heart, Phone, Globe, MapPin, Calendar, Sun, Wind, Droplets, Mountain, Star as StarIcon, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { getTherapistById } from '@/lib/therapists';
+import { supabase } from '@/lib/customSupabaseClient';
 import { experienceCategories } from '@/lib/journeyData';
 
 const elementConfig = {
@@ -24,13 +24,57 @@ const TherapistProfile = () => {
   const [therapist, setTherapist] = useState(null);
 
   useEffect(() => {
-    const fetchedTherapist = getTherapistById(parseInt(id));
-    if (fetchedTherapist) {
-      setTherapist(fetchedTherapist);
-    } else {
-      navigate('/annuaire');
-    }
-  }, [id, navigate]);
+    const fetchTherapist = async () => {
+      const { data, error } = await supabase
+        .from('therapists')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching therapist:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Erreur',
+          description: 'Impossible de charger le profil'
+        });
+        navigate('/annuaire');
+        return;
+      }
+
+      if (!data) {
+        navigate('/annuaire');
+        return;
+      }
+
+      const formattedTherapist = {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        commune: data.commune,
+        relianceDirecte: data.reliance_directe || '',
+        presenceInspirante: data.presence_inspirante || '',
+        vibrationalPhrase: data.vibrational_phrase || '',
+        mission: data.mission || '',
+        approach: data.approach || '',
+        messageBienvenue: data.message_bienvenue || '',
+        mantra: data.mantra || '',
+        image: data.portrait_photo_url || '/placeholder-therapist.jpg',
+        artPhoto: data.art_photo_url || '',
+        elements: data.elements || [],
+        experiences: data.experiences || {},
+        intentions: data.intentions || [],
+        durations: data.durations || [],
+        locations: data.locations || [],
+        rating: 0
+      };
+
+      setTherapist(formattedTherapist);
+    };
+
+    fetchTherapist();
+  }, [id, navigate, toast]);
   
   const handleManageProfile = () => {
     localStorage.setItem('loggedInUserId', therapist.id);
