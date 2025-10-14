@@ -26,13 +26,15 @@ const DirectoryPage = () => {
   const initialNeed = new URLSearchParams(location.search).get('besoin') || '';
   const [selectedNeed, setSelectedNeed] = useState(initialNeed);
   const [therapists, setTherapists] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchTherapists = async () => {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from('therapists')
-        .select('*')
+        .select('id, name, commune, vibrational_phrase, profile_photo_url, portrait_photo_url, practice_photos, elements, experiences')
         .eq('is_approved', true);
 
       if (error) {
@@ -42,6 +44,7 @@ const DirectoryPage = () => {
           title: 'Erreur',
           description: 'Impossible de charger les thérapeutes'
         });
+        setIsLoading(false);
         return;
       }
 
@@ -50,12 +53,14 @@ const DirectoryPage = () => {
         name: t.name,
         commune: t.commune,
         vibrationalPhrase: t.vibrational_phrase || '',
-        portraitPhoto: (t.practice_photos && t.practice_photos.length > 0) ? t.practice_photos[0] : (t.profile_photo_url || t.portrait_photo_url || ''),
+        image: (t.practice_photos && t.practice_photos.length > 0) ? t.practice_photos[0] : (t.profile_photo_url || t.portrait_photo_url || ''),
         elements: t.elements || [],
-        experiences: t.experiences || {}
+        experiences: t.experiences || {},
+        rating: 0
       }));
 
       setTherapists(formattedTherapists);
+      setIsLoading(false);
     };
 
     fetchTherapists();
@@ -166,21 +171,27 @@ const DirectoryPage = () => {
 
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <p className="text-lg text-foreground/80">
-              {filteredTherapists.length} thérapeute{filteredTherapists.length > 1 ? 's' : ''} trouvé{filteredTherapists.length > 1 ? 's' : ''}
-            </p>
-          </div>
+          {isLoading ? (
+            <div className="text-center py-16">
+              <div className="inline-block w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <p className="mt-4 text-lg text-foreground/80">Chargement des thérapeutes...</p>
+            </div>
+          ) : (
+            <>
+              <div className="mb-8">
+                <p className="text-lg text-foreground/80">
+                  {filteredTherapists.length} thérapeute{filteredTherapists.length > 1 ? 's' : ''} trouvé{filteredTherapists.length > 1 ? 's' : ''}
+                </p>
+              </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {filteredTherapists.map((therapist, index) => {
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {filteredTherapists.map((therapist, index) => {
               return (
                 <motion.div
                   key={therapist.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.3) }}
                   className="therapy-card rounded-3xl p-6 relative overflow-hidden flex flex-col"
                 >
                   {therapist.featured && (
@@ -191,10 +202,11 @@ const DirectoryPage = () => {
 
                   <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="relative">
-                      <img 
-                        className="w-full h-48 md:h-full object-cover rounded-2xl shadow-lg" 
+                      <img
+                        className="w-full h-48 md:h-full object-cover rounded-2xl shadow-lg"
                         alt={`${therapist.name}, thérapeute holistique`}
-                        src={therapist.image} />
+                        src={therapist.image}
+                        loading="lazy" />
                     </div>
 
                     <div className="md:col-span-2 space-y-4 flex flex-col">
@@ -242,10 +254,10 @@ const DirectoryPage = () => {
                   </div>
                 </motion.div>
               );
-            })}
-          </div>
+                })}
+              </div>
 
-          {filteredTherapists.length === 0 && (
+              {filteredTherapists.length === 0 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -267,6 +279,8 @@ const DirectoryPage = () => {
                 Voir tous les thérapeutes
               </Button>
             </motion.div>
+              )}
+            </>
           )}
         </div>
       </section>

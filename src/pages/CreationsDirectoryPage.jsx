@@ -19,14 +19,16 @@ const CreationsDirectoryPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [creators, setCreators] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCreators = async () => {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from('creators')
-        .select('*')
+        .select('id, name, email, phone, commune, art_type, description, profile_photo_url, art_photos, inspiration, message')
         .eq('is_approved', true);
 
       if (error) {
@@ -36,6 +38,7 @@ const CreationsDirectoryPage = () => {
           title: 'Erreur',
           description: 'Impossible de charger les créateurs'
         });
+        setIsLoading(false);
         return;
       }
 
@@ -54,6 +57,7 @@ const CreationsDirectoryPage = () => {
       }));
 
       setCreators(formattedCreators);
+      setIsLoading(false);
     };
 
     fetchCreators();
@@ -146,27 +150,34 @@ const CreationsDirectoryPage = () => {
 
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <p className="text-lg text-foreground/80">
-              {filteredCreators.length} création{filteredCreators.length > 1 ? 's' : ''} trouvée{filteredCreators.length > 1 ? 's' : ''}
-            </p>
-          </div>
+          {isLoading ? (
+            <div className="text-center py-16">
+              <div className="inline-block w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <p className="mt-4 text-lg text-foreground/80">Chargement des créations...</p>
+            </div>
+          ) : (
+            <>
+              <div className="mb-8">
+                <p className="text-lg text-foreground/80">
+                  {filteredCreators.length} création{filteredCreators.length > 1 ? 's' : ''} trouvée{filteredCreators.length > 1 ? 's' : ''}
+                </p>
+              </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredCreators.map((creator, index) => {
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredCreators.map((creator, index) => {
               return (
                 <motion.div
                   key={creator.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: Math.min(index * 0.05, 0.3) }}
                   className="therapy-card rounded-3xl p-6 relative overflow-hidden flex flex-col"
                 >
-                  <img 
-                    className="w-full h-48 object-cover rounded-2xl shadow-lg mb-4" 
+                  <img
+                    className="w-full h-48 object-cover rounded-2xl shadow-lg mb-4"
                     alt={`Création par ${creator.name}`}
-                    src={creator.image} />
+                    src={creator.image}
+                    loading="lazy" />
 
                   <div className="flex-grow flex flex-col">
                     <h3 className="text-2xl font-bold mb-1">
@@ -202,10 +213,10 @@ const CreationsDirectoryPage = () => {
                   </div>
                 </motion.div>
               );
-            })}
-          </div>
+                })}
+              </div>
 
-          {filteredCreators.length === 0 && (
+              {filteredCreators.length === 0 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -227,6 +238,8 @@ const CreationsDirectoryPage = () => {
                 Voir toutes les créations
               </Button>
             </motion.div>
+              )}
+            </>
           )}
         </div>
       </section>
