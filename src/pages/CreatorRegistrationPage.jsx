@@ -97,10 +97,10 @@ const CreatorRegistrationPage = () => {
     }
 
     const uploadedArtPhotos = formData.artPhotos.filter(photo => photo !== null);
-    if (uploadedArtPhotos.length < 4) {
+    if (uploadedArtPhotos.length < 1) {
       toast({
         title: 'Photos manquantes',
-        description: 'Veuillez ajouter au moins 4 photos de vos créations artistiques.',
+        description: 'Veuillez ajouter au moins 1 photo de vos créations artistiques.',
         variant: 'destructive'
       });
       return;
@@ -310,7 +310,7 @@ const CreatorRegistrationPage = () => {
 
               <div>
                 <Label className="text-lg mb-3 block">
-                  Photos de vos Créations * (minimum 4)
+                  Photos de vos Créations * (minimum 1)
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {formData.artPhotos.map((photo, index) => (
@@ -351,7 +351,7 @@ const CreatorRegistrationPage = () => {
                   ))}
                 </div>
                 <p className="text-sm text-foreground/60 mt-2">
-                  {formData.artPhotos.filter(p => p !== null).length} / 4 photos ajoutées (minimum requis)
+                  {formData.artPhotos.filter(p => p !== null).length} photo(s) ajoutée(s) (minimum 1 requis)
                 </p>
               </div>
             </div>

@@ -132,11 +132,11 @@ const RegisterTherapistPage = () => {
     }
 
     const uploadedPracticePhotos = formData.practicePhotos.filter(photo => photo !== null);
-    if (uploadedPracticePhotos.length < 4) {
+    if (uploadedPracticePhotos.length < 1) {
       toast({
         variant: "destructive",
         title: "Photos manquantes",
-        description: "Veuillez ajouter au moins 4 photos de votre pratique ou espace de soin."
+        description: "Veuillez ajouter au moins 1 photo de votre pratique ou espace de soin."
       });
       return;
     }
@@ -380,7 +380,7 @@ const RegisterTherapistPage = () => {
 
               <div>
                 <Label className="text-lg mb-3 block">
-                  Photos de votre Pratique ou Espace de Soin * (minimum 4)
+                  Photos de votre Pratique ou Espace de Soin * (minimum 1)
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {formData.practicePhotos.map((photo, index) => (
@@ -421,7 +421,7 @@ const RegisterTherapistPage = () => {
                   ))}
                 </div>
                 <p className="text-sm text-foreground/60 mt-2">
-                  {formData.practicePhotos.filter(p => p !== null).length} / 4 photos ajoutées (minimum requis)
+                  {formData.practicePhotos.filter(p => p !== null).length} photo(s) ajoutée(s) (minimum 1 requis)
                 </p>
               </div>
             </div>
