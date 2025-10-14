@@ -5,7 +5,7 @@ import { Search, MapPin, Star, Heart, Phone, Feather, Zap, Waves, Leaf, BrainCir
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { getAllTherapists } from '@/lib/therapists';
+import { supabase } from '@/lib/customSupabaseClient';
 
 const needsConfig = {
   "réconfort": { icon: Feather, label: "Réconfort", categoryIds: ["soin_energetique", "nettoyage_purification"] },
@@ -29,7 +29,36 @@ const DirectoryPage = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    setTherapists(getAllTherapists());
+    const fetchTherapists = async () => {
+      const { data, error } = await supabase
+        .from('therapists')
+        .select('*')
+        .eq('is_approved', true);
+
+      if (error) {
+        console.error('Error fetching therapists:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Erreur',
+          description: 'Impossible de charger les thérapeutes'
+        });
+        return;
+      }
+
+      const formattedTherapists = data.map(t => ({
+        id: t.id,
+        name: t.name,
+        commune: t.commune,
+        vibrationalPhrase: t.vibrational_phrase || '',
+        portraitPhoto: t.portrait_photo_url || '',
+        elements: t.elements || [],
+        experiences: t.experiences || {}
+      }));
+
+      setTherapists(formattedTherapists);
+    };
+
+    fetchTherapists();
   }, []);
 
   useEffect(() => {

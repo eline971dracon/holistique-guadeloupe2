@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 import { experienceCategories } from '@/lib/journeyData';
-import { addTherapist } from '@/lib/therapists';
+import { supabase } from '@/lib/customSupabaseClient';
 
 
 const guadeloupeCommunes = [
@@ -60,8 +60,11 @@ const RegisterTherapistPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [openSection, setOpenSection] = useState('identity');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
+    phone: '',
     commune: '',
     relianceDirecte: '',
     presenceInspirante: '',
@@ -145,11 +148,11 @@ const RegisterTherapistPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.portraitPhoto || !formData.artPhoto) {
-        toast({ variant: "destructive", title: "Photos manquantes", description: "Veuillez télécharger une photo portrait et une photo d'art." });
+
+    if (!formData.name || !formData.email || !formData.commune) {
+        toast({ variant: "destructive", title: "Champs obligatoires manquants", description: "Veuillez remplir au moins le nom, l'email et la commune." });
         return;
     }
     if (Object.keys(formData.experiences).length === 0) {
@@ -161,14 +164,54 @@ const RegisterTherapistPage = () => {
       return;
     }
 
-    const newTherapist = addTherapist(formData);
+    setIsSubmitting(true);
 
-    toast({
-      title: "🌺 Fiche Créée !",
-      description: "Votre fiche vibratoire rayonne maintenant dans l'annuaire.",
-    });
-    
-    navigate('/annuaire');
+    try {
+      const { data, error } = await supabase
+        .from('therapists')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          commune: formData.commune,
+          reliance_directe: formData.relianceDirecte,
+          presence_inspirante: formData.presenceInspirante,
+          vibrational_phrase: formData.vibrationalPhrase,
+          mission: formData.mission,
+          approach: formData.approach,
+          message_bienvenue: formData.messageBienvenue,
+          mantra: formData.mantra,
+          portrait_photo_url: formData.portraitPhoto,
+          art_photo_url: formData.artPhoto,
+          elements: formData.elements,
+          experiences: formData.experiences,
+          intentions: formData.intentions,
+          durations: formData.durations,
+          locations: formData.locations,
+          is_approved: false
+        }])
+        .select();
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Fiche créée avec succès !",
+        description: "Votre fiche vibratoire rayonne maintenant dans l'annuaire. Elle sera visible après validation.",
+      });
+
+      navigate('/annuaire');
+    } catch (error) {
+      console.error('Error submitting therapist:', error);
+      toast({
+        variant: "destructive",
+        title: "Erreur lors de l'enregistrement",
+        description: error.message || "Une erreur est survenue. Veuillez réessayer."
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const Section = ({ id, title, icon: Icon, children }) => (
@@ -226,6 +269,14 @@ const RegisterTherapistPage = () => {
                         <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
                     </div>
                     <div>
+                        <Label htmlFor="email" className="font-semibold text-lg">Email*</Label>
+                        <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+                    </div>
+                    <div>
+                        <Label htmlFor="phone" className="font-semibold text-lg">Téléphone*</Label>
+                        <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} required />
+                    </div>
+                    <div>
                         <Label htmlFor="commune" className="font-semibold text-lg">Terre d'Ancrage*</Label>
                         <Select onValueChange={(value) => handleSelectChange('commune', value)} value={formData.commune}>
                             <SelectTrigger><SelectValue placeholder="Sélectionnez..." /></SelectTrigger>
@@ -233,8 +284,8 @@ const RegisterTherapistPage = () => {
                         </Select>
                     </div>
                     <div>
-                        <Label htmlFor="relianceDirecte" className="font-semibold text-lg">Reliance directe (téléphone)*</Label>
-                        <Input id="relianceDirecte" name="relianceDirecte" type="tel" value={formData.relianceDirecte} onChange={handleChange} required />
+                        <Label htmlFor="relianceDirecte" className="font-semibold text-lg">Reliance directe (téléphone)</Label>
+                        <Input id="relianceDirecte" name="relianceDirecte" type="tel" value={formData.relianceDirecte} onChange={handleChange} />
                     </div>
                     <div>
                         <Label htmlFor="presenceInspirante" className="font-semibold text-lg">Présence inspirante (lien)</Label>
@@ -367,8 +418,12 @@ const RegisterTherapistPage = () => {
             </Section>
 
             <div className="text-center pt-8 border-t border-primary/20">
-              <Button type="submit" className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                Je fais rayonner ma médecine 🌺
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 energy-pulse"
+              >
+                {isSubmitting ? 'Enregistrement en cours...' : 'Je fais rayonner ma médecine 🌺'}
               </Button>
             </div>
             

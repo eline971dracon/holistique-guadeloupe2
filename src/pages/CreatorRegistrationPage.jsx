@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { supabase } from '@/lib/customSupabaseClient';
 
 const guadeloupeCommunes = [
   "Les Abymes", "Anse-Bertrand", "Baie-Mahault", "Baillif", "Basse-Terre",
@@ -59,20 +60,38 @@ const CreatorRegistrationPage = () => {
     setIsSubmitting(true);
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const { data, error } = await supabase
+        .from('creators')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          commune: formData.commune,
+          art_type: formData.artType,
+          description: formData.description,
+          inspiration: formData.inspiration,
+          message: formData.message,
+          is_approved: false
+        }])
+        .select();
+
+      if (error) {
+        throw error;
+      }
 
       toast({
-        title: 'Inscription envoyée !',
-        description: 'Nous examinerons votre candidature et vous contacterons très prochainement.',
+        title: 'Inscription envoyée avec succès !',
+        description: 'Votre fiche créateur sera visible après validation. Nous vous contacterons très prochainement.',
       });
 
       setTimeout(() => {
-        navigate('/');
+        navigate('/annuaire-creations');
       }, 2000);
     } catch (error) {
+      console.error('Error submitting creator:', error);
       toast({
-        title: 'Erreur',
-        description: 'Une erreur est survenue. Veuillez réessayer.',
+        title: 'Erreur lors de l\'enregistrement',
+        description: error.message || 'Une erreur est survenue. Veuillez réessayer.',
         variant: 'destructive'
       });
     } finally {
