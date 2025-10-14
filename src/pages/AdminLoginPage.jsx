@@ -32,7 +32,9 @@ const AdminLoginPage = () => {
     setIsLoading(true);
 
     setTimeout(() => {
-      if (password === ADMIN_PASSWORD) {
+      const trimmedPassword = password.trim();
+
+      if (trimmedPassword === ADMIN_PASSWORD) {
         sessionStorage.setItem('adminAccess', 'true');
         sessionStorage.setItem('adminPassword', ADMIN_PASSWORD);
 
@@ -46,7 +48,7 @@ const AdminLoginPage = () => {
         toast({
           variant: "destructive",
           title: "Accès refusé",
-          description: "Mot de passe vibratoire incorrect."
+          description: `Mot de passe incorrect. Vous avez saisi: "${trimmedPassword}"`
         });
       }
       setIsLoading(false);
@@ -115,9 +117,12 @@ const AdminLoginPage = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-2">
             <p className="text-xs text-foreground/50">
               Accès réservé aux gardiens de Terra Nova
+            </p>
+            <p className="text-xs text-primary font-mono">
+              Code attendu: SIRIUS2025
             </p>
           </div>
         </div>
