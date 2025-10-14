@@ -42,6 +42,8 @@ const CreationsDirectoryPage = () => {
       const formattedCreators = data.map(c => ({
         id: c.id,
         name: c.name,
+        email: c.email,
+        phone: c.phone,
         commune: c.commune,
         craft: c.art_type,
         category: c.art_type,
@@ -69,11 +71,8 @@ const CreationsDirectoryPage = () => {
     });
   }, [searchTerm, selectedCategory, creators]);
 
-  const contactCreator = (creator) => {
-    toast({
-      title: `🌟 Connexion avec ${creator.name}`,
-      description: "🚧 Cette fonctionnalité n'est pas encore implémentée—mais ne t'inquiète pas ! Tu peux la demander dans ton prochain message ! 🚀"
-    });
+  const viewCreatorProfile = (creatorId) => {
+    navigate(`/createur/${creatorId}`);
   };
 
   const clearFilters = () => {
@@ -185,10 +184,17 @@ const CreationsDirectoryPage = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-auto">
+                  <div className="mt-auto space-y-3">
                     <Button
-                      onClick={() => contactCreator(creator)}
-                      className="w-full bg-gradient-to-r from-element-bois to-element-eau hover:from-element-bois/90 hover:to-element-eau/90 text-white px-4 py-2 rounded-full"
+                      onClick={() => viewCreatorProfile(creator.id)}
+                      className="w-full bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white px-4 py-2 rounded-full"
+                    >
+                      Voir le profil
+                    </Button>
+                    <Button
+                      onClick={() => window.location.href = `mailto:${creator.email || ''}`}
+                      variant="outline"
+                      className="w-full border-2 border-primary text-primary hover:bg-secondary rounded-full"
                     >
                       <Mail className="w-4 h-4 mr-2" />
                       Contacter

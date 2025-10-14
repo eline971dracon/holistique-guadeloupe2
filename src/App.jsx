@@ -8,6 +8,7 @@ import DirectoryPage from '@/pages/DirectoryPage';
 import CreationsDirectoryPage from '@/pages/CreationsDirectoryPage';
 import ElinePage from '@/pages/ElinePage';
 import TherapistProfile from '@/pages/TherapistProfile';
+import CreatorProfile from '@/pages/CreatorProfile';
 import RegisterTherapistPage from '@/pages/RegisterTherapistPage';
 import CreatorRegistrationPage from '@/pages/CreatorRegistrationPage';
 import BlogPage from '@/pages/BlogPage';
@@ -52,6 +53,7 @@ function App() {
         <Route path="/soin/rituel-dome-eau-terre" element={<RituelDomeEauTerrePage />} />
         <Route path="/soin/:serviceId" element={<ServiceDetailPage />} />
         <Route path="/therapeute/:id" element={<TherapistProfile />} />
+        <Route path="/createur/:id" element={<CreatorProfile />} />
         <Route path="/rejoindre-aventure" element={<TherapistGatePage />} />
         <Route path="/inscription-type" element={<RegistrationTypePage />} />
         <Route path="/choix-inscription" element={<RegistrationTypePage />} />
