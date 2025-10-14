@@ -569,7 +569,7 @@ const RegisterTherapistPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {[
                     { value: 'demi-journee', label: 'Demi-journée', icon: Sun },
-                    { value: 'journee', label: 'Journée complète', icon: Star },
+                    { value: 'journee', label: 'Journée complète', icon: StarIcon },
                     { value: 'mini-retraite', label: '1-2 jours (mini-retraite)', icon: Calendar }
                   ].map((duration) => {
                     const Icon = duration.icon;
