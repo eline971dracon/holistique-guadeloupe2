@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Heart, Image as ImageIcon, Droplets, Mountain, Sun, Wind, Star as StarIcon, User, Phone, Mail, MapPin, MessageSquare, Compass, Leaf } from 'lucide-react';
+import { Sparkles, Heart, Image as ImageIcon, Droplets, Mountain, Sun, Wind, Star as StarIcon, User, Phone, Mail, MapPin, MessageSquare, Compass, Leaf, Waves, Brush, Users, Calendar, Palmtree, Trees, Coffee, Paintbrush } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -51,6 +51,9 @@ const RegisterTherapistPage = () => {
     practicePhotos: [null, null, null, null],
     elements: [],
     experiences: {},
+    intentions: [],
+    durations: [],
+    locations: [],
   });
 
   const handleChange = (e) => {
@@ -95,6 +98,33 @@ const RegisterTherapistPage = () => {
         ? prev.elements.filter(id => id !== elementId)
         : [...prev.elements, elementId];
       return { ...prev, elements: newElements.slice(0, 2) };
+    });
+  };
+
+  const handleIntentionChange = (intentionValue) => {
+    setFormData(prev => {
+      const newIntentions = prev.intentions.includes(intentionValue)
+        ? prev.intentions.filter(i => i !== intentionValue)
+        : [...prev.intentions, intentionValue];
+      return { ...prev, intentions: newIntentions };
+    });
+  };
+
+  const handleDurationChange = (durationValue) => {
+    setFormData(prev => {
+      const newDurations = prev.durations.includes(durationValue)
+        ? prev.durations.filter(d => d !== durationValue)
+        : [...prev.durations, durationValue];
+      return { ...prev, durations: newDurations };
+    });
+  };
+
+  const handleLocationChange = (locationValue) => {
+    setFormData(prev => {
+      const newLocations = prev.locations.includes(locationValue)
+        ? prev.locations.filter(l => l !== locationValue)
+        : [...prev.locations, locationValue];
+      return { ...prev, locations: newLocations };
     });
   };
 
@@ -162,6 +192,9 @@ const RegisterTherapistPage = () => {
           practice_photos: uploadedPracticePhotos,
           elements: formData.elements,
           experiences: formData.experiences,
+          intentions: formData.intentions,
+          durations: formData.durations,
+          locations: formData.locations,
           is_approved: true
         }])
         .select();
@@ -487,6 +520,108 @@ const RegisterTherapistPage = () => {
                   onChange={handleChange}
                   className="h-12 text-lg"
                 />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold aura-text flex items-center gap-2">
+                <Compass className="w-6 h-6 text-rose-500" />
+                Voyage Intérieur - Mes Offres (optionnel)
+              </h2>
+              <p className="text-foreground/70">Si vous souhaitez faire partie du parcours "Voyage Intérieur", précisez vos offres :</p>
+
+              <div>
+                <Label className="text-lg mb-3 block">
+                  Intentions proposées
+                </Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {[
+                    { value: 'detente', label: 'Détente', icon: Waves },
+                    { value: 'guerison', label: 'Guérison', icon: Heart },
+                    { value: 'creativite', label: 'Créativité', icon: Brush },
+                    { value: 'connexion', label: 'Connexion', icon: Users },
+                    { value: 'transformation', label: 'Transformation', icon: Sun }
+                  ].map((intention) => {
+                    const Icon = intention.icon;
+                    const isSelected = formData.intentions.includes(intention.value);
+                    return (
+                      <div
+                        key={intention.value}
+                        onClick={() => handleIntentionChange(intention.value)}
+                        className={`cursor-pointer p-4 rounded-xl border-2 transition-all text-center ${
+                          isSelected
+                            ? 'border-primary bg-primary/10'
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? 'text-primary' : 'text-foreground/60'}`} />
+                        <p className="font-semibold text-sm">{intention.label}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-lg mb-3 block">
+                  Durées proposées
+                </Label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {[
+                    { value: 'demi-journee', label: 'Demi-journée', icon: Sun },
+                    { value: 'journee', label: 'Journée complète', icon: Star },
+                    { value: 'mini-retraite', label: '1-2 jours (mini-retraite)', icon: Calendar }
+                  ].map((duration) => {
+                    const Icon = duration.icon;
+                    const isSelected = formData.durations.includes(duration.value);
+                    return (
+                      <div
+                        key={duration.value}
+                        onClick={() => handleDurationChange(duration.value)}
+                        className={`cursor-pointer p-4 rounded-xl border-2 transition-all text-center ${
+                          isSelected
+                            ? 'border-primary bg-primary/10'
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? 'text-primary' : 'text-foreground/60'}`} />
+                        <p className="font-semibold text-sm">{duration.label}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-lg mb-3 block">
+                  Lieux / Ambiances proposés
+                </Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {[
+                    { value: 'plage', label: 'Plage', icon: Palmtree },
+                    { value: 'foret', label: 'Forêt', icon: Trees },
+                    { value: 'espace-sacre', label: 'Espace sacré', icon: Sparkles },
+                    { value: 'atelier-creatif', label: 'Atelier créatif', icon: Paintbrush },
+                    { value: 'salle-cosy', label: 'Salle cosy', icon: Coffee }
+                  ].map((location) => {
+                    const Icon = location.icon;
+                    const isSelected = formData.locations.includes(location.value);
+                    return (
+                      <div
+                        key={location.value}
+                        onClick={() => handleLocationChange(location.value)}
+                        className={`cursor-pointer p-4 rounded-xl border-2 transition-all text-center ${
+                          isSelected
+                            ? 'border-primary bg-primary/10'
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? 'text-primary' : 'text-foreground/60'}`} />
+                        <p className="font-semibold text-sm">{location.label}</p>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
