@@ -30,6 +30,8 @@ const CreatorRegistrationPage = () => {
     email: '',
     phone: '',
     commune: '',
+    password: '',
+    confirmPassword: '',
     artType: '',
     artTypeOther: '',
     description: '',
@@ -78,10 +80,28 @@ const CreatorRegistrationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.commune || !formData.artType) {
+    if (!formData.name || !formData.email || !formData.commune || !formData.artType || !formData.password) {
       toast({
         title: 'Informations manquantes',
-        description: 'Veuillez remplir tous les champs obligatoires.',
+        description: 'Veuillez remplir tous les champs obligatoires, y compris le mot de passe.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        title: 'Erreur',
+        description: 'Les mots de passe ne correspondent pas.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast({
+        title: 'Mot de passe trop court',
+        description: 'Le mot de passe doit contenir au moins 6 caractères.',
         variant: 'destructive'
       });
       return;
@@ -118,6 +138,7 @@ const CreatorRegistrationPage = () => {
           email: formData.email,
           phone: formData.phone,
           commune: formData.commune,
+          password: formData.password,
           art_type: finalArtType,
           description: formData.description,
           inspiration: formData.inspiration,
@@ -259,6 +280,43 @@ const CreatorRegistrationPage = () => {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="password" className="text-lg mb-2">
+                    Mot de passe * (min. 6 caractères)
+                  </Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                    required
+                  />
+                  <p className="text-xs text-foreground/60 mt-1">
+                    Ce mot de passe vous permettra d'accéder à votre espace personnel
+                  </p>
+                </div>
+
+                <div>
+                  <Label htmlFor="confirmPassword" className="text-lg mb-2">
+                    Confirmer le mot de passe *
+                  </Label>
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                    required
+                  />
+                </div>
               </div>
             </div>
 

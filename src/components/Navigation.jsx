@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Menu, X, Home, BookOpen, Users, Feather, Heart, Compass } from 'lucide-react';
+import { Sparkles, Menu, X, Home, BookOpen, Users, Feather, Heart, Compass, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navigation = () => {
@@ -14,6 +14,7 @@ const Navigation = () => {
     { to: '/rejoindre-aventure', text: 'Artiste Thérapeute', icon: Feather },
     { to: '/eline-dracon', text: 'A propos', icon: Heart },
     { to: '/blog', text: 'Blog', icon: BookOpen },
+    { to: '/connexion', text: 'Connexion', icon: LogIn },
   ];
 
   const mobileMenuVariants = {

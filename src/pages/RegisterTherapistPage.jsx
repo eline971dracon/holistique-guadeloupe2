@@ -40,6 +40,8 @@ const RegisterTherapistPage = () => {
     email: '',
     phone: '',
     commune: '',
+    password: '',
+    confirmPassword: '',
     relianceDirecte: '',
     presenceInspirante: '',
     vibrationalPhrase: '',
@@ -152,11 +154,29 @@ const RegisterTherapistPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.commune) {
+    if (!formData.name || !formData.email || !formData.commune || !formData.password) {
       toast({
         variant: "destructive",
         title: "Champs obligatoires manquants",
-        description: "Veuillez remplir au moins le nom, l'email et la commune."
+        description: "Veuillez remplir le nom, l'email, la commune et le mot de passe."
+      });
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Les mots de passe ne correspondent pas."
+      });
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast({
+        variant: "destructive",
+        title: "Mot de passe trop court",
+        description: "Le mot de passe doit contenir au moins 6 caractères."
       });
       return;
     }
@@ -181,6 +201,7 @@ const RegisterTherapistPage = () => {
           email: formData.email,
           phone: formData.phone,
           commune: formData.commune,
+          password: formData.password,
           reliance_directe: formData.relianceDirecte,
           presence_inspirante: formData.presenceInspirante,
           vibrational_phrase: formData.vibrationalPhrase,
@@ -330,6 +351,43 @@ const RegisterTherapistPage = () => {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="password" className="text-lg mb-2">
+                    Mot de passe * (min. 6 caractères)
+                  </Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                    required
+                  />
+                  <p className="text-xs text-foreground/60 mt-1">
+                    Ce mot de passe vous permettra d'accéder à votre espace personnel
+                  </p>
+                </div>
+
+                <div>
+                  <Label htmlFor="confirmPassword" className="text-lg mb-2">
+                    Confirmer le mot de passe *
+                  </Label>
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
