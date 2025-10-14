@@ -89,9 +89,16 @@ const CreatorRegistrationPage = () => {
       }, 1500);
     } catch (error) {
       console.error('Error submitting creator:', error);
+
+      let errorMessage = error.message || 'Une erreur est survenue. Veuillez réessayer.';
+
+      if (error.message && error.message.includes('duplicate key') && error.message.includes('email')) {
+        errorMessage = "Cet email est déjà utilisé. Si c'est votre fiche, connectez-vous pour la modifier ou utilisez un autre email.";
+      }
+
       toast({
         title: 'Erreur lors de l\'enregistrement',
-        description: error.message || 'Une erreur est survenue. Veuillez réessayer.',
+        description: errorMessage,
         variant: 'destructive'
       });
     } finally {
