@@ -30,6 +30,8 @@ import EtherPage from '@/pages/EtherPage';
 import TherapistGatePage from '@/pages/TherapistGatePage';
 import ContactPage from '@/pages/ContactPage';
 import LoginPage from '@/pages/LoginPage';
+import AdminLoginPage from '@/pages/AdminLoginPage';
+import AdminDashboardPage from '@/pages/AdminDashboardPage';
 import { Toaster } from '@/components/ui/toaster';
 import ScrollToTop from '@/components/ScrollToTop';
 
@@ -65,6 +67,8 @@ function App() {
         <Route path="/blog/resonance-schumann" element={<ResonanceSchumannPage />} />
         <Route path="/blog/eau-memoire" element={<EauMemoirePage />} />
         <Route path="/connexion" element={<LoginPage />} />
+        <Route path="/admin-login" element={<AdminLoginPage />} />
+        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         <Route path="/mon-compte/modifier-profil" element={<EditTherapistProfilePage />} />
         <Route path="/edit-therapist-profile/:id" element={<EditTherapistProfilePage />} />
         <Route path="/mon-voyage-interieur" element={<MyInnerJourneyPage />} />
