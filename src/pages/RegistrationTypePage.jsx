@@ -1,109 +1,177 @@
 import React, { useState } from 'react';
-    import { useNavigate } from 'react-router-dom';
-    import { motion } from 'framer-motion';
-    import { Helmet } from 'react-helmet';
-    import { Shield, UserPlus, ArrowRight } from 'lucide-react';
-    import { Button } from '@/components/ui/button';
-    import { useToast } from '@/components/ui/use-toast';
-    import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-    import { Label } from '@/components/ui/label';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet';
+import { Heart, Palette, Lock, Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/components/ui/use-toast';
 
-    const RegistrationTypePage = () => {
-      const [userType, setUserType] = useState(null);
-      const navigate = useNavigate();
-      const { toast } = useToast();
+const RegistrationTypePage = () => {
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-      const handleContinue = () => {
-        if (!userType) {
-          toast({
-            variant: "destructive",
-            title: "Sélection requise",
-            description: "Veuillez sélectionner votre statut pour continuer.",
-          });
-          return;
-        }
+  const correctPassword = 'SIRIUS 2025';
 
-        if (userType === 'guardian') {
-          toast({
-            title: "Bienvenue, Gardienne ✨",
-            description: "Vous êtes redirigée vers le formulaire d'inscription.",
-          });
-          navigate('/inscription-formulaire');
-        } else if (userType === 'new') {
-          toast({
-            title: "🚧 Fonctionnalité en cours de développement",
-            description: "Le paiement n'est pas encore actif. Vous serez redirigé(e) vers le formulaire. Demandez l'intégration de Stripe pour activer cette fonction ! 🚀",
-            duration: 8000
-          });
-          // In a real scenario, this would redirect to a Stripe checkout page.
-          // For now, we simulate success and redirect.
-          navigate('/inscription-formulaire', { state: { fromPayment: true } });
-        }
-      };
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (password === correctPassword) {
+      setIsUnlocked(true);
+      toast({
+        title: 'Accès autorisé',
+        description: 'Bienvenue dans l\'espace d\'inscription',
+      });
+    } else {
+      toast({
+        title: 'Mot de passe incorrect',
+        description: 'Veuillez vérifier votre mot de passe vibratoire',
+        variant: 'destructive',
+      });
+    }
+  };
 
-      return (
-        <div className="pt-24 min-h-screen flex items-center justify-center mystical-gradient">
-          <Helmet>
-            <title>Statut d'Inscription - Réseau Holistique de Guadeloupe</title>
-            <meta name="description" content="Choisissez votre statut pour rejoindre le Réseau Holistique de Guadeloupe." />
-          </Helmet>
+  const handleTypeSelection = (type) => {
+    if (type === 'therapist') {
+      navigate('/inscription-therapeute');
+    } else if (type === 'creator') {
+      navigate('/inscription-artiste');
+    }
+  };
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="crystal-card rounded-3xl p-8 md:p-12 max-w-3xl mx-auto text-center"
-          >
-            <UserPlus className="w-16 h-16 mx-auto mb-6 text-primary floating-animation" />
+  if (!isUnlocked) {
+    return (
+      <div className="pt-24 pb-12 min-h-screen flex items-center justify-center mystical-gradient">
+        <Helmet>
+          <title>Inscription - Espace Protégé - Terra Nova</title>
+          <meta name="description" content="Accédez à l'espace d'inscription sécurisé" />
+        </Helmet>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="crystal-card rounded-3xl p-8 md:p-12 max-w-md w-full mx-4"
+        >
+          <div className="text-center mb-8">
+            <Lock className="w-16 h-16 mx-auto mb-4 text-primary" />
             <h1 className="text-3xl md:text-4xl font-bold mb-4 aura-text font-['Dancing_Script']">
-              Inscription au Réseau Holistique
+              Espace Protégé
             </h1>
-            <p className="text-lg text-foreground/80 mb-6">
-              Bienvenue dans ce cercle sacré dédié aux âmes-médecines, praticien·ne·s et gardiennes du vivant.
+            <p className="text-foreground/80">
+              Entrez le mot de passe vibratoire pour accéder à l'inscription
             </p>
+          </div>
 
-            <div className="text-left bg-background/30 p-6 rounded-xl border border-primary/20 shadow-inner mb-8">
-              <h2 className="font-bold text-primary mb-2">Important :</h2>
-              <ul className="list-disc list-inside space-y-2 text-foreground/90">
-                <li>L’inscription est <strong>gratuite</strong> pour les membres du cercle des gardiennes, reconnues et engagées dans la Charte Vibratoire du réseau.</li>
-                <li>Pour les nouveaux thérapeutes ou praticiens <strong>hors cercle</strong>, une participation financière est requise afin de valider l’inscription.</li>
-              </ul>
-            </div>
-
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold aura-text font-['Dancing_Script']">Veuillez sélectionner votre statut :</h2>
-              <RadioGroup value={userType} onValueChange={setUserType} className="flex flex-col md:flex-row gap-6 justify-center">
-                <motion.div whileHover={{ y: -5 }} className="flex-1">
-                  <RadioGroupItem value="guardian" id="guardian" className="sr-only" />
-                  <Label htmlFor="guardian" className={`flex flex-col items-center justify-center p-6 rounded-2xl border-2 cursor-pointer transition-all ${userType === 'guardian' ? 'border-primary bg-primary/10 shadow-lg' : 'border-input'}`}>
-                    <Shield className="w-10 h-10 mb-3 text-primary" />
-                    <span className="font-bold text-lg">Membre reconnue du cercle des gardiennes</span>
-                    <span className="text-sm text-foreground/70">(Inscription gratuite)</span>
-                  </Label>
-                </motion.div>
-                <motion.div whileHover={{ y: -5 }} className="flex-1">
-                  <RadioGroupItem value="new" id="new" className="sr-only" />
-                  <Label htmlFor="new" className={`flex flex-col items-center justify-center p-6 rounded-2xl border-2 cursor-pointer transition-all ${userType === 'new' ? 'border-primary bg-primary/10 shadow-lg' : 'border-input'}`}>
-                    <UserPlus className="w-10 h-10 mb-3 text-primary" />
-                    <span className="font-bold text-lg">Nouveau thérapeute/praticien</span>
-                    <span className="text-sm text-foreground/70">(Paiement requis)</span>
-                  </Label>
-                </motion.div>
-              </RadioGroup>
+          <form onSubmit={handlePasswordSubmit} className="space-y-6">
+            <div>
+              <Label htmlFor="password" className="text-lg mb-2 block">
+                Mot de passe vibratoire
+              </Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Mot de passe vibratoire"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="h-14 text-lg text-center pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/60 hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
 
             <Button
-              onClick={handleContinue}
-              disabled={!userType}
+              type="submit"
               size="lg"
-              className="w-full mt-10 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-8 py-4 text-xl rounded-full shadow-lg energy-pulse"
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-lg py-6 rounded-full shadow-lg energy-pulse"
             >
-              Valider et Continuer
-              <ArrowRight className="w-5 h-5 ml-2" />
+              Déverrouiller
+            </Button>
+          </form>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-24 pb-12 min-h-screen mystical-gradient">
+      <Helmet>
+        <title>Choisir votre type d'inscription - Terra Nova</title>
+        <meta name="description" content="Inscrivez-vous en tant que thérapeute ou créateur" />
+      </Helmet>
+
+      <div className="container mx-auto px-4 max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 aura-text font-['Dancing_Script']">
+            Bienvenue dans l'Espace d'Inscription
+          </h1>
+          <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
+            Choisissez le type d'inscription qui correspond à votre activité holistique
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="crystal-card rounded-3xl p-8 md:p-10 text-center hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+            onClick={() => handleTypeSelection('therapist')}
+          >
+            <Heart className="w-20 h-20 mx-auto mb-6 text-rose-500 group-hover:scale-110 transition-transform duration-300" />
+            <h2 className="text-3xl font-bold mb-4 aura-text font-['Dancing_Script']">
+              Thérapeute Holistique
+            </h2>
+            <p className="text-foreground/80 mb-8 leading-relaxed">
+              Inscrivez-vous dans l'annuaire des thérapeutes pour partager vos pratiques de soins énergétiques, méditation, rituels et accompagnements holistiques
+            </p>
+            <Button
+              size="lg"
+              className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-lg py-6 rounded-full shadow-lg"
+            >
+              S'inscrire comme Thérapeute
+            </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="crystal-card rounded-3xl p-8 md:p-10 text-center hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+            onClick={() => handleTypeSelection('creator')}
+          >
+            <Palette className="w-20 h-20 mx-auto mb-6 text-purple-500 group-hover:scale-110 transition-transform duration-300" />
+            <h2 className="text-3xl font-bold mb-4 aura-text font-['Dancing_Script']">
+              Créateur / Artiste
+            </h2>
+            <p className="text-foreground/80 mb-8 leading-relaxed">
+              Rejoignez l'annuaire des créateurs pour présenter vos créations artistiques, ateliers créatifs et expressions de l'âme
+            </p>
+            <Button
+              size="lg"
+              className="w-full bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white text-lg py-6 rounded-full shadow-lg"
+            >
+              S'inscrire comme Créateur
             </Button>
           </motion.div>
         </div>
-      );
-    };
+      </div>
+    </div>
+  );
+};
 
-    export default RegistrationTypePage;
+export default RegistrationTypePage;

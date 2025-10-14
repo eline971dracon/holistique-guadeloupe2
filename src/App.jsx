@@ -9,6 +9,7 @@ import CreationsDirectoryPage from '@/pages/CreationsDirectoryPage';
 import ElinePage from '@/pages/ElinePage';
 import TherapistProfile from '@/pages/TherapistProfile';
 import RegisterTherapistPage from '@/pages/RegisterTherapistPage';
+import CreatorRegistrationPage from '@/pages/CreatorRegistrationPage';
 import BlogPage from '@/pages/BlogPage';
 import FormesEtFrequencesPage from '@/pages/blog/FormesEtFrequencesPage';
 import ResonanceSchumannPage from '@/pages/blog/ResonanceSchumannPage';
@@ -53,7 +54,8 @@ function App() {
         <Route path="/therapeute/:id" element={<TherapistProfile />} />
         <Route path="/rejoindre-aventure" element={<TherapistGatePage />} />
         <Route path="/inscription-type" element={<RegistrationTypePage />} />
-        <Route path="/inscription-formulaire" element={<RegisterTherapistPage />} />
+        <Route path="/inscription-therapeute" element={<RegisterTherapistPage />} />
+        <Route path="/inscription-artiste" element={<CreatorRegistrationPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/formes-et-frequences" element={<FormesEtFrequencesPage />} />
         <Route path="/blog/resonance-schumann" element={<ResonanceSchumannPage />} />
