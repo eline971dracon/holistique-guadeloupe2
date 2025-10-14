@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MapPin, Clock, Calendar, Sparkles, Heart, Brush, Users, Sun, Waves, User, Mail, Phone, Check } from 'lucide-react';
+import { ArrowLeft, MapPin, Clock, Calendar, Sparkles, Heart, Brush, Users, Sun, Waves, User, Mail, Phone, Check, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
 import { experienceCategories } from '@/lib/journeyData';
 
 const durationLabels = {
@@ -32,6 +36,14 @@ const JourneyResultsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedExperiences, setSelectedExperiences] = useState([]);
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!location.state || !location.state.formData) {
@@ -71,6 +83,55 @@ const JourneyResultsPage = () => {
   const { formData } = location.state;
   const intentionInfo = intentionConfig[formData.intention];
   const IntentionIcon = intentionInfo?.icon;
+
+  const handleContactChange = (e) => {
+    const { name, value } = e.target;
+    setContactForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!contactForm.name || !contactForm.email) {
+      toast({
+        title: 'Informations manquantes',
+        description: 'Veuillez remplir au moins votre nom et email.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const journeyDetails = `
+Voyage Intérieur:
+- Intention: ${intentionInfo?.label}
+- Durée: ${durationLabels[formData.duration]}
+- Lieu: ${locationLabels[formData.location] || 'Non spécifié'}
+- Expériences: ${selectedExperiences.map(exp => `${exp.categoryTitle} - ${exp.label}`).join(', ')}
+`;
+
+    const fullMessage = `${contactForm.message}\n\n${journeyDetails}`;
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      toast({
+        title: 'Demande envoyée !',
+        description: 'Nous vous contacterons très prochainement pour finaliser votre voyage.'
+      });
+
+      setContactForm({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Une erreur est survenue. Veuillez réessayer.',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="pt-24 pb-12 min-h-screen mystical-gradient">
@@ -171,27 +232,97 @@ const JourneyResultsPage = () => {
           </div>
 
 
-          <div className="crystal-card rounded-2xl p-8 bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/30">
-            <div className="text-center">
-              <Link to="/contact">
-                <Button size="lg" className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-lg px-8 py-4 rounded-full shadow-lg energy-pulse">
-                  <Check className="w-5 h-5 mr-2" />
-                  Valider ma demande
-                </Button>
-              </Link>
-              <p className="text-sm text-foreground/60 mt-4">
-                Vous serez redirigé vers notre formulaire de contact
+          <div className="mt-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 font-['Dancing_Script']">
+                <span className="text-emerald-500">Finalisons</span>{' '}
+                <span className="text-teal-500">Votre</span>{' '}
+                <span className="text-rose-500">Voyage</span>
+              </h2>
+              <p className="text-lg text-foreground/80">
+                Nous allons maintenant composer une ébauche personnalisée de votre journée sacrée. Laissez-nous vos coordonnées pour que nous puissions vous recontacter avec votre parcours sur mesure.
               </p>
             </div>
-          </div>
 
-          <div className="mt-8 text-center">
-            <p className="text-foreground/60 text-sm">
-              Besoin d'aide ? Contactez-nous directement au{' '}
-              <a href="tel:+590690123456" className="text-primary hover:underline">
-                +590 690 12 34 56
-              </a>
-            </p>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <Label htmlFor="name" className="flex items-center gap-2 text-lg mb-2">
+                  <User className="w-5 h-5" />
+                  Nom & Prénom *
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Votre nom complet"
+                  value={contactForm.name}
+                  onChange={handleContactChange}
+                  required
+                  className="h-14 text-lg"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="email" className="flex items-center gap-2 text-lg mb-2">
+                  <Mail className="w-5 h-5" />
+                  Email *
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="votre@email.com"
+                  value={contactForm.email}
+                  onChange={handleContactChange}
+                  required
+                  className="h-14 text-lg"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="phone" className="flex items-center gap-2 text-lg mb-2">
+                  <Phone className="w-5 h-5" />
+                  Téléphone
+                </Label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="0590 XX XX XX"
+                  value={contactForm.phone}
+                  onChange={handleContactChange}
+                  className="h-14 text-lg"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="message" className="flex items-center gap-2 text-lg mb-2">
+                  <Heart className="w-5 h-5" />
+                  Message (optionnel)
+                </Label>
+                <Textarea
+                  id="message"
+                  name="message"
+                  placeholder="Partagez-nous vos attentes particulières ou toute information qui pourrait nous aider à personnaliser votre expérience..."
+                  value={contactForm.message}
+                  onChange={handleContactChange}
+                  rows={5}
+                  className="text-lg resize-none"
+                />
+              </div>
+
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  size="lg"
+                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-xl py-6 rounded-full shadow-lg energy-pulse"
+                >
+                  <Send className="w-6 h-6 mr-2" />
+                  {isSubmitting ? 'Envoi en cours...' : 'Envoyer ma demande'}
+                </Button>
+              </div>
+            </form>
           </div>
         </motion.div>
       </div>
