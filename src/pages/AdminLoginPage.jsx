@@ -117,12 +117,9 @@ const AdminLoginPage = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center space-y-2">
+          <div className="mt-6 text-center">
             <p className="text-xs text-foreground/50">
               Accès réservé aux gardiens de Terra Nova
-            </p>
-            <p className="text-xs text-primary font-mono">
-              Code attendu: SIRIUS2025
             </p>
           </div>
         </div>
