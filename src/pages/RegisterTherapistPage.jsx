@@ -59,7 +59,13 @@ const locations = [
 const RegisterTherapistPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [openSection, setOpenSection] = useState('identity');
+  const [openSections, setOpenSections] = useState({
+    identity: true,
+    vibration: true,
+    practices: true,
+    modalities: true,
+    approach: true
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -83,7 +89,10 @@ const RegisterTherapistPage = () => {
   });
 
   const handleSectionToggle = (sectionId) => {
-    setOpenSection(openSection === sectionId ? null : sectionId);
+    setOpenSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
   };
 
   const handleMultiCheckboxChange = (field, value, checked) => {
@@ -214,26 +223,30 @@ const RegisterTherapistPage = () => {
     }
   };
 
-  const Section = ({ id, title, icon: Icon, children }) => (
-    <div className="crystal-card rounded-2xl p-4 transition-all duration-300">
-        <button type="button" onClick={() => handleSectionToggle(id)} className="w-full flex justify-between items-center text-left">
-            <div className="flex items-center gap-4">
-                <Icon className="w-8 h-8 text-primary" />
-                <h2 className="text-2xl font-semibold font-['Dancing_Script'] aura-text">{title}</h2>
-            </div>
-            <ChevronDown className={cn("w-6 h-6 transition-transform", openSection === id && "rotate-180")} />
-        </button>
-        <AnimatePresence>
-            {openSection === id && (
-            <motion.div initial={{ height: 0, opacity: 0, marginTop: 0 }} animate={{ height: 'auto', opacity: 1, marginTop: '1rem' }} exit={{ height: 0, opacity: 0, marginTop: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-                <div className="pt-4 border-t border-primary/20 space-y-8">
-                    {children}
-                </div>
-            </motion.div>
-            )}
-        </AnimatePresence>
-    </div>
-  );
+  const Section = ({ id, title, icon: Icon, children }) => {
+    const isOpen = openSections[id];
+
+    return (
+      <div className="crystal-card rounded-2xl p-4 transition-all duration-300">
+          <button type="button" onClick={() => handleSectionToggle(id)} className="w-full flex justify-between items-center text-left">
+              <div className="flex items-center gap-4">
+                  <Icon className="w-8 h-8 text-primary" />
+                  <h2 className="text-2xl font-semibold font-['Dancing_Script'] aura-text">{title}</h2>
+              </div>
+              <ChevronDown className={cn("w-6 h-6 transition-transform", isOpen && "rotate-180")} />
+          </button>
+          <AnimatePresence>
+              {isOpen && (
+              <motion.div initial={{ height: 0, opacity: 0, marginTop: 0 }} animate={{ height: 'auto', opacity: 1, marginTop: '1rem' }} exit={{ height: 0, opacity: 0, marginTop: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
+                  <div className="pt-4 border-t border-primary/20 space-y-8">
+                      {children}
+                  </div>
+              </motion.div>
+              )}
+          </AnimatePresence>
+      </div>
+    );
+  };
 
   return (
     <div className="pt-16 min-h-screen">
