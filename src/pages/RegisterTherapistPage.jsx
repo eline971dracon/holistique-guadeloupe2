@@ -164,14 +164,6 @@ const RegisterTherapistPage = () => {
         toast({ variant: "destructive", title: "Champs obligatoires manquants", description: "Veuillez remplir au moins le nom, l'email et la commune." });
         return;
     }
-    if (Object.keys(formData.experiences).length === 0) {
-      toast({ variant: "destructive", title: "Champ manquant", description: "Veuillez sélectionner au moins une pratique." });
-      return;
-    }
-    if (formData.elements.length === 0) {
-      toast({ variant: "destructive", title: "Élément manquant", description: "Veuillez sélectionner au moins un élément dominant." });
-      return;
-    }
 
     setIsSubmitting(true);
 
@@ -227,23 +219,14 @@ const RegisterTherapistPage = () => {
     const isOpen = openSections[id];
 
     return (
-      <div className="crystal-card rounded-2xl p-4 transition-all duration-300">
-          <button type="button" onClick={() => handleSectionToggle(id)} className="w-full flex justify-between items-center text-left">
-              <div className="flex items-center gap-4">
-                  <Icon className="w-8 h-8 text-primary" />
-                  <h2 className="text-2xl font-semibold font-['Dancing_Script'] aura-text">{title}</h2>
-              </div>
-              <ChevronDown className={cn("w-6 h-6 transition-transform", isOpen && "rotate-180")} />
-          </button>
-          <AnimatePresence>
-              {isOpen && (
-              <motion.div initial={{ height: 0, opacity: 0, marginTop: 0 }} animate={{ height: 'auto', opacity: 1, marginTop: '1rem' }} exit={{ height: 0, opacity: 0, marginTop: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
-                  <div className="pt-4 border-t border-primary/20 space-y-8">
-                      {children}
-                  </div>
-              </motion.div>
-              )}
-          </AnimatePresence>
+      <div className="crystal-card rounded-2xl p-6 mb-6">
+          <div className="flex items-center gap-4 mb-6">
+              <Icon className="w-8 h-8 text-primary" />
+              <h2 className="text-2xl font-semibold font-['Dancing_Script'] aura-text">{title}</h2>
+          </div>
+          <div className="space-y-6">
+              {children}
+          </div>
       </div>
     );
   };
@@ -286,8 +269,8 @@ const RegisterTherapistPage = () => {
                         <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
                     </div>
                     <div>
-                        <Label htmlFor="phone" className="font-semibold text-lg">Téléphone*</Label>
-                        <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} required />
+                        <Label htmlFor="phone" className="font-semibold text-lg">Téléphone</Label>
+                        <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} />
                     </div>
                     <div>
                         <Label htmlFor="commune" className="font-semibold text-lg">Terre d'Ancrage*</Label>
@@ -307,13 +290,13 @@ const RegisterTherapistPage = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                      <div>
-                        <Label htmlFor="portraitPhoto" className="font-semibold text-lg">Photo portrait*</Label>
-                        <Input id="portraitPhoto" name="portraitPhoto" type="file" accept="image/*" onChange={handleFileChange} required />
+                        <Label htmlFor="portraitPhoto" className="font-semibold text-lg">Photo portrait</Label>
+                        <Input id="portraitPhoto" name="portraitPhoto" type="file" accept="image/*" onChange={handleFileChange} />
                         {formData.portraitPhoto && <img src={formData.portraitPhoto} alt="Aperçu portrait" className="mt-2 rounded-lg w-32 h-32 object-cover"/>}
                     </div>
                     <div>
-                        <Label htmlFor="artPhoto" className="font-semibold text-lg">Photo d'art*</Label>
-                        <Input id="artPhoto" name="artPhoto" type="file" accept="image/*" onChange={handleFileChange} required />
+                        <Label htmlFor="artPhoto" className="font-semibold text-lg">Photo d'art</Label>
+                        <Input id="artPhoto" name="artPhoto" type="file" accept="image/*" onChange={handleFileChange} />
                         {formData.artPhoto && <img src={formData.artPhoto} alt="Aperçu art" className="mt-2 rounded-lg w-32 h-32 object-cover"/>}
                     </div>
                 </div>
@@ -322,7 +305,7 @@ const RegisterTherapistPage = () => {
             <Section id="vibration" title="Vibration & Essence" icon={Sparkles}>
                 <div className="space-y-6">
                     <div>
-                        <Label className="font-semibold text-lg">Mon alignement (1 ou 2 éléments)*</Label>
+                        <Label className="font-semibold text-lg">Mon alignement (1 ou 2 éléments)</Label>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2">
                         {elements.map(el => (
                             <label key={el.id} className={`flex flex-col items-center p-3 border-2 rounded-lg cursor-pointer transition-all ${formData.elements.includes(el.id) ? 'border-primary bg-primary/10' : 'border-input'}`}>
@@ -334,14 +317,14 @@ const RegisterTherapistPage = () => {
                         </div>
                     </div>
                      <div>
-                        <Label htmlFor="vibrationalPhrase" className="font-semibold text-lg">Ma phrase d'appel*</Label>
+                        <Label htmlFor="vibrationalPhrase" className="font-semibold text-lg">Ma phrase d'appel</Label>
                         <p className="text-sm text-foreground/70 italic">Une phrase courte qui capte ton essence.</p>
-                        <Textarea id="vibrationalPhrase" name="vibrationalPhrase" value={formData.vibrationalPhrase} onChange={handleChange} rows={2} required />
+                        <Textarea id="vibrationalPhrase" name="vibrationalPhrase" value={formData.vibrationalPhrase} onChange={handleChange} rows={2} />
                     </div>
                     <div>
-                        <Label htmlFor="mission" className="font-semibold text-lg">Ma mission de cœur*</Label>
+                        <Label htmlFor="mission" className="font-semibold text-lg">Ma mission de cœur</Label>
                         <p className="text-sm text-foreground/70 italic">Ce qui t'anime, ce que tu souhaites apporter au monde.</p>
-                        <Textarea id="mission" name="mission" value={formData.mission} onChange={handleChange} rows={3} required />
+                        <Textarea id="mission" name="mission" value={formData.mission} onChange={handleChange} rows={3} />
                     </div>
                 </div>
             </Section>
@@ -413,14 +396,14 @@ const RegisterTherapistPage = () => {
             <Section id="approach" title="Mon Approche & Mon Message" icon={MessageSquare}>
                  <div className="space-y-6">
                     <div>
-                        <Label htmlFor="approach" className="font-semibold text-lg">Mon approche*</Label>
+                        <Label htmlFor="approach" className="font-semibold text-lg">Mon approche</Label>
                         <p className="text-sm text-foreground/70 italic">Comment décrirais-tu ta manière de travailler, ta "patte" ?</p>
-                        <Textarea id="approach" name="approach" value={formData.approach} onChange={handleChange} rows={3} required />
+                        <Textarea id="approach" name="approach" value={formData.approach} onChange={handleChange} rows={3} />
                     </div>
                     <div>
-                        <Label htmlFor="messageBienvenue" className="font-semibold text-lg">Un message pour toi*</Label>
+                        <Label htmlFor="messageBienvenue" className="font-semibold text-lg">Un message pour toi</Label>
                         <p className="text-sm text-foreground/70 italic">Un message d'accueil pour la personne qui découvrira ta fiche.</p>
-                        <Textarea id="messageBienvenue" name="messageBienvenue" value={formData.messageBienvenue} onChange={handleChange} rows={2} required />
+                        <Textarea id="messageBienvenue" name="messageBienvenue" value={formData.messageBienvenue} onChange={handleChange} rows={2} />
                     </div>
                     <div>
                         <Label htmlFor="mantra" className="font-semibold text-lg">Mon mantra</Label>
