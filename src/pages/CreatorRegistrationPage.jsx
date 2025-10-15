@@ -10,16 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/lib/customSupabaseClient';
+import { CommuneCombobox } from '@/components/CommuneCombobox';
 
-const guadeloupeCommunes = [
-  "Les Abymes", "Anse-Bertrand", "Baie-Mahault", "Baillif", "Basse-Terre",
-  "Bouillante", "Capesterre-Belle-Eau", "Capesterre-de-Marie-Galante",
-  "Deshaies", "La Désirade", "Le Gosier", "Gourbeyre", "Grand-Bourg",
-  "Lamentin", "Morne-à-l'Eau", "Le Moule", "Petit-Bourg", "Petit-Canal",
-  "Pointe-à-Pitre", "Pointe-Noire", "Port-Louis", "Saint-Claude",
-  "Saint-François", "Saint-Louis", "Sainte-Anne", "Sainte-Rose",
-  "Terre-de-Bas", "Terre-de-Haut", "Trois-Rivières", "Vieux-Fort", "Vieux-Habitants"
-];
 
 const CreatorRegistrationPage = () => {
   const { toast } = useToast();
@@ -291,18 +283,10 @@ const CreatorRegistrationPage = () => {
                 <Label htmlFor="commune" className="text-lg mb-2">
                   Commune *
                 </Label>
-                <Select value={formData.commune} onValueChange={(value) => handleSelectChange('commune', value)}>
-                  <SelectTrigger className="h-12 text-lg">
-                    <SelectValue placeholder="Sélectionnez votre commune" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {guadeloupeCommunes.map((commune) => (
-                      <SelectItem key={commune} value={commune}>
-                        {commune}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <CommuneCombobox
+                  value={formData.commune}
+                  onChange={(value) => handleSelectChange('commune', value)}
+                />
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
