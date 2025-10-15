@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Search, MapPin, Star, Heart, Phone, Feather, Zap, Waves, Leaf, BrainCircuit, Moon, Shield, Gem, Brush } from 'lucide-react';
+import { Search, MapPin, Star, Heart, Phone, Feather, Zap, Waves, Leaf, BrainCircuit, Moon, Shield, Gem, Brush, Instagram, Facebook, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -34,7 +34,7 @@ const DirectoryPage = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('therapists')
-        .select('id, name, commune, vibrational_phrase, profile_photo_url, portrait_photo_url, practice_photos, elements, experiences')
+        .select('id, name, commune, vibrational_phrase, profile_photo_url, portrait_photo_url, practice_photos, elements, experiences, social_links')
         .eq('is_approved', true);
 
       if (error) {
@@ -56,6 +56,7 @@ const DirectoryPage = () => {
         image: (t.practice_photos && t.practice_photos.length > 0) ? t.practice_photos[0] : (t.profile_photo_url || t.portrait_photo_url || ''),
         elements: t.elements || [],
         experiences: t.experiences || {},
+        socialLinks: t.social_links || {},
         rating: 0
       }));
 
@@ -231,9 +232,47 @@ const DirectoryPage = () => {
                           <span className="ml-1 font-semibold">{therapist.rating > 0 ? therapist.rating : 'N/A'}</span>
                         </div>
                       </div>
+
+                      {(therapist.socialLinks?.instagram || therapist.socialLinks?.facebook || therapist.socialLinks?.website) && (
+                        <div className="flex justify-start gap-3 pt-3 border-t border-border/50">
+                          {therapist.socialLinks?.instagram && (
+                            <a
+                              href={therapist.socialLinks.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 transition-all"
+                              title="Instagram"
+                            >
+                              <Instagram className="w-5 h-5 text-purple-600" />
+                            </a>
+                          )}
+                          {therapist.socialLinks?.facebook && (
+                            <a
+                              href={therapist.socialLinks.facebook}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 transition-all"
+                              title="Facebook"
+                            >
+                              <Facebook className="w-5 h-5 text-blue-600" />
+                            </a>
+                          )}
+                          {therapist.socialLinks?.website && (
+                            <a
+                              href={therapist.socialLinks.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-full bg-gradient-to-r from-green-500/20 to-teal-500/20 hover:from-green-500/30 hover:to-teal-500/30 transition-all"
+                              title="Site Web"
+                            >
+                              <Globe className="w-5 h-5 text-green-600" />
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
-                  
+
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <Button
                       onClick={() => contactTherapist(therapist)}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { ArrowLeft, Star, Heart, Phone, Globe, MapPin, Calendar, Sun, Wind, Droplets, Mountain, Star as StarIcon, Edit } from 'lucide-react';
+import { ArrowLeft, Star, Heart, Phone, Globe, MapPin, Calendar, Sun, Wind, Droplets, Mountain, Star as StarIcon, Edit, Instagram, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -156,6 +156,44 @@ const TherapistProfile = () => {
                 <p className="text-xl text-white font-semibold">
                   Mantra: "{therapist.mantra}"
                 </p>
+              )}
+
+              {(therapist.social_links?.instagram || therapist.social_links?.facebook || therapist.social_links?.website) && (
+                <div className="flex gap-3 pt-4">
+                  {therapist.social_links?.instagram && (
+                    <a
+                      href={therapist.social_links.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30 hover:from-purple-500/50 hover:to-pink-500/50 transition-all transform hover:scale-110 backdrop-blur-sm"
+                      title="Instagram"
+                    >
+                      <Instagram className="w-6 h-6 text-white" />
+                    </a>
+                  )}
+                  {therapist.social_links?.facebook && (
+                    <a
+                      href={therapist.social_links.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-gradient-to-r from-blue-500/30 to-blue-600/30 hover:from-blue-500/50 hover:to-blue-600/50 transition-all transform hover:scale-110 backdrop-blur-sm"
+                      title="Facebook"
+                    >
+                      <Facebook className="w-6 h-6 text-white" />
+                    </a>
+                  )}
+                  {therapist.social_links?.website && (
+                    <a
+                      href={therapist.social_links.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-gradient-to-r from-green-500/30 to-teal-500/30 hover:from-green-500/50 hover:to-teal-500/50 transition-all transform hover:scale-110 backdrop-blur-sm"
+                      title="Site Web"
+                    >
+                      <Globe className="w-6 h-6 text-white" />
+                    </a>
+                  )}
+                </div>
               )}
 
 

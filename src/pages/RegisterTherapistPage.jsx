@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Heart, Image as ImageIcon, Droplets, Mountain, Sun, Wind, Star as StarIcon, User, Phone, Mail, MapPin, MessageSquare, Compass, Leaf, Waves, Brush, Users, Calendar, Palmtree, Trees, Coffee, Paintbrush, Eye, EyeOff } from 'lucide-react';
+import { Sparkles, Heart, Image as ImageIcon, Droplets, Mountain, Sun, Wind, Star as StarIcon, User, Phone, Mail, MapPin, MessageSquare, Compass, Leaf, Waves, Brush, Users, Calendar, Palmtree, Trees, Coffee, Paintbrush, Eye, EyeOff, Instagram, Facebook, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -42,6 +42,9 @@ const RegisterTherapistPage = () => {
     approach: '',
     messageBienvenue: '',
     mantra: '',
+    instagram: '',
+    facebook: '',
+    website: '',
     profilePhoto: null,
     practicePhotos: [null, null, null, null],
     elements: [],
@@ -187,6 +190,11 @@ const RegisterTherapistPage = () => {
     setIsSubmitting(true);
 
     try {
+      const socialLinks = {};
+      if (formData.instagram) socialLinks.instagram = formData.instagram;
+      if (formData.facebook) socialLinks.facebook = formData.facebook;
+      if (formData.website) socialLinks.website = formData.website;
+
       const { data, error } = await supabase
         .from('therapists')
         .insert([{
@@ -209,6 +217,7 @@ const RegisterTherapistPage = () => {
           intentions: formData.intentions,
           durations: formData.durations,
           locations: formData.locations,
+          social_links: Object.keys(socialLinks).length > 0 ? socialLinks : null,
           is_approved: true
         }])
         .select();
@@ -419,6 +428,64 @@ const RegisterTherapistPage = () => {
                     type="text"
                     placeholder="Site web, réseaux..."
                     value={formData.presenceInspirante}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold aura-text flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-rose-500" />
+                  Réseaux Sociaux & Site Web
+                </h3>
+                <p className="text-sm text-foreground/70">
+                  Partagez vos liens pour que les visiteurs puissent découvrir votre univers
+                </p>
+
+                <div>
+                  <Label htmlFor="instagram" className="text-lg mb-2 flex items-center gap-2">
+                    <Instagram className="w-4 h-4" />
+                    Instagram
+                  </Label>
+                  <Input
+                    id="instagram"
+                    name="instagram"
+                    type="url"
+                    placeholder="https://instagram.com/votre_compte"
+                    value={formData.instagram}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="facebook" className="text-lg mb-2 flex items-center gap-2">
+                    <Facebook className="w-4 h-4" />
+                    Facebook
+                  </Label>
+                  <Input
+                    id="facebook"
+                    name="facebook"
+                    type="url"
+                    placeholder="https://facebook.com/votre_page"
+                    value={formData.facebook}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="website" className="text-lg mb-2 flex items-center gap-2">
+                    <Globe className="w-4 h-4" />
+                    Site Web Personnel
+                  </Label>
+                  <Input
+                    id="website"
+                    name="website"
+                    type="url"
+                    placeholder="https://votre-site.com"
+                    value={formData.website}
                     onChange={handleChange}
                     className="h-12 text-lg"
                   />
