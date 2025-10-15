@@ -807,7 +807,7 @@ const RegisterTherapistPage = () => {
 
               <div className="border border-border/30 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Brush className="w-6 h-6 text-primary" />
+                  <Sparkles className="w-6 h-6 text-primary" />
                   <h3 className="text-xl font-semibold">Autre pratique</h3>
                 </div>
                 <div>

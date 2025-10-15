@@ -12,9 +12,6 @@ import CreatorProfile from '@/pages/CreatorProfile';
 import RegisterTherapistPage from '@/pages/RegisterTherapistPage';
 import CreatorRegistrationPage from '@/pages/CreatorRegistrationPage';
 import BlogPage from '@/pages/BlogPage';
-import FormesEtFrequencesPage from '@/pages/blog/FormesEtFrequencesPage';
-import ResonanceSchumannPage from '@/pages/blog/ResonanceSchumannPage';
-import EauMemoirePage from '@/pages/blog/EauMemoirePage';
 import DirectoryGatePage from '@/pages/DirectoryGatePage';
 import RegistrationTypePage from '@/pages/RegistrationTypePage';
 import EditTherapistProfilePage from '@/pages/EditTherapistProfilePage';
@@ -63,9 +60,6 @@ function App() {
         <Route path="/inscription-therapeute" element={<RegisterTherapistPage />} />
         <Route path="/inscription-artiste" element={<CreatorRegistrationPage />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/formes-et-frequences" element={<FormesEtFrequencesPage />} />
-        <Route path="/blog/resonance-schumann" element={<ResonanceSchumannPage />} />
-        <Route path="/blog/eau-memoire" element={<EauMemoirePage />} />
         <Route path="/connexion" element={<LoginPage />} />
         <Route path="/admin-login" element={<AdminLoginPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
