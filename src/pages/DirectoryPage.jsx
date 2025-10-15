@@ -8,15 +8,15 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 
 const needsConfig = {
-  "réconfort": { icon: Feather, label: "Réconfort", categoryIds: ["soin_energetique", "nettoyage_purification"] },
-  "énergie": { icon: Zap, label: "Énergie", categoryIds: ["soin_energetique", "portes_conscience"] },
-  "libération": { icon: Waves, label: "Libération", categoryIds: ["danses_songes", "nettoyage_purification"] },
-  "ancrage": { icon: Leaf, label: "Ancrage", categoryIds: ["connexion_nature", "creation_ame"] },
-  "paix": { icon: BrainCircuit, label: "Paix", categoryIds: ["meditation_rituels", "voyage_sensoriel"] },
-  "féminin": { icon: Moon, label: "Féminin Sacré", categoryIds: ["couronne_lumiere", "meditation_rituels"] },
-  "transformation": { icon: Shield, label: "Transformation", categoryIds: ["portes_conscience", "soin_energetique"] },
-  "potentiel": { icon: Gem, label: "Potentiel", categoryIds: ["histoires_sagesses", "creation_ame"] },
-  "découverte": { icon: Search, label: "Découverte", categoryIds: [] },
+  "réconfort": { icon: Feather, label: "Réconfort", elements: ["Terre"] },
+  "énergie": { icon: Zap, label: "Énergie", elements: ["Feu"] },
+  "libération": { icon: Waves, label: "Libération", elements: ["Eau"] },
+  "ancrage": { icon: Leaf, label: "Ancrage", elements: ["Terre"] },
+  "paix": { icon: BrainCircuit, label: "Paix", elements: ["Air"] },
+  "féminin": { icon: Moon, label: "Féminin Sacré", elements: ["Eau", "Ether"] },
+  "transformation": { icon: Shield, label: "Transformation", elements: ["Feu"] },
+  "potentiel": { icon: Gem, label: "Potentiel", elements: ["Ether"] },
+  "découverte": { icon: Search, label: "Découverte", elements: [] },
 };
 
 const DirectoryPage = () => {
@@ -77,14 +77,14 @@ const DirectoryPage = () => {
     return therapists.filter(therapist => {
       const matchesSearch = therapist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            therapist.vibrationalPhrase.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       let matchesNeed = !selectedNeed;
       if (selectedNeed && needsConfig[selectedNeed]) {
-        const needCategoryIds = needsConfig[selectedNeed].categoryIds;
-        if (needCategoryIds.length === 0) { // For "Découverte"
+        const needElements = needsConfig[selectedNeed].elements;
+        if (needElements.length === 0) {
           matchesNeed = true;
         } else {
-          matchesNeed = Object.keys(therapist.experiences).some(catId => needCategoryIds.includes(catId));
+          matchesNeed = therapist.elements && therapist.elements.some(element => needElements.includes(element));
         }
       }
       
