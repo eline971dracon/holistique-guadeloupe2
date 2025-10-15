@@ -35,8 +35,6 @@ const RegisterTherapistPage = () => {
     commune: '',
     password: '',
     confirmPassword: '',
-    relianceDirecte: '',
-    presenceInspirante: '',
     vibrationalPhrase: '',
     mission: '',
     approach: '',
@@ -203,8 +201,6 @@ const RegisterTherapistPage = () => {
           phone: formData.phone,
           commune: formData.commune,
           password: formData.password,
-          reliance_directe: formData.relianceDirecte,
-          presence_inspirante: formData.presenceInspirante,
           vibrational_phrase: formData.vibrationalPhrase,
           mission: formData.mission,
           approach: formData.approach,
@@ -399,38 +395,6 @@ const RegisterTherapistPage = () => {
                       {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="relianceDirecte" className="text-lg mb-2">
-                    Reliance Directe
-                  </Label>
-                  <Input
-                    id="relianceDirecte"
-                    name="relianceDirecte"
-                    type="text"
-                    placeholder="Téléphone ou autre"
-                    value={formData.relianceDirecte}
-                    onChange={handleChange}
-                    className="h-12 text-lg"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="presenceInspirante" className="text-lg mb-2">
-                    Présence Inspirante
-                  </Label>
-                  <Input
-                    id="presenceInspirante"
-                    name="presenceInspirante"
-                    type="text"
-                    placeholder="Site web, réseaux..."
-                    value={formData.presenceInspirante}
-                    onChange={handleChange}
-                    className="h-12 text-lg"
-                  />
                 </div>
               </div>
 
