@@ -53,13 +53,9 @@ const TherapistProfile = () => {
         email: data.email,
         phone: data.phone,
         commune: data.commune,
-        relianceDirecte: data.reliance_directe || '',
-        presenceInspirante: data.presence_inspirante || '',
         vibrationalPhrase: data.vibrational_phrase || '',
         mission: data.mission || '',
         approach: data.approach || '',
-        messageBienvenue: data.message_bienvenue || '',
-        mantra: data.mantra || '',
         image: data.profile_photo_url || data.portrait_photo_url || '/placeholder-therapist.jpg',
         practicePhotos: data.practice_photos || [],
         elements: data.elements || [],
@@ -151,12 +147,6 @@ const TherapistProfile = () => {
               <p className="text-lg text-white leading-relaxed italic">
                 "{therapist.vibrationalPhrase}"
               </p>
-
-              {therapist.mantra && (
-                <p className="text-xl text-white font-semibold">
-                  Mantra: "{therapist.mantra}"
-                </p>
-              )}
 
               {(therapist.social_links?.instagram || therapist.social_links?.facebook || therapist.social_links?.website) && (
                 <div className="flex gap-3 pt-4">
@@ -363,24 +353,6 @@ const TherapistProfile = () => {
               </motion.div>
             )}
 
-            {therapist.messageBienvenue && (
-              <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  viewport={{ once: true }}
-                  className="text-center"
-              >
-                  <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  <span className="aura-text font-['Dancing_Script']">
-                      Un Message Pour Toi
-                  </span>
-                  </h2>
-                  <p className="text-xl text-foreground max-w-3xl mx-auto">
-                      "{therapist.messageBienvenue}"
-                  </p>
-              </motion.div>
-            )}
         </div>
       </section>
 
