@@ -29,6 +29,7 @@ const CreatorRegistrationPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    artistName: '',
     email: '',
     phone: '',
     commune: '',
@@ -137,6 +138,7 @@ const CreatorRegistrationPage = () => {
         .from('creators')
         .insert([{
           name: formData.name,
+          artist_name: formData.artistName,
           email: formData.email,
           phone: formData.phone,
           commune: formData.commune,
@@ -231,6 +233,25 @@ const CreatorRegistrationPage = () => {
                   required
                   className="h-12 text-lg"
                 />
+              </div>
+
+              <div className="bg-gradient-to-r from-purple-500/10 to-violet-500/10 p-6 rounded-xl border-2 border-purple-500/30">
+                <Label htmlFor="artistName" className="text-lg mb-2 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-purple-500" />
+                  Nom d'Artiste
+                </Label>
+                <Input
+                  id="artistName"
+                  name="artistName"
+                  type="text"
+                  placeholder="Votre nom de scène ou signature artistique"
+                  value={formData.artistName}
+                  onChange={handleChange}
+                  className="h-12 text-lg bg-background/80"
+                />
+                <p className="text-sm text-foreground/60 mt-2">
+                  Le nom sous lequel vous souhaitez être connu(e) en tant qu'artiste
+                </p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
