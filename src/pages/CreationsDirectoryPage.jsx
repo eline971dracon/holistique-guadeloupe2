@@ -20,6 +20,7 @@ const CreationsDirectoryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [creators, setCreators] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showContactId, setShowContactId] = useState(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -28,7 +29,7 @@ const CreationsDirectoryPage = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('creators')
-        .select('id, name, email, phone, commune, art_type, description, profile_photo_url, art_photos, inspiration, message')
+        .select('id, name, artist_name, email, phone, commune, art_type, description, profile_photo_url, art_photos, inspiration, message')
         .eq('is_approved', true);
 
       if (error) {
@@ -45,6 +46,7 @@ const CreationsDirectoryPage = () => {
       const formattedCreators = data.map(c => ({
         id: c.id,
         name: c.name,
+        artistName: c.artist_name,
         email: c.email,
         phone: c.phone,
         commune: c.commune,
@@ -180,12 +182,24 @@ const CreationsDirectoryPage = () => {
                     loading="lazy" />
 
                   <div className="flex-grow flex flex-col">
-                    <h3 className="text-2xl font-bold mb-1">
-                      <span className="aura-text font-['Dancing_Script']">
-                        {creator.name}
-                      </span>
-                    </h3>
+                    {creator.artistName && (
+                      <h3 className="text-2xl font-bold mb-1">
+                        <span className="aura-text font-['Dancing_Script']">
+                          {creator.artistName}
+                        </span>
+                      </h3>
+                    )}
                     <p className="font-semibold text-primary mb-3">{creator.craft}</p>
+                    {creator.artistName && (
+                      <p className="text-sm text-foreground/60 mb-2">({creator.name})</p>
+                    )}
+                    {!creator.artistName && (
+                      <h3 className="text-2xl font-bold mb-3">
+                        <span className="aura-text font-['Dancing_Script']">
+                          {creator.name}
+                        </span>
+                      </h3>
+                    )}
                     <p className="text-foreground/80 leading-relaxed text-sm flex-grow mb-4">
                       {creator.description}
                     </p>
@@ -202,14 +216,23 @@ const CreationsDirectoryPage = () => {
                     >
                       Voir le profil
                     </Button>
-                    <Button
-                      onClick={() => window.location.href = `mailto:${creator.email || ''}`}
-                      variant="outline"
-                      className="w-full border-2 border-primary text-primary hover:bg-secondary rounded-full"
-                    >
-                      <Mail className="w-4 h-4 mr-2" />
-                      Contacter
-                    </Button>
+                    {showContactId === creator.id ? (
+                      <div className="p-4 bg-gradient-to-r from-purple-500/10 to-violet-500/10 rounded-xl border-2 border-purple-500/30 text-center">
+                        <p className="text-sm text-foreground/70 mb-2">Téléphone</p>
+                        <a href={`tel:${creator.phone}`} className="text-lg font-bold text-primary hover:text-primary/80 transition-colors">
+                          {creator.phone || 'Non renseigné'}
+                        </a>
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={() => setShowContactId(creator.id)}
+                        variant="outline"
+                        className="w-full border-2 border-primary text-primary hover:bg-secondary rounded-full"
+                      >
+                        <Mail className="w-4 h-4 mr-2" />
+                        Prendre contact
+                      </Button>
+                    )}
                   </div>
                 </motion.div>
               );
