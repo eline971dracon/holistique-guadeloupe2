@@ -206,14 +206,19 @@ const TherapistProfile = () => {
                   <MapPin className="w-5 h-5 text-teal-400" />
                   <span>Terre d'Ancrage: {therapist.commune}</span>
                 </div>
-                <div className="flex items-center space-x-3 text-white">
-                  <Phone className="w-5 h-5 text-purple-400" />
-                  <span>Reliance directe: {therapist.relianceDirecte}</span>
-                </div>
-                {therapist.presenceInspirante && (
+                {therapist.phone && (
                   <div className="flex items-center space-x-3 text-white">
-                    <Globe className="w-5 h-5 text-cyan-400" />
-                    <span>Présence inspirante: {therapist.presenceInspirante}</span>
+                    <Phone className="w-5 h-5 text-purple-400" />
+                    <span>{therapist.phone}</span>
+                  </div>
+                )}
+                {therapist.availability_days && therapist.availability_days.length > 0 && (
+                  <div className="flex items-start space-x-3 text-white sm:col-span-2">
+                    <Calendar className="w-5 h-5 text-rose-400 mt-1 flex-shrink-0" />
+                    <div>
+                      <span className="font-semibold block mb-1">Disponibilités:</span>
+                      <span className="text-sm">{therapist.availability_days.join(', ')}</span>
+                    </div>
                   </div>
                 )}
               </div>

@@ -50,6 +50,7 @@ const RegisterTherapistPage = () => {
     intentions: [],
     durations: [],
     locations: [],
+    availabilityDays: [],
   });
 
   const handleChange = (e) => {
@@ -121,6 +122,15 @@ const RegisterTherapistPage = () => {
         ? prev.locations.filter(l => l !== locationValue)
         : [...prev.locations, locationValue];
       return { ...prev, locations: newLocations };
+    });
+  };
+
+  const handleAvailabilityDayChange = (day) => {
+    setFormData(prev => {
+      const newDays = prev.availabilityDays.includes(day)
+        ? prev.availabilityDays.filter(d => d !== day)
+        : [...prev.availabilityDays, day];
+      return { ...prev, availabilityDays: newDays };
     });
   };
 
@@ -213,6 +223,7 @@ const RegisterTherapistPage = () => {
           intentions: formData.intentions,
           durations: formData.durations,
           locations: formData.locations,
+          availability_days: formData.availabilityDays.length > 0 ? formData.availabilityDays : null,
           social_links: Object.keys(socialLinks).length > 0 ? socialLinks : null,
           is_approved: true
         }])
@@ -623,6 +634,42 @@ const RegisterTherapistPage = () => {
               <p className="text-foreground/70">Si vous souhaitez faire partie du parcours "Voyage Intérieur", précisez vos offres :</p>
 
               <div>
+                <Label className="text-lg mb-3 block text-rose-600 font-semibold">
+                  Jours de disponibilité
+                </Label>
+                <p className="text-sm text-foreground/70 mb-3">
+                  Sélectionnez les jours où vous êtes disponible pour participer au parcours "Voyage Intérieur"
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { value: 'Lundi', label: 'Lundi' },
+                    { value: 'Mardi', label: 'Mardi' },
+                    { value: 'Mercredi', label: 'Mercredi' },
+                    { value: 'Jeudi', label: 'Jeudi' },
+                    { value: 'Vendredi', label: 'Vendredi' },
+                    { value: 'Samedi', label: 'Samedi' },
+                    { value: 'Dimanche', label: 'Dimanche' }
+                  ].map((day) => {
+                    const isSelected = formData.availabilityDays.includes(day.value);
+                    return (
+                      <div
+                        key={day.value}
+                        onClick={() => handleAvailabilityDayChange(day.value)}
+                        className={`cursor-pointer p-3 rounded-xl border-2 transition-all text-center ${
+                          isSelected
+                            ? 'border-rose-500 bg-rose-500/10'
+                            : 'border-border hover:border-rose-500/50'
+                        }`}
+                      >
+                        <Calendar className={`w-5 h-5 mx-auto mb-1 ${isSelected ? 'text-rose-500' : 'text-foreground/60'}`} />
+                        <p className="font-semibold text-sm">{day.label}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
                 <Label className="text-lg mb-3 block">
                   Intentions proposées
                 </Label>
@@ -685,7 +732,7 @@ const RegisterTherapistPage = () => {
               </div>
 
               <div>
-                <Label className="text-lg mb-3 block">
+                <Label className="text-lg mb-3 block text-rose-600 font-semibold">
                   Lieux / Ambiances proposés
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -704,11 +751,11 @@ const RegisterTherapistPage = () => {
                         onClick={() => handleLocationChange(location.value)}
                         className={`cursor-pointer p-4 rounded-xl border-2 transition-all text-center ${
                           isSelected
-                            ? 'border-primary bg-primary/10'
-                            : 'border-border hover:border-primary/50'
+                            ? 'border-rose-500 bg-rose-500/10'
+                            : 'border-border hover:border-rose-500/50'
                         }`}
                       >
-                        <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? 'text-primary' : 'text-foreground/60'}`} />
+                        <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? 'text-rose-500' : 'text-foreground/60'}`} />
                         <p className="font-semibold text-sm">{location.label}</p>
                       </div>
                     );
