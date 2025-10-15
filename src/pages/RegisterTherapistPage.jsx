@@ -47,6 +47,7 @@ const RegisterTherapistPage = () => {
     practicePhotos: [null, null, null, null],
     elements: [],
     experiences: {},
+    otherPractice: '',
     intentions: [],
     durations: [],
     locations: [],
@@ -220,6 +221,7 @@ const RegisterTherapistPage = () => {
           practice_photos: uploadedPracticePhotos,
           elements: formData.elements,
           experiences: formData.experiences,
+          other_practice: formData.otherPractice || null,
           intentions: formData.intentions,
           durations: formData.durations,
           locations: formData.locations,
@@ -802,6 +804,27 @@ const RegisterTherapistPage = () => {
                   </div>
                 );
               })}
+
+              <div className="border border-border/30 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Brush className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-semibold">Autre pratique</h3>
+                </div>
+                <div>
+                  <Label htmlFor="otherPractice" className="text-base mb-2">
+                    Si vous pratiquez autre chose, précisez-le ici
+                  </Label>
+                  <Input
+                    id="otherPractice"
+                    name="otherPractice"
+                    type="text"
+                    placeholder="Ex: Constellation familiale, Hypnose, etc."
+                    value={formData.otherPractice}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="space-y-6">
