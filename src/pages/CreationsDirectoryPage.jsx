@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Search, MapPin, Palette, Hammer, Sparkles, Mail, Phone, Brush, ArrowLeft } from 'lucide-react';
+import { Search, MapPin, Palette, Hammer, Sparkles, Mail, Phone, Brush, ArrowLeft, Instagram, Facebook, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -29,7 +29,7 @@ const CreationsDirectoryPage = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('creators')
-        .select('id, name, artist_name, email, phone, commune, art_type, description, profile_photo_url, art_photos, inspiration, message')
+        .select('id, name, artist_name, email, phone, commune, art_type, description, profile_photo_url, art_photos, inspiration, message, social_links')
         .eq('is_approved', true);
 
       if (error) {
@@ -55,7 +55,8 @@ const CreationsDirectoryPage = () => {
         description: c.description || '',
         image: (c.art_photos && c.art_photos.length > 0) ? c.art_photos[0] : (c.profile_photo_url || '/placeholder-art.jpg'),
         inspiration: c.inspiration || '',
-        message: c.message || ''
+        message: c.message || '',
+        socialLinks: c.social_links || {}
       }));
 
       setCreators(formattedCreators);
@@ -210,6 +211,43 @@ const CreationsDirectoryPage = () => {
                   </div>
                   
                   <div className="mt-auto space-y-3">
+                    {(creator.socialLinks?.instagram || creator.socialLinks?.facebook || creator.socialLinks?.website) && (
+                      <div className="flex justify-center gap-3 py-2">
+                        {creator.socialLinks?.instagram && (
+                          <a
+                            href={creator.socialLinks.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 transition-all"
+                            title="Instagram"
+                          >
+                            <Instagram className="w-5 h-5 text-purple-600" />
+                          </a>
+                        )}
+                        {creator.socialLinks?.facebook && (
+                          <a
+                            href={creator.socialLinks.facebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 transition-all"
+                            title="Facebook"
+                          >
+                            <Facebook className="w-5 h-5 text-blue-600" />
+                          </a>
+                        )}
+                        {creator.socialLinks?.website && (
+                          <a
+                            href={creator.socialLinks.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-full bg-gradient-to-r from-green-500/20 to-teal-500/20 hover:from-green-500/30 hover:to-teal-500/30 transition-all"
+                            title="Site Web"
+                          >
+                            <Globe className="w-5 h-5 text-green-600" />
+                          </a>
+                        )}
+                      </div>
+                    )}
                     <Button
                       onClick={() => viewCreatorProfile(creator.id)}
                       className="w-full bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white px-4 py-2 rounded-full"

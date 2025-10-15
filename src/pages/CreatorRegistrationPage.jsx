@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
-import { Palette, Heart, Image as ImageIcon, Mail, Phone, MapPin, Sparkles, Send, User, Eye, EyeOff } from 'lucide-react';
+import { Palette, Heart, Image as ImageIcon, Mail, Phone, MapPin, Sparkles, Send, User, Eye, EyeOff, Instagram, Facebook, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -32,6 +32,9 @@ const CreatorRegistrationPage = () => {
     description: '',
     inspiration: '',
     message: '',
+    instagram: '',
+    facebook: '',
+    website: '',
     profilePhoto: null,
     artPhotos: [null, null, null, null]
   });
@@ -126,6 +129,11 @@ const CreatorRegistrationPage = () => {
     try {
       const finalArtType = formData.artType === 'Autre' ? formData.artTypeOther : formData.artType;
 
+      const socialLinks = {};
+      if (formData.instagram) socialLinks.instagram = formData.instagram;
+      if (formData.facebook) socialLinks.facebook = formData.facebook;
+      if (formData.website) socialLinks.website = formData.website;
+
       const { data, error } = await supabase
         .from('creators')
         .insert([{
@@ -141,6 +149,7 @@ const CreatorRegistrationPage = () => {
           message: formData.message,
           profile_photo_url: formData.profilePhoto,
           art_photos: uploadedArtPhotos,
+          social_links: Object.keys(socialLinks).length > 0 ? socialLinks : null,
           is_approved: true
         }])
         .select();
@@ -273,6 +282,64 @@ const CreatorRegistrationPage = () => {
                     type="tel"
                     placeholder="0590 XX XX XX"
                     value={formData.phone}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold aura-text flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-purple-500" />
+                  Réseaux Sociaux & Site Web
+                </h3>
+                <p className="text-sm text-foreground/70">
+                  Partagez vos liens pour que les visiteurs puissent découvrir votre univers
+                </p>
+
+                <div>
+                  <Label htmlFor="instagram" className="text-lg mb-2 flex items-center gap-2">
+                    <Instagram className="w-4 h-4" />
+                    Instagram
+                  </Label>
+                  <Input
+                    id="instagram"
+                    name="instagram"
+                    type="url"
+                    placeholder="https://instagram.com/votre_compte"
+                    value={formData.instagram}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="facebook" className="text-lg mb-2 flex items-center gap-2">
+                    <Facebook className="w-4 h-4" />
+                    Facebook
+                  </Label>
+                  <Input
+                    id="facebook"
+                    name="facebook"
+                    type="url"
+                    placeholder="https://facebook.com/votre_page"
+                    value={formData.facebook}
+                    onChange={handleChange}
+                    className="h-12 text-lg"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="website" className="text-lg mb-2 flex items-center gap-2">
+                    <Globe className="w-4 h-4" />
+                    Site Web Personnel
+                  </Label>
+                  <Input
+                    id="website"
+                    name="website"
+                    type="url"
+                    placeholder="https://votre-site.com"
+                    value={formData.website}
                     onChange={handleChange}
                     className="h-12 text-lg"
                   />

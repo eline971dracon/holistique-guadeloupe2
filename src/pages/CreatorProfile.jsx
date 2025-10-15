@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { ArrowLeft, Palette, Mail, Phone, Globe, MapPin, Sparkles, Heart } from 'lucide-react';
+import { ArrowLeft, Palette, Mail, Phone, Globe, MapPin, Sparkles, Heart, Instagram, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -98,17 +98,65 @@ const CreatorProfile = () => {
               )}
 
               <div className="text-center mb-6">
-                <h1 className="text-3xl font-bold mb-2 aura-text font-['Dancing_Script']">
-                  {creator.name}
-                </h1>
-                <p className="text-xl text-primary font-semibold mb-4">
+                {creator.artist_name && (
+                  <h1 className="text-3xl font-bold mb-2 aura-text font-['Dancing_Script']">
+                    {creator.artist_name}
+                  </h1>
+                )}
+                <p className="text-xl text-primary font-semibold mb-2">
                   {creator.art_type}
                 </p>
+                {creator.artist_name && (
+                  <p className="text-sm text-foreground/60 mb-4">({creator.name})</p>
+                )}
+                {!creator.artist_name && (
+                  <h1 className="text-3xl font-bold mb-4 aura-text font-['Dancing_Script']">
+                    {creator.name}
+                  </h1>
+                )}
 
                 <div className="flex items-center justify-center gap-2 text-foreground/70 mb-4">
                   <MapPin className="w-5 h-5" />
                   <span>{creator.commune}</span>
                 </div>
+
+                {(creator.social_links?.instagram || creator.social_links?.facebook || creator.social_links?.website) && (
+                  <div className="flex justify-center gap-3 mb-4 pt-2 border-t border-border/50">
+                    {creator.social_links?.instagram && (
+                      <a
+                        href={creator.social_links.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-3 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/40 hover:to-pink-500/40 transition-all transform hover:scale-110"
+                        title="Instagram"
+                      >
+                        <Instagram className="w-6 h-6 text-purple-600" />
+                      </a>
+                    )}
+                    {creator.social_links?.facebook && (
+                      <a
+                        href={creator.social_links.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-3 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-600/20 hover:from-blue-500/40 hover:to-blue-600/40 transition-all transform hover:scale-110"
+                        title="Facebook"
+                      >
+                        <Facebook className="w-6 h-6 text-blue-600" />
+                      </a>
+                    )}
+                    {creator.social_links?.website && (
+                      <a
+                        href={creator.social_links.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-3 rounded-full bg-gradient-to-r from-green-500/20 to-teal-500/20 hover:from-green-500/40 hover:to-teal-500/40 transition-all transform hover:scale-110"
+                        title="Site Web"
+                      >
+                        <Globe className="w-6 h-6 text-green-600" />
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="space-y-3">
