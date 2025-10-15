@@ -812,7 +812,7 @@ const RegisterTherapistPage = () => {
                 </div>
                 <div>
                   <Label htmlFor="otherPractice" className="text-base mb-2">
-                    Si vous pratiquez autre chose, précisez-le ici
+                    Si autre pratique, précisez-le ici
                   </Label>
                   <Input
                     id="otherPractice"
