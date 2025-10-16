@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { ArrowLeft, Palette, Mail, Phone, Globe, MapPin, Sparkles, Heart, Instagram, Facebook } from 'lucide-react';
+import { ArrowLeft, Palette, Mail, Phone, Globe, MapPin, Sparkles, Heart, Instagram, Facebook, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -12,6 +12,7 @@ const CreatorProfile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [creator, setCreator] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     const fetchCreator = async () => {
@@ -38,6 +39,12 @@ const CreatorProfile = () => {
       }
 
       setCreator(data);
+
+      const userType = sessionStorage.getItem('userType');
+      const userId = sessionStorage.getItem('userId');
+      if (userType === 'creator' && userId === id) {
+        setIsOwner(true);
+      }
     };
 
     fetchCreator();
@@ -73,14 +80,27 @@ const CreatorProfile = () => {
       </Helmet>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Button
-          onClick={() => navigate('/annuaire-creations')}
-          variant="outline"
-          className="mb-6 border-2 border-primary text-primary hover:bg-secondary"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Retour à l'annuaire
-        </Button>
+        <div className="flex justify-between items-center mb-6">
+          <Button
+            onClick={() => navigate('/annuaire-creations')}
+            variant="outline"
+            className="border-2 border-primary text-primary hover:bg-secondary"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour à l'annuaire
+          </Button>
+          {isOwner && (
+            <Button
+              onClick={() => navigate(`/edit-creator-profile/${id}`)}
+              variant="ghost"
+              size="sm"
+              className="text-foreground/60 hover:text-foreground"
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Gérer ma fiche
+            </Button>
+          )}
+        </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <motion.div

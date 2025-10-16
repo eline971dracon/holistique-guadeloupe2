@@ -22,6 +22,7 @@ const TherapistProfile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [therapist, setTherapist] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     const fetchTherapist = async () => {
@@ -67,18 +68,19 @@ const TherapistProfile = () => {
       };
 
       setTherapist(formattedTherapist);
+
+      const userType = sessionStorage.getItem('userType');
+      const userId = sessionStorage.getItem('userId');
+      if (userType === 'therapist' && userId === id) {
+        setIsOwner(true);
+      }
     };
 
     fetchTherapist();
   }, [id, navigate, toast]);
   
   const handleManageProfile = () => {
-    localStorage.setItem('loggedInUserId', therapist.id);
-    toast({
-      title: `Bienvenue, ${therapist.name} !`,
-      description: "Vous êtes maintenant connecté(e) et pouvez gérer votre fiche.",
-    });
-    navigate('/mon-compte/modifier-profil');
+    navigate(`/edit-therapist-profile/${therapist.id}`);
   };
 
   const getSubcategoryLabel = (categoryId, subcategoryId) => {
@@ -112,10 +114,12 @@ const TherapistProfile = () => {
             Retour à l'annuaire
           </Button>
         </Link>
-        <Button onClick={handleManageProfile} variant="secondary">
-          <Edit className="w-4 h-4 mr-2" />
-          Gérer ma fiche
-        </Button>
+        {isOwner && (
+          <Button onClick={handleManageProfile} variant="ghost" size="sm" className="text-foreground/60 hover:text-foreground">
+            <Edit className="w-4 h-4 mr-2" />
+            Gérer ma fiche
+          </Button>
+        )}
       </div>
 
       <section className="mystical-gradient py-16">
