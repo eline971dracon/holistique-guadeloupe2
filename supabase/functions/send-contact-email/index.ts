@@ -28,6 +28,12 @@ Deno.serve(async (req: Request) => {
     const body: EmailRequest = await req.json();
     const { name, email, phone, discipline, message, journeyDetails, type } = body;
 
+    const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
+    
+    if (!SENDGRID_API_KEY) {
+      throw new Error("SENDGRID_API_KEY is not configured");
+    }
+
     let emailSubject = "";
     let emailBody = "";
 
@@ -55,13 +61,34 @@ ${journeyDetails || ""}
       `;
     }
 
-    const emailData = {
-      to: "terranova.gwada@gmail.com",
-      subject: emailSubject,
-      body: emailBody,
-    };
+    const sendGridResponse = await fetch("https://api.sendgrid.com/v3/mail/send", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${SENDGRID_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: "terranova.gwada@gmail.com" }],
+            subject: emailSubject,
+          },
+        ],
+        from: { email: "noreply@terranova.com", name: "Terra Nova" },
+        content: [
+          {
+            type: "text/plain",
+            value: emailBody,
+          },
+        ],
+      }),
+    });
 
-    console.log("Email to send:", emailData);
+    if (!sendGridResponse.ok) {
+      const errorText = await sendGridResponse.text();
+      console.error("SendGrid error:", errorText);
+      throw new Error(`SendGrid API error: ${sendGridResponse.status}`);
+    }
 
     return new Response(
       JSON.stringify({ success: true, message: "Email envoyé avec succès" }),
