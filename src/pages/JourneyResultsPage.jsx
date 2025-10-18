@@ -111,10 +111,28 @@ Voyage Intérieur:
 - Expériences: ${selectedExperiences.map(exp => `${exp.categoryTitle} - ${exp.label}`).join(', ')}
 `;
 
-    const fullMessage = `${contactForm.message}\n\n${journeyDetails}`;
-
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-email`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          phone: contactForm.phone,
+          message: contactForm.message,
+          journeyDetails: journeyDetails,
+          type: 'journey'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'envoi');
+      }
 
       toast({
         title: 'Demande envoyée !',
@@ -123,6 +141,7 @@ Voyage Intérieur:
 
       setContactForm({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
+      console.error('Error sending email:', error);
       toast({
         title: 'Erreur',
         description: 'Une erreur est survenue. Veuillez réessayer.',

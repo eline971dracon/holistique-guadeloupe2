@@ -38,15 +38,45 @@ const ContactPage = () => {
       sincere: checked
     }));
   };
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log('Form data submitted:', formData);
-    toast({
-      title: 'Demande envoyée !',
-      description: 'Merci pour ton appel 💫. Nous avons bien reçu ta demande.',
-      variant: 'default'
-    });
-    setSubmitted(true);
+
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-email`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          discipline: formData.discipline,
+          message: formData.message,
+          type: 'contact'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'envoi');
+      }
+
+      toast({
+        title: 'Demande envoyée !',
+        description: 'Merci pour ton appel 💫. Nous avons bien reçu ta demande.',
+        variant: 'default'
+      });
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.',
+        variant: 'destructive'
+      });
+    }
   };
   if (submitted) {
     return <div className="pt-16 min-h-screen flex items-center justify-center mystical-gradient">
