@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/radio-group';
 
 const AdminEditContentPage = () => {
   const navigate = useNavigate();
