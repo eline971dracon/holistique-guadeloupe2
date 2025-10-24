@@ -1,12 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Heart, Waves, Sparkles, Droplets } from 'lucide-react';
 import ElineHeroSection from '@/components/eline/ElineHeroSection';
 import ElineServicesSection from '@/components/eline/ElineServicesSection';
 import ElineAboutSection from '@/components/eline/ElineAboutSection';
 import ElineContactSection from '@/components/eline/ElineContactSection';
+import { supabase } from '@/lib/customSupabaseClient';
+
+const iconMap = {
+  'rituel_dome_eau_terre': Droplets,
+  'rituel_reharmonisation': Heart,
+  'rituel_terre_vagues_feu': Waves,
+  'rituel_roots_renaissance': Sparkles
+};
 
 const ElinePage = () => {
+  const [services, setServices] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('services_content')
+          .select('*')
+          .order('id');
+
+        if (error) throw error;
+
+        const formattedServices = data.map(service => ({
+          id: service.service_key.replace(/_/g, '-'),
+          icon: iconMap[service.service_key] || Heart,
+          title: service.title,
+          description: service.description,
+          duration: service.duration,
+          price: service.price
+        }));
+
+        setServices(formattedServices);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
   const elineData = {
     name: "Éline",
     image: "/unnamed.png",
@@ -18,43 +59,17 @@ const ElinePage = () => {
       phone: "0590 XX XX XX",
       email: "eline.dracon@therapie-gp.com"
     },
-    services: [
-      {
-        id: "rituel-dome-eau-terre",
-        icon: Droplets,
-        title: "Rituel du Dôme Le trône de l'Eau et de la Terre",
-        description: "Enracinement et lâcher prise.",
-        duration: "60 minutes",
-        price: "111 €"
-      },
-      {
-        id: "rituel-reharmonisation",
-        icon: Heart,
-        title: "Rituel Réharmonisation",
-        description: "Soin massage d'entretien vibratoire",
-        duration: "75 min",
-        price: "111€",
-        image: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/746eb9998a27453610070f44ba9cfe74.jpg"
-      },
-      {
-        id: "rituel-terre-vagues",
-        icon: Waves,
-        title: "Rituel entre Terre, Vagues et Feu",
-        description: "Rituel sensoriel au cœur des éléments",
-        duration: "120 minutes",
-        price: "222€"
-      },
-      {
-        id: "rituel-terre-feu",
-        icon: Sparkles,
-        title: "Rituel Roots Renaissance",
-        description: "Rituel de transmutation, d'ancrage et de renaissance.",
-        duration: "Demi-journée",
-        price: "333€"
-      }
-    ],
+    services: services,
     aboutImage: "/moi 2.jpg"
   };
+
+  if (isLoading) {
+    return (
+      <div className="pt-16 min-h-screen flex items-center justify-center">
+        <div className="text-white text-xl">Chargement...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-16">
