@@ -50,15 +50,18 @@ const EditTherapistProfilePage = () => {
 
         if (therapistData) {
           setTherapist(therapistData);
+          const socialLinks = therapistData.social_links || {};
+          const practicePhotos = therapistData.practice_photos || [];
+
           setFormData({
             name: therapistData.name || '',
             surnom: therapistData.surnom || '',
             email: therapistData.email || '',
             commune: therapistData.commune || '',
             phone: therapistData.phone || '',
-            instagram: therapistData.instagram || '',
-            facebook: therapistData.facebook || '',
-            website: therapistData.website || '',
+            instagram: socialLinks.instagram || '',
+            facebook: socialLinks.facebook || '',
+            website: socialLinks.website || '',
             vibrationalPhrase: therapistData.vibrational_phrase || '',
             mission: therapistData.mission || '',
             approach: therapistData.approach || '',
@@ -72,10 +75,10 @@ const EditTherapistProfilePage = () => {
             availabilityDays: therapistData.availability_days || [],
             profilePhoto: therapistData.profile_photo_url || null,
             practicePhotos: [
-              therapistData.practice_photo_1_url || null,
-              therapistData.practice_photo_2_url || null,
-              therapistData.practice_photo_3_url || null,
-              therapistData.practice_photo_4_url || null,
+              practicePhotos[0] || null,
+              practicePhotos[1] || null,
+              practicePhotos[2] || null,
+              practicePhotos[3] || null,
             ],
           });
         } else {
@@ -202,6 +205,13 @@ const EditTherapistProfilePage = () => {
     e.preventDefault();
 
     try {
+      const socialLinks = {};
+      if (formData.instagram) socialLinks.instagram = formData.instagram;
+      if (formData.facebook) socialLinks.facebook = formData.facebook;
+      if (formData.website) socialLinks.website = formData.website;
+
+      const practicePhotos = formData.practicePhotos.filter(photo => photo !== null);
+
       const { error } = await supabase
         .from('therapists')
         .update({
@@ -210,9 +220,7 @@ const EditTherapistProfilePage = () => {
           email: formData.email,
           commune: formData.commune,
           phone: formData.phone,
-          instagram: formData.instagram,
-          facebook: formData.facebook,
-          website: formData.website,
+          social_links: socialLinks,
           vibrational_phrase: formData.vibrationalPhrase,
           mission: formData.mission,
           approach: formData.approach,
@@ -225,10 +233,7 @@ const EditTherapistProfilePage = () => {
           locations: formData.locations,
           availability_days: formData.availabilityDays,
           profile_photo_url: formData.profilePhoto,
-          practice_photo_1_url: formData.practicePhotos[0],
-          practice_photo_2_url: formData.practicePhotos[1],
-          practice_photo_3_url: formData.practicePhotos[2],
-          practice_photo_4_url: formData.practicePhotos[3],
+          practice_photos: practicePhotos,
         })
         .eq('id', therapist.id);
 

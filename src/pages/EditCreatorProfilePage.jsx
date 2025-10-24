@@ -45,15 +45,18 @@ const EditCreatorProfilePage = () => {
 
         if (creatorData) {
           setCreator(creatorData);
+          const socialLinks = creatorData.social_links || {};
+          const artPhotos = creatorData.art_photos || [];
+
           setFormData({
             name: creatorData.name || '',
             artistName: creatorData.artist_name || '',
             email: creatorData.email || '',
             commune: creatorData.commune || '',
             phone: creatorData.phone || '',
-            instagram: creatorData.instagram || '',
-            facebook: creatorData.facebook || '',
-            website: creatorData.website || '',
+            instagram: socialLinks.instagram || '',
+            facebook: socialLinks.facebook || '',
+            website: socialLinks.website || '',
             artType: creatorData.art_type || '',
             artTypeOther: '',
             description: creatorData.description || '',
@@ -61,10 +64,10 @@ const EditCreatorProfilePage = () => {
             message: creatorData.message || '',
             profilePhoto: creatorData.profile_photo_url || null,
             artPhotos: [
-              creatorData.art_photo_1_url || null,
-              creatorData.art_photo_2_url || null,
-              creatorData.art_photo_3_url || null,
-              creatorData.art_photo_4_url || null,
+              artPhotos[0] || null,
+              artPhotos[1] || null,
+              artPhotos[2] || null,
+              artPhotos[3] || null,
             ],
           });
         } else {
@@ -123,6 +126,13 @@ const EditCreatorProfilePage = () => {
     try {
       const finalArtType = formData.artType === 'Autre' ? formData.artTypeOther : formData.artType;
 
+      const socialLinks = {};
+      if (formData.instagram) socialLinks.instagram = formData.instagram;
+      if (formData.facebook) socialLinks.facebook = formData.facebook;
+      if (formData.website) socialLinks.website = formData.website;
+
+      const artPhotos = formData.artPhotos.filter(photo => photo !== null);
+
       const { error } = await supabase
         .from('creators')
         .update({
@@ -131,18 +141,13 @@ const EditCreatorProfilePage = () => {
           email: formData.email,
           commune: formData.commune,
           phone: formData.phone,
-          instagram: formData.instagram,
-          facebook: formData.facebook,
-          website: formData.website,
+          social_links: socialLinks,
           art_type: finalArtType,
           description: formData.description,
           inspiration: formData.inspiration,
           message: formData.message,
           profile_photo_url: formData.profilePhoto,
-          art_photo_1_url: formData.artPhotos[0],
-          art_photo_2_url: formData.artPhotos[1],
-          art_photo_3_url: formData.artPhotos[2],
-          art_photo_4_url: formData.artPhotos[3],
+          art_photos: artPhotos,
         })
         .eq('id', creator.id);
 
