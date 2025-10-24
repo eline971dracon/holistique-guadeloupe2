@@ -330,7 +330,7 @@ const TherapistProfile = () => {
                     if (!category) return null;
                     const Icon = category.icon;
                     return (
-                      <div key={categoryId} className="bg-gradient-to-br from-orange-100 to-peach-100 rounded-xl p-4" style={{background: 'linear-gradient(to bottom right, #fed7aa, #fde68a)'}}>
+                      <div key={categoryId} className="bg-gradient-to-br from-orange-300 to-amber-200 rounded-xl p-4" style={{background: 'linear-gradient(to bottom right, #fdba74, #fbbf24)'}}>
                         <div className="flex items-center gap-3 mb-3">
                           <Icon className="w-6 h-6 text-primary" />
                           <h3 className="text-lg font-semibold aura-text">{category.title}</h3>
@@ -348,7 +348,7 @@ const TherapistProfile = () => {
                   })}
                 </div>
                 {therapist.other_practice && (
-                  <div className="mt-6 bg-gradient-to-br from-orange-100 to-peach-100 rounded-xl p-4" style={{background: 'linear-gradient(to bottom right, #fed7aa, #fde68a)'}}>
+                  <div className="mt-6 bg-gradient-to-br from-orange-300 to-amber-200 rounded-xl p-4" style={{background: 'linear-gradient(to bottom right, #fdba74, #fbbf24)'}}>
                     <p className="text-slate-600 text-base font-medium">{therapist.other_practice}</p>
                   </div>
                 )}
