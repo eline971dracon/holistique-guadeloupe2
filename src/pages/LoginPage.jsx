@@ -157,13 +157,6 @@ const LoginPage = () => {
                     Artiste Créateur
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 p-3 rounded-lg border border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 cursor-pointer">
-                  <RadioGroupItem value="admin" id="admin" />
-                  <Label htmlFor="admin" className="cursor-pointer flex-1 flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-purple-500" />
-                    Administrateur
-                  </Label>
-                </div>
               </RadioGroup>
             </div>
 
@@ -224,6 +217,11 @@ const LoginPage = () => {
               Pas encore inscrit ?{' '}
               <Link to="/rejoindre-aventure" className="text-primary hover:underline font-semibold">
                 Rejoindre l'aventure
+              </Link>
+            </p>
+            <p className="mt-2 text-xs">
+              <Link to="/admin/login" className="text-emerald-600 hover:text-emerald-700 hover:underline">
+                Administrateur
               </Link>
             </p>
           </div>
