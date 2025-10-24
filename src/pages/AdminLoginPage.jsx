@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 
-const ADMIN_EMAIL = 'terranova.gwada@gmail.com';
+const ADMIN_EMAIL = 'terranova.gwada@gmailcom';
 const ADMIN_PASSWORD = 'Terra971';
 
 const AdminLoginPage = () => {
