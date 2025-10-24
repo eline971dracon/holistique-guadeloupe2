@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LogIn, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { LogIn, Mail, Lock, User, Eye, EyeOff, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+
+const ADMIN_EMAIL = 'terranova.gwada@gmailcom';
+const ADMIN_PASSWORD = 'Terra971';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -39,6 +42,20 @@ const LoginPage = () => {
     }
 
     setIsLoading(true);
+
+    if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
+      sessionStorage.setItem('adminAccess', 'true');
+      sessionStorage.setItem('adminEmail', ADMIN_EMAIL);
+
+      toast({
+        title: "Accès administrateur accordé",
+        description: "Bienvenue dans l'espace administrateur",
+      });
+
+      navigate('/admin/dashboard');
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const tableName = formData.userType === 'therapist' ? 'therapists' : 'creators';
@@ -135,6 +152,13 @@ const LoginPage = () => {
                   <RadioGroupItem value="creator" id="creator" />
                   <Label htmlFor="creator" className="cursor-pointer flex-1">
                     Artiste Créateur
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 p-3 rounded-lg border border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 cursor-pointer">
+                  <RadioGroupItem value="admin" id="admin" />
+                  <Label htmlFor="admin" className="cursor-pointer flex-1 flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-purple-500" />
+                    Administrateur
                   </Label>
                 </div>
               </RadioGroup>
