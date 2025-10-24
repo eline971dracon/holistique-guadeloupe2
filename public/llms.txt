@@ -12,6 +12,7 @@
 - [Inscription - Espace Protégé - Terra Nova](/registrationtype): Accédez à l
 - [Inscription Thérapeute - Terra Nova](/registertherapist): Créez votre fiche thérapeute et rejoignez notre communauté holistique
 - [Modifier Créateur - Admin - Terra Nova](/admineditcreator): No description available
+- [Modifier ma Fiche -](/editcreatorprofile): Modifiez votre fiche créative sur le Réseau Holistique de Guadeloupe.
 - [Modifier ma Fiche -](/edittherapistprofile): Modifiez votre fiche vibratoire sur le Réseau Holistique de Guadeloupe.
 - [Modifier Thérapeute - Admin - Terra Nova](/adminedittherapist): No description available
 - [Mon Voyage Intérieur - Terra Nova](/myinnerjourney): Composez votre journée holistique personnalisée. Choisissez vos intentions, expériences et lieux pour un parcours sur mesure.

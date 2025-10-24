@@ -9,10 +9,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { getTherapistById, updateTherapist } from '@/lib/therapists';
 import { experienceCategories } from '@/lib/journeyData';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
+import { supabase } from '@/lib/customSupabaseClient';
 
 const guadeloupeCommunes = [
   "Les Abymes", "Anse-Bertrand", "Baie-Mahault", "Baillif", "Basse-Terre", "Bouillante", "Capesterre-Belle-Eau", "Capesterre-de-Marie-Galante",
@@ -37,34 +37,51 @@ const EditTherapistProfilePage = () => {
   const [openCategory, setOpenCategory] = useState(null);
 
   useEffect(() => {
-    const loggedInUserId = localStorage.getItem('loggedInUserId');
-    if (!loggedInUserId) {
-      toast({ variant: "destructive", title: "Accès non autorisé", description: "Vous devez être connecté pour modifier un profil." });
-      navigate('/');
-      return;
-    }
+    const loadTherapistData = async () => {
+      const loggedInUserId = localStorage.getItem('loggedInUserId');
+      if (!loggedInUserId) {
+        toast({ variant: "destructive", title: "Accès non autorisé", description: "Vous devez être connecté pour modifier un profil." });
+        navigate('/');
+        return;
+      }
 
-    const therapistData = getTherapistById(parseInt(loggedInUserId));
-    if (therapistData) {
-      setTherapist(therapistData);
-      setFormData({
-        name: therapistData.name || '',
-        surnom: therapistData.surnom || '',
-        commune: therapistData.commune || '',
-        relianceDirecte: therapistData.relianceDirecte || '',
-        presenceInspirante: therapistData.presenceInspirante || '',
-        vibrationalPhrase: therapistData.vibrationalPhrase || '',
-        mission: therapistData.mission || '',
-        approach: therapistData.approach || '',
-        messageBienvenue: therapistData.messageBienvenue || '',
-        experiences: therapistData.experiences || {},
-        elements: therapistData.elements || [],
-        portraitPhoto: therapistData.image || null,
-      });
-    } else {
-      toast({ variant: "destructive", title: "Profil non trouvé", description: "Impossible de charger les données du profil." });
-      navigate('/annuaire');
-    }
+      try {
+        const { data: therapistData, error } = await supabase
+          .from('therapists')
+          .select('*')
+          .eq('id', loggedInUserId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (therapistData) {
+          setTherapist(therapistData);
+          setFormData({
+            name: therapistData.name || '',
+            surnom: therapistData.surnom || '',
+            commune: therapistData.commune || '',
+            relianceDirecte: therapistData.phone || '',
+            presenceInspirante: therapistData.instagram || therapistData.facebook || '',
+            vibrationalPhrase: therapistData.vibrational_phrase || '',
+            mission: therapistData.mission || '',
+            approach: therapistData.approach || '',
+            messageBienvenue: therapistData.message_bienvenue || '',
+            experiences: therapistData.experiences || {},
+            elements: therapistData.elements || [],
+            portraitPhoto: therapistData.profile_photo_url || therapistData.portrait_photo_url || null,
+          });
+        } else {
+          toast({ variant: "destructive", title: "Profil non trouvé", description: "Impossible de charger les données du profil." });
+          navigate('/annuaire');
+        }
+      } catch (error) {
+        console.error('Error loading therapist:', error);
+        toast({ variant: "destructive", title: "Erreur", description: "Impossible de charger les données du profil." });
+        navigate('/annuaire');
+      }
+    };
+
+    loadTherapistData();
   }, [navigate, toast]);
 
   const handleChange = (e) => {
@@ -110,14 +127,41 @@ const EditTherapistProfilePage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updateTherapist(therapist.id, formData);
-    toast({
-      title: "✨ Profil Mis à Jour !",
-      description: "Votre fiche vibratoire a été mise à jour avec succès.",
-    });
-    navigate(`/therapeute/${therapist.id}`);
+
+    try {
+      const { error } = await supabase
+        .from('therapists')
+        .update({
+          name: formData.name,
+          surnom: formData.surnom,
+          commune: formData.commune,
+          phone: formData.relianceDirecte,
+          vibrational_phrase: formData.vibrationalPhrase,
+          mission: formData.mission,
+          approach: formData.approach,
+          message_bienvenue: formData.messageBienvenue,
+          experiences: formData.experiences,
+          elements: formData.elements,
+        })
+        .eq('id', therapist.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "✨ Profil Mis à Jour !",
+        description: "Votre fiche vibratoire a été mise à jour avec succès.",
+      });
+      navigate(`/therapeute/${therapist.id}`);
+    } catch (error) {
+      console.error('Error updating therapist:', error);
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Impossible de sauvegarder les modifications.",
+      });
+    }
   };
 
   if (!formData) {
