@@ -158,7 +158,7 @@ const EditTherapistProfilePage = () => {
       const newElements = prev.elements.includes(elementId)
         ? prev.elements.filter(id => id !== elementId)
         : [...prev.elements, elementId];
-      return { ...prev, elements: newElements.slice(0, 2) };
+      return { ...prev, elements: newElements.slice(0, 3) };
     });
   };
 
@@ -387,13 +387,14 @@ const EditTherapistProfilePage = () => {
             </div>
 
             <div className="space-y-4">
-              <SectionTitle icon={Sparkles}>Mon alignement (1 ou 2 éléments)</SectionTitle>
+              <SectionTitle icon={Sparkles}>Mon alignement (3 éléments max)</SectionTitle>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {elements.map(el => (
                   <label key={el.id} className={`flex flex-col items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${formData.elements.includes(el.id) ? 'border-primary bg-primary/10' : 'border-input'}`}>
                     <input type="checkbox" className="hidden" checked={formData.elements.includes(el.id)} onChange={() => handleElementChange(el.id)} />
                     <el.icon className="w-8 h-8 mb-2" />
                     <span className="font-semibold">{el.name}</span>
+                    <span className="text-xs text-center text-muted-foreground mt-1">({el.description})</span>
                   </label>
                 ))}
               </div>

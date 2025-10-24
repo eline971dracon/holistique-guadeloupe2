@@ -95,7 +95,7 @@ const RegisterTherapistPage = () => {
       const newElements = prev.elements.includes(elementId)
         ? prev.elements.filter(id => id !== elementId)
         : [...prev.elements, elementId];
-      return { ...prev, elements: newElements.slice(0, 2) };
+      return { ...prev, elements: newElements.slice(0, 3) };
     });
   };
 
@@ -587,7 +587,7 @@ const RegisterTherapistPage = () => {
 
               <div>
                 <Label className="text-lg mb-3 block">
-                  Éléments Dominants (2 max)
+                  Éléments Dominants (3 max)
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                   {elements.map((element) => {
