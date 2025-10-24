@@ -120,7 +120,8 @@ const TerrePage = () => {
   };
 
   return (
-    <div className={`pt-24 pb-12 min-h-screen bg-cover bg-center bg-fixed`} style={{ backgroundImage: `url('https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/4b14d4d42e8c4c50eca0e27511199bd8.jpg')` }}>
+    <div className={`pt-24 pb-12 min-h-screen bg-cover bg-center bg-fixed relative`} style={{ backgroundImage: `url('/IMG_2042.JPG')` }}>
+      <div className="absolute inset-0 bg-black/40"></div>
       <Helmet>
         <title>Porte de la Terre - Retour aux Racines</title>
         <meta name="description" content="Explorez l'ancrage et la guérison à travers des rituels et parcours connectés à l'élément Terre." />

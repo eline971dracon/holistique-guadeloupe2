@@ -13,8 +13,8 @@ const doorsData = [{
   discovery: 'En franchissant cette porte, tu pourrais rencontrer…',
   details: ['des praticiens de massages profonds et enveloppants,', 'des soins aux argiles et cataplasmes,', 'des ateliers de poterie, de sculpture ou de jardinage en conscience,', 'des lieux en pleine nature pour te ressourcer.'],
   conclusion: 'Ici, tu apprends à t’enraciner et à sentir que ton corps est ta première maison.',
-  imageSrc: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/4b14d4d42e8c4c50eca0e27511199bd8.jpg",
-  imageText: "Paysage de montagne serein avec une vallée verdoyante",
+  imageSrc: "/IMG_2042.JPG",
+  imageText: "Paysage de terre craquelée avec montagnes au coucher du soleil",
   color: 'from-emerald-500/80 to-green-600/80',
   borderColor: 'border-emerald-400',
   link: '/porte/terre'
