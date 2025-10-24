@@ -176,6 +176,16 @@ const EauPage = () => {
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="mb-16 p-8 crystal-card rounded-3xl text-center"
+        >
+          <h2 className="text-3xl font-bold mb-4 font-['Dancing_Script'] aura-text">Les yeux respirent</h2>
+          <p className="text-lg text-white/80 italic">Une série de photos en diaporama sera proposée très prochainement</p>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.6 }}
         >
           <h2 className="text-4xl font-bold mb-8 text-center">
