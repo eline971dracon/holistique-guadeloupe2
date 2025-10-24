@@ -330,7 +330,7 @@ const TherapistProfile = () => {
                     if (!category) return null;
                     const Icon = category.icon;
                     return (
-                      <div key={categoryId} className="rounded-xl p-4">
+                      <div key={categoryId} className="crystal-card rounded-xl p-4">
                         <div className="flex items-center gap-3 mb-3">
                           <Icon className="w-6 h-6 text-primary" />
                           <h3 className="text-lg font-semibold aura-text">{category.title}</h3>
@@ -348,7 +348,7 @@ const TherapistProfile = () => {
                   })}
                 </div>
                 {therapist.other_practice && (
-                  <div className="mt-6 rounded-xl p-4">
+                  <div className="mt-6 crystal-card rounded-xl p-4">
                     <p className="text-slate-100 text-base font-medium">{therapist.other_practice}</p>
                   </div>
                 )}
