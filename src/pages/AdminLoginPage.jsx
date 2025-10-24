@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Shield, Lock, Eye, EyeOff } from 'lucide-react';
+import { Shield, Lock, Eye, EyeOff, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 
-const ADMIN_PASSWORD = 'SIRIUS2025';
+const ADMIN_EMAIL = 'terranova.gwada@gmail.com';
+const ADMIN_PASSWORD = 'Terra971';
 
 const AdminLoginPage = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +22,11 @@ const AdminLoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!password) {
+    if (!email || !password) {
       toast({
         variant: "destructive",
         title: "Erreur",
-        description: "Veuillez entrer le mot de passe vibratoire."
+        description: "Veuillez entrer votre email et mot de passe."
       });
       return;
     }
@@ -32,11 +34,12 @@ const AdminLoginPage = () => {
     setIsLoading(true);
 
     setTimeout(() => {
+      const trimmedEmail = email.trim();
       const trimmedPassword = password.trim();
 
-      if (trimmedPassword === ADMIN_PASSWORD) {
+      if (trimmedEmail === ADMIN_EMAIL && trimmedPassword === ADMIN_PASSWORD) {
         sessionStorage.setItem('adminAccess', 'true');
-        sessionStorage.setItem('adminPassword', ADMIN_PASSWORD);
+        sessionStorage.setItem('adminEmail', ADMIN_EMAIL);
 
         toast({
           title: "Accès accordé",
@@ -48,7 +51,7 @@ const AdminLoginPage = () => {
         toast({
           variant: "destructive",
           title: "Accès refusé",
-          description: `Mot de passe incorrect. Vous avez saisi: "${trimmedPassword}"`
+          description: "Email ou mot de passe incorrect."
         });
       }
       setIsLoading(false);
@@ -83,19 +86,35 @@ const AdminLoginPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
+              <Label htmlFor="email" className="text-base flex items-center gap-2 mb-2">
+                <Mail className="w-4 h-4" />
+                Email
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email administrateur"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-14 text-lg"
+                required
+              />
+            </div>
+            <div>
               <Label htmlFor="password" className="text-base flex items-center gap-2 mb-2">
                 <Lock className="w-4 h-4" />
-                Mot de passe vibratoire
+                Mot de passe
               </Label>
               <div className="relative">
                 <Input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Mot de passe vibratoire"
+                  placeholder="Mot de passe"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-14 text-lg text-center pr-12"
+                  className="h-14 text-lg pr-12"
                   required
                 />
                 <button
