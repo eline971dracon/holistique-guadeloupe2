@@ -119,7 +119,8 @@ const EauPage = () => {
   };
 
   return (
-    <div className={`pt-24 pb-12 min-h-screen bg-cover bg-center bg-fixed`} style={{ backgroundImage: `url('https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/1f139dbb394411b83813ba7c781856d1.jpg')` }}>
+    <div className={`pt-24 pb-12 min-h-screen bg-cover bg-center bg-fixed relative`} style={{ backgroundImage: `url('/IMG_2056.JPG')` }}>
+      <div className="absolute inset-0 bg-black/40"></div>
       <Helmet>
         <title>Porte de l'Eau - Fluidité & Douceur</title>
         <meta name="description" content="Explorez la fluidité et la douceur à travers des rituels et parcours connectés à l'élément Eau." />

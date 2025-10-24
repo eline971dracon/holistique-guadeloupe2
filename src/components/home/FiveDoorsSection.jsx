@@ -27,8 +27,8 @@ const doorsData = [{
   discovery: 'En franchissant cette porte, tu pourrais découvrir…',
   details: ['des soins sonores ou vibratoires (bols, tambours d’eau),', 'des massages fluides et enveloppants,', 'des rituels de bains aux plantes,', 'des ateliers de danse intuitive ou d’expression des émotions par l’art.'],
   conclusion: 'Ici, tu plonges dans le flux, tu libères les mémoires et tu retrouves ta fluidité intérieure.',
-  imageSrc: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/1f139dbb394411b83813ba7c781856d1.jpg",
-  imageText: "Goutte d'eau tombant dans l'eau, créant des ondulations",
+  imageSrc: "/IMG_2056.JPG",
+  imageText: "Gouttes d'eau en suspension avec reflets turquoise et verts",
   color: 'from-cyan-500/80 to-sky-600/80',
   borderColor: 'border-cyan-400',
   link: '/porte/eau'
