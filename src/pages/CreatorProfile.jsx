@@ -40,9 +40,13 @@ const CreatorProfile = () => {
 
       setCreator(data);
 
-      const userType = sessionStorage.getItem('userType');
-      const userId = sessionStorage.getItem('userId');
-      if (userType === 'creator' && userId === id) {
+      const sessionUserType = sessionStorage.getItem('userType');
+      const sessionUserId = sessionStorage.getItem('userId');
+      const localUserType = localStorage.getItem('userType');
+      const localUserId = localStorage.getItem('loggedInUserId');
+
+      if ((sessionUserType === 'creator' && sessionUserId === id) ||
+          (localUserType === 'creator' && localUserId === id)) {
         setIsOwner(true);
       }
     };
