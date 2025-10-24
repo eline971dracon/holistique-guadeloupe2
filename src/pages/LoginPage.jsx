@@ -43,7 +43,10 @@ const LoginPage = () => {
 
     setIsLoading(true);
 
-    if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
+    const trimmedEmail = formData.email.trim();
+    const trimmedPassword = formData.password.trim();
+
+    if (trimmedEmail === ADMIN_EMAIL && trimmedPassword === ADMIN_PASSWORD) {
       sessionStorage.setItem('adminAccess', 'true');
       sessionStorage.setItem('adminEmail', ADMIN_EMAIL);
 
