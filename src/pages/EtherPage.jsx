@@ -119,7 +119,8 @@ const EtherPage = () => {
   };
 
   return (
-    <div className={`pt-24 pb-12 min-h-screen bg-cover bg-center bg-fixed`} style={{ backgroundImage: `url('https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/b4f83bec67a9a7ec14c9c95a563fa716.jpg')` }}>
+    <div className={`pt-24 pb-12 min-h-screen bg-contain bg-center bg-no-repeat bg-fixed relative`} style={{ backgroundImage: `url('/IMG_2052.JPG')`, backgroundColor: '#1a202c' }}>
+      <div className="absolute inset-0 bg-black/30"></div>
       <Helmet>
         <title>Porte de l'Éther - Reliance & Subtil</title>
         <meta name="description" content="Explorez la reliance et le subtil à travers des rituels et parcours connectés à l'élément Éther." />

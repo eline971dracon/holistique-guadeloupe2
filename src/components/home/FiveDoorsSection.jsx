@@ -69,8 +69,8 @@ const doorsData = [{
   discovery: 'En franchissant cette porte, tu pourrais accéder à…',
   details: ['des soins énergétiques subtils et vibratoires,', 'des voyages chamaniques ou méditatifs,', 'des rencontres avec des oracles, runes ou archétypes,', 'des espaces de contemplation, de silence et de reliance spirituelle.'],
   conclusion: 'Ici, tu goûtes au mystère, à l’invisible, et tu te connectes à ton essence profonde.',
-  imageSrc: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/b4f83bec67a9a7ec14c9c95a563fa716.jpg",
-  imageText: "Silhouette méditant dans un espace éthéré avec des voiles de lumière dorée.",
+  imageSrc: "/IMG_2052.JPG",
+  imageText: "Silhouette en méditation devant des voiles lumineux dorés et éthérés",
   color: 'from-purple-500/80 to-indigo-600/80',
   borderColor: 'border-purple-400',
   link: '/porte/ether'
