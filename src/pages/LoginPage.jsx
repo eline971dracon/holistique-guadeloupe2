@@ -67,17 +67,19 @@ const LoginPage = () => {
       sessionStorage.setItem('userType', formData.userType);
       sessionStorage.setItem('userId', data.id);
       sessionStorage.setItem('userName', data.name);
+      localStorage.setItem('loggedInUserId', data.id);
+      localStorage.setItem('userType', formData.userType);
 
       toast({
         title: "Connexion réussie !",
         description: `Bienvenue ${data.name}`,
       });
 
-      const editPath = formData.userType === 'therapist'
-        ? `/edit-therapist-profile/${data.id}`
-        : `/edit-creator-profile/${data.id}`;
+      const profilePath = formData.userType === 'therapist'
+        ? `/therapeute/${data.id}`
+        : `/createur/${data.id}`;
 
-      navigate(editPath);
+      navigate(profilePath);
     } catch (error) {
       console.error('Erreur de connexion:', error);
       toast({

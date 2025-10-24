@@ -95,13 +95,11 @@ const CreatorProfile = () => {
           </Button>
           {isOwner && (
             <Button
-              onClick={() => navigate(`/edit-creator-profile/${id}`)}
-              variant="ghost"
-              size="sm"
-              className="text-foreground/60 hover:text-foreground"
+              onClick={() => navigate('/mon-compte/modifier-profil-createur')}
+              className="bg-gradient-to-r from-purple-500 to-violet-600 text-white hover:from-purple-600 hover:to-violet-700"
             >
               <Edit className="w-4 h-4 mr-2" />
-              Gérer ma fiche
+              Modifier ma fiche
             </Button>
           )}
         </div>

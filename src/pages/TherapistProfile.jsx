@@ -150,13 +150,11 @@ const TherapistProfile = () => {
           </Button>
           {isOwner && (
             <Button
-              onClick={() => navigate(`/edit-therapist-profile/${id}`)}
-              variant="ghost"
-              size="sm"
-              className="text-foreground/60 hover:text-foreground"
+              onClick={() => navigate('/mon-compte/modifier-profil')}
+              className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:from-emerald-600 hover:to-teal-700"
             >
               <Edit className="w-4 h-4 mr-2" />
-              Gérer ma fiche
+              Modifier ma fiche
             </Button>
           )}
         </div>
