@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Shield, Users, Palette, LogOut, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
+import { Shield, Users, Palette, LogOut, RefreshCw, CheckCircle, XCircle, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -197,6 +197,14 @@ const AdminDashboardPage = () => {
                     </div>
                     <div className="flex gap-2">
                       <Button
+                        onClick={() => navigate(`/admin/edit-therapist/${therapist.id}`)}
+                        variant="ghost"
+                        size="sm"
+                      >
+                        <Edit className="w-4 h-4 mr-1" />
+                        Modifier
+                      </Button>
+                      <Button
                         onClick={() => handleApproval('therapists', therapist.id, therapist.is_approved)}
                         variant={therapist.is_approved ? "outline" : "default"}
                         size="sm"
@@ -253,6 +261,14 @@ const AdminDashboardPage = () => {
                       </div>
                     </div>
                     <div className="flex gap-2">
+                      <Button
+                        onClick={() => navigate(`/admin/edit-creator/${creator.id}`)}
+                        variant="ghost"
+                        size="sm"
+                      >
+                        <Edit className="w-4 h-4 mr-1" />
+                        Modifier
+                      </Button>
                       <Button
                         onClick={() => handleApproval('creators', creator.id, creator.is_approved)}
                         variant={creator.is_approved ? "outline" : "default"}
