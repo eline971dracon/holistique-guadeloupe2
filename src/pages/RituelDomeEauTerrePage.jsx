@@ -120,7 +120,7 @@ const RituelDomeEauTerrePage = () => {
               duration: 0.7,
               delay: 0.4
             }}>
-              <img className="rounded-2xl w-full h-full object-cover shadow-lg" alt="A serene spa setting with a wooden dome structure, water elements, and earthy tones" src="https://images.unsplash.com/photo-1597671594310-80ccb4d03f88" />
+              <img className="rounded-2xl w-full h-full object-cover shadow-lg" alt="Vagues dorées sur une plage au coucher du soleil" src="/plage.JPG" />
             </motion.div>
 
             <div className="flex flex-col justify-center">
