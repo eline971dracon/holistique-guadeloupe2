@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { ArrowLeft, Palette, Mail, Phone, Globe, MapPin, Sparkles, Heart, Instagram, Facebook, Edit } from 'lucide-react';
+import { ArrowLeft, Palette, Mail, Phone, Globe, MapPin, Sparkles, Heart, Instagram, Facebook, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -13,6 +13,7 @@ const CreatorProfile = () => {
   const { toast } = useToast();
   const [creator, setCreator] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchCreator = async () => {
@@ -40,6 +41,11 @@ const CreatorProfile = () => {
 
       setCreator(data);
 
+      const adminAccess = sessionStorage.getItem('adminAccess');
+      if (adminAccess === 'true') {
+        setIsAdmin(true);
+      }
+
       const sessionUserType = sessionStorage.getItem('userType');
       const sessionUserId = sessionStorage.getItem('userId');
       const localUserType = localStorage.getItem('userType');
@@ -65,6 +71,37 @@ const CreatorProfile = () => {
       toast({
         title: 'Contact',
         description: 'Aucun numéro de téléphone disponible pour ce créateur.'
+      });
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette fiche ? Cette action est irréversible.')) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('creators')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: 'Fiche supprimée',
+        description: 'La fiche a été supprimée avec succès',
+      });
+
+      navigate('/annuaire-creations');
+    } catch (error) {
+      console.error('Error deleting creator:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Erreur',
+        description: 'Impossible de supprimer la fiche'
       });
     }
   };
@@ -97,15 +134,36 @@ const CreatorProfile = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour à l'annuaire
           </Button>
-          {isOwner && (
-            <Button
-              onClick={() => navigate('/mon-compte/modifier-profil-createur')}
-              className="bg-gradient-to-r from-purple-500 to-violet-600 text-white hover:from-purple-600 hover:to-violet-700"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Modifier ma fiche
-            </Button>
-          )}
+          <div className="flex gap-3">
+            {isOwner && (
+              <Button
+                onClick={() => navigate('/mon-compte/modifier-profil-createur')}
+                className="bg-gradient-to-r from-purple-500 to-violet-600 text-white hover:from-purple-600 hover:to-violet-700"
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Modifier ma fiche
+              </Button>
+            )}
+            {isAdmin && (
+              <>
+                <Button
+                  onClick={() => navigate(`/admin/edit-creator/${id}`)}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700"
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Modifier fiche
+                </Button>
+                <Button
+                  onClick={handleDelete}
+                  variant="destructive"
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Supprimer fiche
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
