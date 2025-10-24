@@ -347,6 +347,11 @@ const TherapistProfile = () => {
                     );
                   })}
                 </div>
+                {therapist.other_practice && (
+                  <div className="mt-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-4">
+                    <p className="text-foreground/80">{therapist.other_practice}</p>
+                  </div>
+                )}
               </div>
             )}
 
