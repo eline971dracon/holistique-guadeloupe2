@@ -474,11 +474,32 @@ const AdminEditContentPage = () => {
                   </div>
 
                   <div>
-                    <Label>URL de l'image</Label>
+                    <Label>URL de l'image de présentation</Label>
                     <Input
                       value={post.image_url}
                       onChange={(e) => handleBlogChange(index, 'image_url', e.target.value)}
+                      placeholder="https://images.unsplash.com/photo-..."
                     />
+                    <p className="text-sm text-foreground/60 mt-1">
+                      Utilisez une URL d'image (Unsplash, Pexels, ou votre propre image hébergée)
+                    </p>
+                    {post.image_url && (
+                      <div className="mt-3">
+                        <p className="text-sm font-semibold mb-2">Aperçu :</p>
+                        <img
+                          src={post.image_url}
+                          alt="Aperçu"
+                          className="w-full max-w-md h-48 object-cover rounded-lg shadow-md"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'block';
+                          }}
+                        />
+                        <p className="text-sm text-red-500 mt-2" style={{display: 'none'}}>
+                          Impossible de charger l'image. Vérifiez l'URL.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
