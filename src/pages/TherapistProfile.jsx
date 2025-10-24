@@ -330,14 +330,14 @@ const TherapistProfile = () => {
                     if (!category) return null;
                     const Icon = category.icon;
                     return (
-                      <div key={categoryId} className="bg-violet-800/40 rounded-xl p-4">
+                      <div key={categoryId} className="rounded-xl p-4">
                         <div className="flex items-center gap-3 mb-3">
                           <Icon className="w-6 h-6 text-primary" />
                           <h3 className="text-lg font-semibold aura-text">{category.title}</h3>
                         </div>
                         <ul className="space-y-2">
                           {subcategories.map(subcategoryId => (
-                            <li key={subcategoryId} className="flex items-start text-slate-600 text-base font-medium">
+                            <li key={subcategoryId} className="flex items-start text-slate-100 text-base font-medium">
                               <Heart className="w-4 h-4 mr-2 text-teal-500 flex-shrink-0 mt-1" />
                               <span>{getSubcategoryLabel(categoryId, subcategoryId)}</span>
                             </li>
@@ -348,8 +348,8 @@ const TherapistProfile = () => {
                   })}
                 </div>
                 {therapist.other_practice && (
-                  <div className="mt-6 bg-violet-800/40 rounded-xl p-4">
-                    <p className="text-slate-600 text-base font-medium">{therapist.other_practice}</p>
+                  <div className="mt-6 rounded-xl p-4">
+                    <p className="text-slate-100 text-base font-medium">{therapist.other_practice}</p>
                   </div>
                 )}
               </div>
