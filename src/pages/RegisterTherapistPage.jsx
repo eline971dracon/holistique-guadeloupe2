@@ -30,6 +30,7 @@ const RegisterTherapistPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
+    surnom: '',
     email: '',
     phone: '',
     commune: '',
@@ -39,7 +40,6 @@ const RegisterTherapistPage = () => {
     mission: '',
     approach: '',
     messageBienvenue: '',
-    mantra: '',
     instagram: '',
     facebook: '',
     website: '',
@@ -212,11 +212,11 @@ const RegisterTherapistPage = () => {
           phone: formData.phone,
           commune: formData.commune,
           password: formData.password,
+          surnom: formData.surnom,
           vibrational_phrase: formData.vibrationalPhrase,
           mission: formData.mission,
           approach: formData.approach,
           message_bienvenue: formData.messageBienvenue,
-          mantra: formData.mantra,
           profile_photo_url: formData.profilePhoto,
           practice_photos: uploadedPracticePhotos,
           elements: formData.elements,
@@ -309,6 +309,21 @@ const RegisterTherapistPage = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
+                  className="h-12 text-lg"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="surnom" className="text-lg mb-2">
+                  Surnom
+                </Label>
+                <Input
+                  id="surnom"
+                  name="surnom"
+                  type="text"
+                  placeholder="Votre surnom ou nom d'artiste"
+                  value={formData.surnom}
+                  onChange={handleChange}
                   className="h-12 text-lg"
                 />
               </div>
@@ -599,7 +614,7 @@ const RegisterTherapistPage = () => {
 
               <div>
                 <Label htmlFor="vibrationalPhrase" className="text-lg mb-2">
-                  Phrase Vibratoire
+                  Phrase Vibratoire / Mantra
                 </Label>
                 <Input
                   id="vibrationalPhrase"
@@ -607,21 +622,6 @@ const RegisterTherapistPage = () => {
                   type="text"
                   placeholder="Une phrase qui résume votre essence..."
                   value={formData.vibrationalPhrase}
-                  onChange={handleChange}
-                  className="h-12 text-lg"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="mantra" className="text-lg mb-2">
-                  Mantra
-                </Label>
-                <Input
-                  id="mantra"
-                  name="mantra"
-                  type="text"
-                  placeholder="Votre mantra personnel..."
-                  value={formData.mantra}
                   onChange={handleChange}
                   className="h-12 text-lg"
                 />

@@ -49,6 +49,7 @@ const EditTherapistProfilePage = () => {
       setTherapist(therapistData);
       setFormData({
         name: therapistData.name || '',
+        surnom: therapistData.surnom || '',
         commune: therapistData.commune || '',
         relianceDirecte: therapistData.relianceDirecte || '',
         presenceInspirante: therapistData.presenceInspirante || '',
@@ -56,7 +57,6 @@ const EditTherapistProfilePage = () => {
         mission: therapistData.mission || '',
         approach: therapistData.approach || '',
         messageBienvenue: therapistData.messageBienvenue || '',
-        mantra: therapistData.mantra || '',
         experiences: therapistData.experiences || {},
         elements: therapistData.elements || [],
         portraitPhoto: therapistData.image || null,
@@ -164,6 +164,10 @@ const EditTherapistProfilePage = () => {
                 <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="surnom" className="font-['Dancing_Script'] aura-text text-3xl">Surnom</Label>
+                <Input id="surnom" name="surnom" value={formData.surnom} onChange={handleChange} />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="commune" className="font-['Dancing_Script'] aura-text text-3xl">Terre d'Ancrage</Label>
                 <Select onValueChange={(value) => handleSelectChange('commune', value)} value={formData.commune}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
@@ -194,7 +198,7 @@ const EditTherapistProfilePage = () => {
             </div>
 
             <div className="space-y-2">
-              <SectionTitle icon={Heart}>Ma phrase d'appel</SectionTitle>
+              <SectionTitle icon={Heart}>Ma phrase d'appel / Mantra</SectionTitle>
               <Textarea id="vibrationalPhrase" name="vibrationalPhrase" value={formData.vibrationalPhrase} onChange={handleChange} rows={2} required />
             </div>
             
@@ -248,11 +252,6 @@ const EditTherapistProfilePage = () => {
             <div className="space-y-2">
               <SectionTitle icon={MessageSquare}>Un message pour toi</SectionTitle>
               <Textarea id="messageBienvenue" name="messageBienvenue" value={formData.messageBienvenue} onChange={handleChange} rows={2} required />
-            </div>
-
-            <div className="space-y-2">
-              <SectionTitle icon={Type}>Mon mantra</SectionTitle>
-              <Input id="mantra" name="mantra" value={formData.mantra} onChange={handleChange} />
             </div>
 
             <div className="text-center pt-8 border-t border-primary/20">
