@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Sparkles, Heart, Palette, Save } from 'lucide-react';
+import { Sparkles, Heart, Palette, Save, Image as ImageIcon, X, Instagram, Facebook, Globe, Phone, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,12 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/lib/customSupabaseClient';
+import { CommuneCombobox } from '@/components/CommuneCombobox';
 
-const guadeloupeCommunes = [
-  "Les Abymes", "Anse-Bertrand", "Baie-Mahault", "Baillif", "Basse-Terre", "Bouillante", "Capesterre-Belle-Eau", "Capesterre-de-Marie-Galante",
-  "Deshaies", "La Désirade", "Le Gosier", "Gourbeyre", "Grand-Bourg", "Lamentin", "Morne-à-l'Eau", "Le Moule", "Petit-Bourg", "Petit-Canal",
-  "Pointe-à-Pitre", "Pointe-Noire", "Port-Louis", "Saint-Claude", "Saint-François", "Saint-Louis", "Sainte-Anne", "Sainte-Rose",
-  "Terre-de-Bas", "Terre-de-Haut", "Trois-Rivières", "Vieux-Fort", "Vieux-Habitants"
+const artTypes = [
+  'Peinture', 'Sculpture', 'Photographie', 'Artisanat', 'Bijouterie',
+  'Céramique', 'Textile', 'Art numérique', 'Illustration', 'Autre'
 ];
 
 const EditCreatorProfilePage = () => {
@@ -48,15 +47,25 @@ const EditCreatorProfilePage = () => {
           setCreator(creatorData);
           setFormData({
             name: creatorData.name || '',
-            artist_name: creatorData.artist_name || '',
+            artistName: creatorData.artist_name || '',
+            email: creatorData.email || '',
             commune: creatorData.commune || '',
             phone: creatorData.phone || '',
             instagram: creatorData.instagram || '',
             facebook: creatorData.facebook || '',
-            art_type: creatorData.art_type || '',
+            website: creatorData.website || '',
+            artType: creatorData.art_type || '',
+            artTypeOther: '',
             description: creatorData.description || '',
             inspiration: creatorData.inspiration || '',
             message: creatorData.message || '',
+            profilePhoto: creatorData.profile_photo_url || null,
+            artPhotos: [
+              creatorData.art_photo_1_url || null,
+              creatorData.art_photo_2_url || null,
+              creatorData.art_photo_3_url || null,
+              creatorData.art_photo_4_url || null,
+            ],
           });
         } else {
           toast({ variant: "destructive", title: "Profil non trouvé", description: "Impossible de charger les données du profil." });
@@ -81,23 +90,59 @@ const EditCreatorProfilePage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e, isProfile = false, index = null) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (isProfile) {
+          setFormData(prev => ({ ...prev, profilePhoto: reader.result }));
+        } else if (index !== null) {
+          setFormData(prev => {
+            const newArtPhotos = [...prev.artPhotos];
+            newArtPhotos[index] = reader.result;
+            return { ...prev, artPhotos: newArtPhotos };
+          });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeArtPhoto = (index) => {
+    setFormData(prev => {
+      const newArtPhotos = [...prev.artPhotos];
+      newArtPhotos[index] = null;
+      return { ...prev, artPhotos: newArtPhotos };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      const finalArtType = formData.artType === 'Autre' ? formData.artTypeOther : formData.artType;
+
       const { error } = await supabase
         .from('creators')
         .update({
           name: formData.name,
-          artist_name: formData.artist_name,
+          artist_name: formData.artistName,
+          email: formData.email,
           commune: formData.commune,
           phone: formData.phone,
           instagram: formData.instagram,
           facebook: formData.facebook,
-          art_type: formData.art_type,
+          website: formData.website,
+          art_type: finalArtType,
           description: formData.description,
           inspiration: formData.inspiration,
           message: formData.message,
+          profile_photo_url: formData.profilePhoto,
+          art_photo_1_url: formData.artPhotos[0],
+          art_photo_2_url: formData.artPhotos[1],
+          art_photo_3_url: formData.artPhotos[2],
+          art_photo_4_url: formData.artPhotos[3],
         })
         .eq('id', creator.id);
 
@@ -156,53 +201,136 @@ const EditCreatorProfilePage = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="crystal-card rounded-3xl p-8 md:p-12 space-y-12"
           >
+            <div className="space-y-8">
+              <SectionTitle icon={ImageIcon}>Photos</SectionTitle>
+
+              <div className="space-y-2">
+                <Label className="font-['Dancing_Script'] aura-text text-2xl">Photo de Profil</Label>
+                <div className="flex items-center gap-4">
+                  {formData.profilePhoto && (
+                    <img src={formData.profilePhoto} alt="Profil" className="w-24 h-24 object-cover rounded-full" />
+                  )}
+                  <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, true)} />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Label className="font-['Dancing_Script'] aura-text text-2xl">Photos de mes créations (jusqu'à 4)</Label>
+                <div className="grid grid-cols-2 gap-4">
+                  {formData.artPhotos.map((photo, index) => (
+                    <div key={index} className="relative">
+                      {photo ? (
+                        <div className="relative">
+                          <img src={photo} alt={`Art ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                          <button
+                            type="button"
+                            onClick={() => removeArtPhoto(index)}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <label className="flex items-center justify-center h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-secondary/50">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleFileChange(e, false, index)}
+                          />
+                          <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                        </label>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label htmlFor="name" className="font-['Dancing_Script'] aura-text text-3xl">Nom Complet</Label>
+                <Label htmlFor="name" className="font-['Dancing_Script'] aura-text text-3xl">Nom Complet *</Label>
                 <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="artist_name" className="font-['Dancing_Script'] aura-text text-3xl">Nom d'Artiste</Label>
-                <Input id="artist_name" name="artist_name" value={formData.artist_name} onChange={handleChange} />
+                <Label htmlFor="artistName" className="font-['Dancing_Script'] aura-text text-3xl">Nom d'Artiste</Label>
+                <Input id="artistName" name="artistName" value={formData.artistName} onChange={handleChange} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="commune" className="font-['Dancing_Script'] aura-text text-3xl">Commune</Label>
-                <Select onValueChange={(value) => handleSelectChange('commune', value)} value={formData.commune}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{guadeloupeCommunes.sort().map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-                </Select>
+                <Label htmlFor="email" className="font-['Dancing_Script'] aura-text text-3xl flex items-center gap-2">
+                  <Mail className="w-5 h-5" />Email *
+                </Label>
+                <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="art_type" className="font-['Dancing_Script'] aura-text text-3xl">Type d'Art</Label>
-                <Input id="art_type" name="art_type" value={formData.art_type} onChange={handleChange} required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="font-['Dancing_Script'] aura-text text-3xl">Téléphone</Label>
+                <Label htmlFor="phone" className="font-['Dancing_Script'] aura-text text-3xl flex items-center gap-2">
+                  <Phone className="w-5 h-5" />Téléphone
+                </Label>
                 <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="instagram" className="font-['Dancing_Script'] aura-text text-3xl">Instagram</Label>
-                <Input id="instagram" name="instagram" value={formData.instagram} onChange={handleChange} placeholder="@votre_compte" />
+                <Label className="font-['Dancing_Script'] aura-text text-3xl flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />Commune *
+                </Label>
+                <CommuneCombobox value={formData.commune} onChange={(value) => handleSelectChange('commune', value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="facebook" className="font-['Dancing_Script'] aura-text text-3xl">Facebook</Label>
-                <Input id="facebook" name="facebook" value={formData.facebook} onChange={handleChange} />
+                <Label htmlFor="artType" className="font-['Dancing_Script'] aura-text text-3xl">Type d'Art *</Label>
+                <Select onValueChange={(value) => handleSelectChange('artType', value)} value={formData.artType}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {artTypes.map(type => (
+                      <SelectItem key={type} value={type}>{type}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {formData.artType === 'Autre' && (
+              <div className="space-y-2">
+                <Label htmlFor="artTypeOther" className="font-['Dancing_Script'] aura-text text-2xl">Précisez votre type d'art *</Label>
+                <Input id="artTypeOther" name="artTypeOther" value={formData.artTypeOther} onChange={handleChange} required />
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <SectionTitle icon={Globe}>Présences numériques</SectionTitle>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="instagram" className="flex items-center gap-2">
+                    <Instagram className="w-4 h-4" />Instagram
+                  </Label>
+                  <Input id="instagram" name="instagram" value={formData.instagram} onChange={handleChange} placeholder="@votre_compte" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="facebook" className="flex items-center gap-2">
+                    <Facebook className="w-4 h-4" />Facebook
+                  </Label>
+                  <Input id="facebook" name="facebook" value={formData.facebook} onChange={handleChange} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="website" className="flex items-center gap-2">
+                    <Globe className="w-4 h-4" />Site Web
+                  </Label>
+                  <Input id="website" name="website" type="url" value={formData.website} onChange={handleChange} placeholder="https://" />
+                </div>
               </div>
             </div>
 
             <div className="space-y-2">
               <SectionTitle icon={Palette}>Ma démarche artistique</SectionTitle>
-              <Textarea id="description" name="description" value={formData.description} onChange={handleChange} rows={4} />
+              <Textarea id="description" name="description" value={formData.description} onChange={handleChange} rows={4} placeholder="Décrivez votre démarche, votre style, ce qui vous inspire..." />
             </div>
 
             <div className="space-y-2">
               <SectionTitle icon={Sparkles}>Mes sources d'inspiration</SectionTitle>
-              <Textarea id="inspiration" name="inspiration" value={formData.inspiration} onChange={handleChange} rows={3} />
+              <Textarea id="inspiration" name="inspiration" value={formData.inspiration} onChange={handleChange} rows={3} placeholder="Qu'est-ce qui nourrit votre créativité ?" />
             </div>
 
             <div className="space-y-2">
               <SectionTitle icon={Heart}>Mon message</SectionTitle>
-              <Textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={3} />
+              <Textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={3} placeholder="Un message à partager avec ceux qui découvrent votre travail..." />
             </div>
 
             <div className="text-center pt-8 border-t border-primary/20">

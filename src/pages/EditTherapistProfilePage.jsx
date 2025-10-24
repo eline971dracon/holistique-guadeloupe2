@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { Sparkles, Heart, Type, Image as ImageIcon, Droplets, Mountain, Sun, Wind, Star as StarIcon, UserCheck, Compass, MessageSquare, Save, ChevronDown } from 'lucide-react';
+import { Sparkles, Heart, Image as ImageIcon, Droplets, Mountain, Sun, Wind, Star as StarIcon, UserCheck, Compass, MessageSquare, Save, ChevronDown, X, Instagram, Facebook, Globe, Phone, Mail, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,13 +13,7 @@ import { experienceCategories } from '@/lib/journeyData';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
 import { supabase } from '@/lib/customSupabaseClient';
-
-const guadeloupeCommunes = [
-  "Les Abymes", "Anse-Bertrand", "Baie-Mahault", "Baillif", "Basse-Terre", "Bouillante", "Capesterre-Belle-Eau", "Capesterre-de-Marie-Galante",
-  "Deshaies", "La Désirade", "Le Gosier", "Gourbeyre", "Grand-Bourg", "Lamentin", "Morne-à-l'Eau", "Le Moule", "Petit-Bourg", "Petit-Canal",
-  "Pointe-à-Pitre", "Pointe-Noire", "Port-Louis", "Saint-Claude", "Saint-François", "Saint-Louis", "Sainte-Anne", "Sainte-Rose",
-  "Terre-de-Bas", "Terre-de-Haut", "Trois-Rivières", "Vieux-Fort", "Vieux-Habitants"
-];
+import { CommuneCombobox } from '@/components/CommuneCombobox';
 
 const elements = [
   { id: 'Terre', name: 'Terre', icon: Mountain, description: 'Racine, corps, stabilité' },
@@ -59,16 +53,30 @@ const EditTherapistProfilePage = () => {
           setFormData({
             name: therapistData.name || '',
             surnom: therapistData.surnom || '',
+            email: therapistData.email || '',
             commune: therapistData.commune || '',
-            relianceDirecte: therapistData.phone || '',
-            presenceInspirante: therapistData.instagram || therapistData.facebook || '',
+            phone: therapistData.phone || '',
+            instagram: therapistData.instagram || '',
+            facebook: therapistData.facebook || '',
+            website: therapistData.website || '',
             vibrationalPhrase: therapistData.vibrational_phrase || '',
             mission: therapistData.mission || '',
             approach: therapistData.approach || '',
             messageBienvenue: therapistData.message_bienvenue || '',
             experiences: therapistData.experiences || {},
             elements: therapistData.elements || [],
-            portraitPhoto: therapistData.profile_photo_url || therapistData.portrait_photo_url || null,
+            otherPractice: therapistData.other_practice || '',
+            intentions: therapistData.intentions || [],
+            durations: therapistData.durations || [],
+            locations: therapistData.locations || [],
+            availabilityDays: therapistData.availability_days || [],
+            profilePhoto: therapistData.profile_photo_url || null,
+            practicePhotos: [
+              therapistData.practice_photo_1_url || null,
+              therapistData.practice_photo_2_url || null,
+              therapistData.practice_photo_3_url || null,
+              therapistData.practice_photo_4_url || null,
+            ],
           });
         } else {
           toast({ variant: "destructive", title: "Profil non trouvé", description: "Impossible de charger les données du profil." });
@@ -91,6 +99,33 @@ const EditTherapistProfilePage = () => {
 
   const handleSelectChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e, isProfile = false, index = null) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (isProfile) {
+          setFormData(prev => ({ ...prev, profilePhoto: reader.result }));
+        } else if (index !== null) {
+          setFormData(prev => {
+            const newPracticePhotos = [...prev.practicePhotos];
+            newPracticePhotos[index] = reader.result;
+            return { ...prev, practicePhotos: newPracticePhotos };
+          });
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removePracticePhoto = (index) => {
+    setFormData(prev => {
+      const newPracticePhotos = [...prev.practicePhotos];
+      newPracticePhotos[index] = null;
+      return { ...prev, practicePhotos: newPracticePhotos };
+    });
   };
 
   const handleCategoryToggle = (categoryId) => {
@@ -117,13 +152,49 @@ const EditTherapistProfilePage = () => {
 
     setFormData({ ...formData, experiences: newExperiences });
   };
-  
+
   const handleElementChange = (elementId) => {
     setFormData(prev => {
       const newElements = prev.elements.includes(elementId)
         ? prev.elements.filter(id => id !== elementId)
         : [...prev.elements, elementId];
       return { ...prev, elements: newElements.slice(0, 2) };
+    });
+  };
+
+  const handleIntentionChange = (intentionValue) => {
+    setFormData(prev => {
+      const newIntentions = prev.intentions.includes(intentionValue)
+        ? prev.intentions.filter(i => i !== intentionValue)
+        : [...prev.intentions, intentionValue];
+      return { ...prev, intentions: newIntentions };
+    });
+  };
+
+  const handleDurationChange = (durationValue) => {
+    setFormData(prev => {
+      const newDurations = prev.durations.includes(durationValue)
+        ? prev.durations.filter(d => d !== durationValue)
+        : [...prev.durations, durationValue];
+      return { ...prev, durations: newDurations };
+    });
+  };
+
+  const handleLocationChange = (locationValue) => {
+    setFormData(prev => {
+      const newLocations = prev.locations.includes(locationValue)
+        ? prev.locations.filter(l => l !== locationValue)
+        : [...prev.locations, locationValue];
+      return { ...prev, locations: newLocations };
+    });
+  };
+
+  const handleAvailabilityDayChange = (day) => {
+    setFormData(prev => {
+      const newDays = prev.availabilityDays.includes(day)
+        ? prev.availabilityDays.filter(d => d !== day)
+        : [...prev.availabilityDays, day];
+      return { ...prev, availabilityDays: newDays };
     });
   };
 
@@ -136,14 +207,28 @@ const EditTherapistProfilePage = () => {
         .update({
           name: formData.name,
           surnom: formData.surnom,
+          email: formData.email,
           commune: formData.commune,
-          phone: formData.relianceDirecte,
+          phone: formData.phone,
+          instagram: formData.instagram,
+          facebook: formData.facebook,
+          website: formData.website,
           vibrational_phrase: formData.vibrationalPhrase,
           mission: formData.mission,
           approach: formData.approach,
           message_bienvenue: formData.messageBienvenue,
           experiences: formData.experiences,
           elements: formData.elements,
+          other_practice: formData.otherPractice,
+          intentions: formData.intentions,
+          durations: formData.durations,
+          locations: formData.locations,
+          availability_days: formData.availabilityDays,
+          profile_photo_url: formData.profilePhoto,
+          practice_photo_1_url: formData.practicePhotos[0],
+          practice_photo_2_url: formData.practicePhotos[1],
+          practice_photo_3_url: formData.practicePhotos[2],
+          practice_photo_4_url: formData.practicePhotos[3],
         })
         .eq('id', therapist.id);
 
@@ -202,9 +287,55 @@ const EditTherapistProfilePage = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="crystal-card rounded-3xl p-8 md:p-12 space-y-12"
           >
+            <div className="space-y-8">
+              <SectionTitle icon={ImageIcon}>Photos</SectionTitle>
+
+              <div className="space-y-2">
+                <Label className="font-['Dancing_Script'] aura-text text-2xl">Photo de Profil</Label>
+                <div className="flex items-center gap-4">
+                  {formData.profilePhoto && (
+                    <img src={formData.profilePhoto} alt="Profil" className="w-24 h-24 object-cover rounded-full" />
+                  )}
+                  <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, true)} />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Label className="font-['Dancing_Script'] aura-text text-2xl">Photos de ma pratique (jusqu'à 4)</Label>
+                <div className="grid grid-cols-2 gap-4">
+                  {formData.practicePhotos.map((photo, index) => (
+                    <div key={index} className="relative">
+                      {photo ? (
+                        <div className="relative">
+                          <img src={photo} alt={`Pratique ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                          <button
+                            type="button"
+                            onClick={() => removePracticePhoto(index)}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <label className="flex items-center justify-center h-32 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-secondary/50">
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleFileChange(e, false, index)}
+                          />
+                          <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                        </label>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
-                <Label htmlFor="name" className="font-['Dancing_Script'] aura-text text-3xl">Nom d'Âme</Label>
+                <Label htmlFor="name" className="font-['Dancing_Script'] aura-text text-3xl">Nom d'Âme *</Label>
                 <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
               </div>
               <div className="space-y-2">
@@ -212,19 +343,46 @@ const EditTherapistProfilePage = () => {
                 <Input id="surnom" name="surnom" value={formData.surnom} onChange={handleChange} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="commune" className="font-['Dancing_Script'] aura-text text-3xl">Terre d'Ancrage</Label>
-                <Select onValueChange={(value) => handleSelectChange('commune', value)} value={formData.commune}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>{guadeloupeCommunes.sort().map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-                </Select>
+                <Label htmlFor="email" className="font-['Dancing_Script'] aura-text text-3xl flex items-center gap-2">
+                  <Mail className="w-5 h-5" />Email *
+                </Label>
+                <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="relianceDirecte" className="font-['Dancing_Script'] aura-text text-3xl">Reliance directe</Label>
-                <Input id="relianceDirecte" name="relianceDirecte" type="tel" value={formData.relianceDirecte} onChange={handleChange} />
+                <Label htmlFor="phone" className="font-['Dancing_Script'] aura-text text-3xl flex items-center gap-2">
+                  <Phone className="w-5 h-5" />Téléphone
+                </Label>
+                <Input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleChange} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="presenceInspirante" className="font-['Dancing_Script'] aura-text text-3xl">Présence inspirante</Label>
-                <Input id="presenceInspirante" name="presenceInspirante" value={formData.presenceInspirante} onChange={handleChange} />
+                <Label className="font-['Dancing_Script'] aura-text text-3xl flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />Terre d'Ancrage *
+                </Label>
+                <CommuneCombobox value={formData.commune} onChange={(value) => handleSelectChange('commune', value)} />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <SectionTitle icon={Globe}>Présences numériques</SectionTitle>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="instagram" className="flex items-center gap-2">
+                    <Instagram className="w-4 h-4" />Instagram
+                  </Label>
+                  <Input id="instagram" name="instagram" value={formData.instagram} onChange={handleChange} placeholder="@votre_compte" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="facebook" className="flex items-center gap-2">
+                    <Facebook className="w-4 h-4" />Facebook
+                  </Label>
+                  <Input id="facebook" name="facebook" value={formData.facebook} onChange={handleChange} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="website" className="flex items-center gap-2">
+                    <Globe className="w-4 h-4" />Site Web
+                  </Label>
+                  <Input id="website" name="website" type="url" value={formData.website} onChange={handleChange} placeholder="https://" />
+                </div>
               </div>
             </div>
 
@@ -242,12 +400,12 @@ const EditTherapistProfilePage = () => {
             </div>
 
             <div className="space-y-2">
-              <SectionTitle icon={Heart}>Ma phrase d'appel / Mantra</SectionTitle>
+              <SectionTitle icon={Heart}>Ma phrase d'appel / Mantra *</SectionTitle>
               <Textarea id="vibrationalPhrase" name="vibrationalPhrase" value={formData.vibrationalPhrase} onChange={handleChange} rows={2} required />
             </div>
-            
+
             <div className="space-y-2">
-              <SectionTitle icon={Compass}>Ma mission de cœur</SectionTitle>
+              <SectionTitle icon={Compass}>Ma mission de cœur *</SectionTitle>
               <Textarea id="mission" name="mission" value={formData.mission} onChange={handleChange} rows={3} required />
             </div>
 
@@ -289,12 +447,65 @@ const EditTherapistProfilePage = () => {
             </div>
 
             <div className="space-y-2">
-              <SectionTitle icon={UserCheck}>Mon approche</SectionTitle>
+              <Label htmlFor="otherPractice" className="font-['Dancing_Script'] aura-text text-2xl">Autre pratique non listée</Label>
+              <Input id="otherPractice" name="otherPractice" value={formData.otherPractice} onChange={handleChange} placeholder="Précisez ici..." />
+            </div>
+
+            <div className="space-y-4">
+              <SectionTitle icon={Heart}>Intentions que j'accompagne</SectionTitle>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {['Se libérer', 'Se reconnecter', 'Se transformer', 'S\'épanouir', 'Guérir'].map(intention => (
+                  <label key={intention} className="flex items-center space-x-2 cursor-pointer">
+                    <Checkbox checked={formData.intentions.includes(intention)} onCheckedChange={() => handleIntentionChange(intention)} />
+                    <span>{intention}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <SectionTitle icon={Calendar}>Durées de séances proposées</SectionTitle>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {['30 min', '1h', '1h30', '2h+'].map(duration => (
+                  <label key={duration} className="flex items-center space-x-2 cursor-pointer">
+                    <Checkbox checked={formData.durations.includes(duration)} onCheckedChange={() => handleDurationChange(duration)} />
+                    <span>{duration}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <SectionTitle icon={MapPin}>Où je pratique</SectionTitle>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {['Cabinet', 'À domicile', 'En ligne'].map(location => (
+                  <label key={location} className="flex items-center space-x-2 cursor-pointer">
+                    <Checkbox checked={formData.locations.includes(location)} onCheckedChange={() => handleLocationChange(location)} />
+                    <span>{location}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <SectionTitle icon={Calendar}>Mes disponibilités</SectionTitle>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'].map(day => (
+                  <label key={day} className="flex items-center space-x-2 cursor-pointer">
+                    <Checkbox checked={formData.availabilityDays.includes(day)} onCheckedChange={() => handleAvailabilityDayChange(day)} />
+                    <span>{day}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <SectionTitle icon={UserCheck}>Mon approche *</SectionTitle>
               <Textarea id="approach" name="approach" value={formData.approach} onChange={handleChange} rows={3} required />
             </div>
 
             <div className="space-y-2">
-              <SectionTitle icon={MessageSquare}>Un message pour toi</SectionTitle>
+              <SectionTitle icon={MessageSquare}>Un message pour toi *</SectionTitle>
               <Textarea id="messageBienvenue" name="messageBienvenue" value={formData.messageBienvenue} onChange={handleChange} rows={2} required />
             </div>
 
