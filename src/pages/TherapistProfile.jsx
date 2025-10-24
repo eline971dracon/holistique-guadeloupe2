@@ -337,8 +337,8 @@ const TherapistProfile = () => {
                         </div>
                         <ul className="space-y-2">
                           {subcategories.map(subcategoryId => (
-                            <li key={subcategoryId} className="flex items-start text-foreground/80 text-sm">
-                              <Heart className="w-3 h-3 mr-2 text-emerald-400 flex-shrink-0 mt-1" />
+                            <li key={subcategoryId} className="flex items-start text-foreground text-base font-medium">
+                              <Heart className="w-4 h-4 mr-2 text-emerald-500 flex-shrink-0 mt-1" />
                               <span>{getSubcategoryLabel(categoryId, subcategoryId)}</span>
                             </li>
                           ))}
