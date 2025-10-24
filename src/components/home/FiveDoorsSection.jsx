@@ -41,8 +41,8 @@ const doorsData = [{
   discovery: 'En franchissant cette porte, tu pourrais vivre…',
   details: ['des cérémonies au tambour ou au feu sacré,', 'des massages énergétiques dynamisants,', 'des pratiques corporelles puissantes comme le breathwork,', 'des ateliers de créativité (peinture, chant, percussion).'],
   conclusion: 'Ici, tu rallumes ton étincelle et tu transformes tes ombres en force vitale.',
-  imageSrc: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/img_2050-BxkWZ.jpeg",
-  imageText: "Flammes dansantes d'un feu de camp la nuit",
+  imageSrc: "/IMG_2050 copy.JPG",
+  imageText: "Flammes orange et jaunes s'élevant dans la nuit avec étincelles",
   color: 'from-red-500/80 to-orange-600/80',
   borderColor: 'border-red-400',
   link: '/porte/feu'

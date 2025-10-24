@@ -119,13 +119,14 @@ const FeuPage = () => {
   };
 
   return (
-    <div className="pt-24 pb-12 min-h-screen mystical-gradient">
+    <div className="pt-24 pb-12 min-h-screen bg-cover bg-center bg-fixed relative" style={{ backgroundImage: `url('/IMG_2050 copy.JPG')` }}>
+      <div className="absolute inset-0 bg-black/40"></div>
       <Helmet>
         <title>Porte du Feu - Vitalité & Transformation</title>
         <meta name="description" content="Explorez la vitalité et la transformation à travers des rituels et parcours connectés à l'élément Feu." />
       </Helmet>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
