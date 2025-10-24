@@ -22,13 +22,13 @@ const QuizPage = () => {
     setQuizState('in_progress');
   };
   
-  const handleAnswer = (freq) => {
+  const handleAnswer = async (freq) => {
     const newAnswers = [...answers, freq];
     setAnswers(newAnswers);
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      const { result, therapist } = calculateResult(newAnswers);
+      const { result, therapist } = await calculateResult(newAnswers);
       const IconComponent = LucideIcons[result.icon] || LucideIcons.Heart;
       setResultData({ result: {...result, icon: IconComponent }, therapist });
       setQuizState('finished');

@@ -13,13 +13,13 @@ const QuizPractitionerCard = ({ therapist, result }) => {
         transition={{ duration: 0.8 }} 
         className={`crystal-card rounded-3xl p-8 text-center border-2 ${result.color.replace('from-', 'border-').split(' ')[0]}`}
       >
-        <img src={therapist.image} alt={`Photo de ${therapist.name}`} className="w-40 h-40 object-cover rounded-full mx-auto mb-6 shadow-lg" />
+        <img src={therapist.profile_photo_url || therapist.portrait_photo_url || '/placeholder-therapist.jpg'} alt={`Photo de ${therapist.name}`} className="w-40 h-40 object-cover rounded-full mx-auto mb-6 shadow-lg" />
         <div className={`inline-flex items-center gap-2 px-4 py-1 rounded-full text-sm font-semibold mb-4 bg-gradient-to-r ${result.color} text-white`}>
           <TherapistIcon className="w-4 h-4" /> {result.vibrationKey}
         </div>
         <h2 className="text-4xl font-bold mb-3 aura-text font-['Dancing_Script']">{therapist.name}</h2>
-        <p className="text-lg text-foreground/80 italic mb-4">« {therapist.mantraSoin || therapist.mantra} »</p>
-        <p className="text-foreground/90 mb-8">{therapist.messageBienvenue || "Un message de bienvenue vous attend."}</p>
+        <p className="text-lg text-foreground/80 italic mb-4">« {therapist.vibrational_phrase || "Une phrase vibratoire vous attend."} »</p>
+        <p className="text-foreground/90 mb-8">{therapist.message_bienvenue || therapist.mission || "Un message de bienvenue vous attend."}</p>
         
         <Link to={`/therapeute/${therapist.id}`}>
             <Button size="lg" className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white">

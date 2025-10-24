@@ -1,4 +1,4 @@
-import { getAllTherapists } from '@/lib/therapists';
+import { supabase } from '@/lib/customSupabaseClient';
 
 export const frequencies = {
   Terre: {
@@ -251,24 +251,38 @@ export function generateQuizQuestions() {
   return shuffleArray(finalQuestions).slice(0, 6);
 }
 
-export function calculateResult(finalAnswers) {
+export async function calculateResult(finalAnswers) {
     const counts = finalAnswers.reduce((acc, freq) => {
       acc[freq] = (acc[freq] || 0) + 1;
       return acc;
     }, {});
-  
+
     const maxCount = Math.max(...Object.values(counts));
     const dominantFrequencies = Object.keys(counts).filter(freq => counts[freq] === maxCount);
-  
+
     const finalFrequencyKey = dominantFrequencies.length > 1
       ? dominantFrequencies[Math.floor(Math.random() * dominantFrequencies.length)]
       : dominantFrequencies[0];
-  
-    const finalResult = frequencies[finalFrequencyKey];
-    
-    const allTherapists = getAllTherapists();
-    const matching = shuffleArray([...allTherapists]).filter(t => t.elements.includes(finalResult.vibrationKey));
-    const selectedTherapist = matching.length > 0 ? matching[0] : null;
 
-    return { result: finalResult, therapist: selectedTherapist };
+    const finalResult = frequencies[finalFrequencyKey];
+
+    try {
+      const { data: therapists, error } = await supabase
+        .from('therapists')
+        .select('*')
+        .contains('elements', [finalResult.vibrationKey]);
+
+      if (error) {
+        console.error('Error fetching therapists:', error);
+        return { result: finalResult, therapist: null };
+      }
+
+      const matching = therapists ? shuffleArray([...therapists]) : [];
+      const selectedTherapist = matching.length > 0 ? matching[0] : null;
+
+      return { result: finalResult, therapist: selectedTherapist };
+    } catch (error) {
+      console.error('Error in calculateResult:', error);
+      return { result: finalResult, therapist: null };
+    }
 }
