@@ -64,6 +64,7 @@ function App() {
         <Route path="/inscription-artiste" element={<CreatorRegistrationPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/connexion" element={<LoginPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin-login" element={<AdminLoginPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         <Route path="/admin/edit-therapist/:id" element={<AdminEditTherapistPage />} />
