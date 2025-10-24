@@ -55,8 +55,8 @@ const doorsData = [{
   discovery: 'En franchissant cette porte, tu pourrais expérimenter…',
   details: ['des séances de respiration consciente,', 'des pratiques de méditation et de yoga,', 'des cercles de parole et de partage,', 'des ateliers d’écriture, de poésie ou de chant inspiré.'],
   conclusion: 'Ici, tu respires, tu t’allèges et tu laisses entrer les nouvelles perspectives.',
-  imageSrc: "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/a2b26adbc3c05b325cc17599b65d5e86.jpg",
-  imageText: "Champ d'herbes de pampas balayées par le vent au coucher du soleil",
+  imageSrc: "/IMG_2054.JPG",
+  imageText: "Herbes hautes balayées par le vent au coucher du soleil",
   color: 'from-slate-400/80 to-gray-500/80',
   borderColor: 'border-slate-300',
   link: '/porte/air'
