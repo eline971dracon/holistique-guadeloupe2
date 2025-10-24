@@ -211,8 +211,14 @@ const MyInnerJourneyPage = () => {
   };
 
   const handleOptionSelect = (key, value) => {
-    setFormData({ ...formData, [key]: value });
-    handleNext();
+    const updatedFormData = { ...formData, [key]: value };
+    setFormData(updatedFormData);
+
+    if (currentStepIndex < journeySteps.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+    } else {
+      navigate('/mon-voyage-interieur/resultats', { state: { formData: updatedFormData } });
+    }
   };
   
   const handleExperienceChange = (categoryId, subcategoryId, checked) => {
