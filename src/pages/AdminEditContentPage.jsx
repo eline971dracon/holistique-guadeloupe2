@@ -306,7 +306,7 @@ const AdminEditContentPage = () => {
 
               {servicesContent.map((service, index) => (
                 <div key={service.id} className="p-6 border rounded-lg space-y-4">
-                  <h3 className="text-xl font-semibold">Service {index + 1}</h3>
+                  <h3 className="text-xl font-semibold">{service.title}</h3>
 
                   <div>
                     <Label>Titre</Label>
@@ -317,7 +317,7 @@ const AdminEditContentPage = () => {
                   </div>
 
                   <div>
-                    <Label>Description courte</Label>
+                    <Label>Description courte (affichée sur la liste)</Label>
                     <Textarea
                       value={service.description}
                       onChange={(e) => handleServiceChange(index, 'description', e.target.value)}
@@ -326,11 +326,12 @@ const AdminEditContentPage = () => {
                   </div>
 
                   <div>
-                    <Label>Description complète</Label>
+                    <Label>Description complète (affichée sur la page détail - séparée par | pour les paragraphes)</Label>
                     <Textarea
                       value={service.full_description}
                       onChange={(e) => handleServiceChange(index, 'full_description', e.target.value)}
-                      rows={6}
+                      rows={10}
+                      placeholder="Paragraphe 1|Paragraphe 2|Paragraphe 3..."
                     />
                   </div>
 
@@ -348,6 +349,39 @@ const AdminEditContentPage = () => {
                         value={service.duration}
                         onChange={(e) => handleServiceChange(index, 'duration', e.target.value)}
                       />
+                    </div>
+                  </div>
+
+                  <div className="border-t pt-4 mt-4">
+                    <h4 className="font-semibold mb-3">Détails du service</h4>
+
+                    <div className="space-y-3">
+                      <div>
+                        <Label>Bienfaits</Label>
+                        <Textarea
+                          value={service.detail_bienfaits || ''}
+                          onChange={(e) => handleServiceChange(index, 'detail_bienfaits', e.target.value)}
+                          rows={2}
+                        />
+                      </div>
+
+                      <div>
+                        <Label>Éléments utilisés</Label>
+                        <Textarea
+                          value={service.detail_elements || ''}
+                          onChange={(e) => handleServiceChange(index, 'detail_elements', e.target.value)}
+                          rows={2}
+                        />
+                      </div>
+
+                      <div>
+                        <Label>Déroulement</Label>
+                        <Textarea
+                          value={service.detail_deroulement || ''}
+                          onChange={(e) => handleServiceChange(index, 'detail_deroulement', e.target.value)}
+                          rows={2}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
