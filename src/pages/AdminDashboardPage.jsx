@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Shield, Users, Palette, LogOut, RefreshCw, CheckCircle, XCircle, Edit } from 'lucide-react';
+import { Shield, Users, Palette, LogOut, RefreshCw, CheckCircle, XCircle, Edit, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -146,7 +146,7 @@ const AdminDashboardPage = () => {
           </Button>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
           <div className="crystal-card p-6 rounded-2xl">
             <div className="flex items-center gap-3 mb-2">
               <Users className="w-6 h-6 text-emerald-500" />
@@ -160,6 +160,13 @@ const AdminDashboardPage = () => {
               <h3 className="text-2xl font-bold">Artistes Créateurs</h3>
             </div>
             <p className="text-4xl font-bold text-purple-500">{creators.length}</p>
+          </div>
+          <div className="crystal-card p-6 rounded-2xl cursor-pointer hover:shadow-xl transition-shadow" onClick={() => navigate('/admin/edit-content')}>
+            <div className="flex items-center gap-3 mb-2">
+              <FileText className="w-6 h-6 text-blue-500" />
+              <h3 className="text-2xl font-bold">Contenu</h3>
+            </div>
+            <p className="text-lg text-blue-500 mt-2">Gérer</p>
           </div>
         </div>
 

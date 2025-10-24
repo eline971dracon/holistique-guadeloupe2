@@ -32,6 +32,7 @@ import AdminLoginPage from '@/pages/AdminLoginPage';
 import AdminDashboardPage from '@/pages/AdminDashboardPage';
 import AdminEditTherapistPage from '@/pages/AdminEditTherapistPage';
 import AdminEditCreatorPage from '@/pages/AdminEditCreatorPage';
+import AdminEditContentPage from '@/pages/AdminEditContentPage';
 import { Toaster } from '@/components/ui/toaster';
 import ScrollToTop from '@/components/ScrollToTop';
 
@@ -69,6 +70,7 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         <Route path="/admin/edit-therapist/:id" element={<AdminEditTherapistPage />} />
         <Route path="/admin/edit-creator/:id" element={<AdminEditCreatorPage />} />
+        <Route path="/admin/edit-content" element={<AdminEditContentPage />} />
         <Route path="/mon-compte/modifier-profil" element={<EditTherapistProfilePage />} />
         <Route path="/mon-compte/modifier-profil-createur" element={<EditCreatorProfilePage />} />
         <Route path="/edit-therapist-profile/:id" element={<EditTherapistProfilePage />} />
