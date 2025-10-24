@@ -337,8 +337,8 @@ const TherapistProfile = () => {
                         </div>
                         <ul className="space-y-2">
                           {subcategories.map(subcategoryId => (
-                            <li key={subcategoryId} className="flex items-start text-gray-800 text-base font-medium">
-                              <Heart className="w-4 h-4 mr-2 text-emerald-600 flex-shrink-0 mt-1" />
+                            <li key={subcategoryId} className="flex items-start text-slate-600 text-base font-medium">
+                              <Heart className="w-4 h-4 mr-2 text-teal-500 flex-shrink-0 mt-1" />
                               <span>{getSubcategoryLabel(categoryId, subcategoryId)}</span>
                             </li>
                           ))}
@@ -349,7 +349,7 @@ const TherapistProfile = () => {
                 </div>
                 {therapist.other_practice && (
                   <div className="mt-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-4">
-                    <p className="text-gray-800 text-base font-medium">{therapist.other_practice}</p>
+                    <p className="text-slate-600 text-base font-medium">{therapist.other_practice}</p>
                   </div>
                 )}
               </div>
