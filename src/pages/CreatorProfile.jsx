@@ -51,12 +51,16 @@ const CreatorProfile = () => {
   }, [id, navigate, toast]);
 
   const handleContact = () => {
-    if (creator.email) {
-      window.location.href = `mailto:${creator.email}`;
+    if (creator.phone) {
+      toast({
+        title: 'Numéro de téléphone',
+        description: creator.phone,
+        duration: 10000
+      });
     } else {
       toast({
         title: 'Contact',
-        description: 'Aucune adresse email disponible pour ce créateur.'
+        description: 'Aucun numéro de téléphone disponible pour ce créateur.'
       });
     }
   };
@@ -266,50 +270,14 @@ const CreatorProfile = () => {
               </div>
             )}
 
-            <div className="crystal-card rounded-3xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Mail className="w-8 h-8 text-purple-500" />
-                <h2 className="text-2xl font-bold aura-text">Informations de Contact</h2>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-foreground/70 mb-1">Email</p>
-                    <a
-                      href={`mailto:${creator.email}`}
-                      className="text-lg text-primary hover:underline break-all"
-                    >
-                      {creator.email}
-                    </a>
-                  </div>
+            {(creator.social_links?.instagram || creator.social_links?.facebook || creator.social_links?.website) && (
+              <div className="crystal-card rounded-3xl p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <Mail className="w-8 h-8 text-purple-500" />
+                  <h2 className="text-2xl font-bold aura-text">Informations de Contact</h2>
                 </div>
-
-                {creator.phone && (
-                  <div className="flex items-start gap-3">
-                    <Phone className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm text-foreground/70 mb-1">Téléphone</p>
-                      <a
-                        href={`tel:${creator.phone}`}
-                        className="text-lg text-primary hover:underline"
-                      >
-                        {creator.phone}
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-foreground/70 mb-1">Localisation</p>
-                    <p className="text-lg">{creator.commune}</p>
-                  </div>
-                </div>
-
-                {(creator.social_links?.instagram || creator.social_links?.facebook || creator.social_links?.website) && (
-                  <div className="pt-4 border-t border-border/50">
                     <p className="text-sm text-foreground/70 mb-3">Réseaux Sociaux</p>
                     <div className="flex gap-3">
                       {creator.social_links?.instagram && (
@@ -350,9 +318,9 @@ const CreatorProfile = () => {
                       )}
                     </div>
                   </div>
-                )}
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="crystal-card rounded-3xl p-8 bg-gradient-to-br from-purple-500/10 to-violet-600/10 border-2 border-purple-500/20">
               <div className="text-center">
