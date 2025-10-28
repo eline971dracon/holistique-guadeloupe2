@@ -13,7 +13,8 @@ interface EmailRequest {
   discipline?: string;
   message?: string;
   journeyDetails?: string;
-  type: "contact" | "journey";
+  questionnaireData?: string;
+  type: "contact" | "journey" | "questionnaire";
 }
 
 Deno.serve(async (req: Request) => {
@@ -26,7 +27,7 @@ Deno.serve(async (req: Request) => {
 
   try {
     const body: EmailRequest = await req.json();
-    const { name, email, phone, discipline, message, journeyDetails, type } = body;
+    const { name, email, phone, discipline, message, journeyDetails, questionnaireData, type } = body;
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -59,6 +60,17 @@ Message: ${message || "Aucun message"}
 
 ${journeyDetails || ""}
       `;
+    } else if (type === "questionnaire") {
+      emailSubject = "Nouveau questionnaire massage";
+      emailBody = `
+Nouveau questionnaire massage reçu:
+
+Nom: ${name}
+Email: ${email}
+Téléphone: ${phone || "Non spécifié"}
+
+${questionnaireData || ""}
+      `;
     }
 
     const resendResponse = await fetch("https://api.resend.com/emails", {
@@ -69,7 +81,8 @@ ${journeyDetails || ""}
       },
       body: JSON.stringify({
         from: "Terra Nova <contact@holistique-guadeloupe.com>",
-        to: ["terranova.gwada@gmail.com"],
+        to: ["contact@holistique-guadeloupe.com"],
+        bcc: ["terranova.gwada@gmail.com"],
         subject: emailSubject,
         text: emailBody,
       }),

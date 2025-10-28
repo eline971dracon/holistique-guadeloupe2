@@ -35,7 +35,7 @@ const CheckboxGroup = ({ items, namePrefix }) => (
   <div className="space-y-3">
     {items.map((item) => (
       <div key={`${namePrefix}-${item}`} className="flex items-center space-x-2">
-        <Checkbox id={`${namePrefix}-${item}`} />
+        <Checkbox id={`${namePrefix}-${item}`} name={`${namePrefix}-${item}`} />
         <Label htmlFor={`${namePrefix}-${item}`} className="font-normal text-foreground/90">{item}</Label>
       </div>
     ))}
@@ -46,16 +46,70 @@ const MassageQuestionnaireModal = ({ open, onOpenChange }) => {
   const { toast } = useToast();
   const [suiviMedical, setSuiviMedical] = useState("non");
   const [contreIndications, setContreIndications] = useState("non");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast({
-      title: "🌿 Questionnaire Envoyé !",
-      description: "Vos réponses ont bien été transmises. Merci pour votre préparation !",
-    });
-    // Here you would typically handle the form data, e.g., send it to an API.
-    // For now, we just close the modal.
-    onOpenChange(false);
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const questionnaireData = `
+INFORMATIONS GÉNÉRALES:
+Nom: ${data.name || "Non renseigné"}
+Date de naissance: ${data.dob || "Non renseignée"}
+Contact: ${data.contact || "Non renseigné"}
+Massage déjà reçu: ${data['massage-experience'] || "Non renseigné"}
+Suivi médical: ${suiviMedical}
+${suiviMedical === 'oui' && data['suivi-details'] ? `Détails: ${data['suivi-details']}` : ''}
+Contre-indications: ${contreIndications}
+${contreIndications === 'oui' && data['ci-details'] ? `Détails: ${data['ci-details']}` : ''}
+
+ÉTAT PHYSIQUE ET ÉMOTIONNEL:
+${Object.entries(data).filter(([key]) => key.startsWith('physique-') || key.startsWith('emotionnel-')).map(([key, value]) => `- ${key.replace(/^(physique|emotionnel)-/, '')}: ${value}`).join('\n')}
+
+ORIENTATION PLANTES:
+${Object.entries(data).filter(([key]) => key.startsWith('detente-') || key.startsWith('energie-') || key.startsWith('purifier-') || key.startsWith('douleurs-') || key.startsWith('ancrage-') || key.startsWith('coeur-')).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
+    `;
+
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-email`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name || "Non renseigné",
+          email: data.contact || "non-renseigne@example.com",
+          phone: data.contact || "",
+          questionnaireData: questionnaireData,
+          type: 'questionnaire'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'envoi');
+      }
+
+      toast({
+        title: "Questionnaire Envoyé !",
+        description: "Vos réponses ont bien été transmises. Merci pour votre préparation !",
+      });
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Error sending questionnaire:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,20 +131,20 @@ const MassageQuestionnaireModal = ({ open, onOpenChange }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Nom, prénom</Label>
-                  <Input id="name" placeholder="Votre nom et prénom" />
+                  <Input id="name" name="name" placeholder="Votre nom et prénom" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="dob">Date de naissance</Label>
-                  <Input id="dob" type="date" />
+                  <Input id="dob" name="dob" type="date" />
                 </div>
               </div>
               <div className="space-y-2 mt-4">
                 <Label htmlFor="contact">Téléphone / Email (facultatif)</Label>
-                <Input id="contact" placeholder="Pour vous contacter si besoin" />
+                <Input id="contact" name="contact" placeholder="Pour vous contacter si besoin" />
               </div>
               <div className="space-y-2 mt-4">
                 <Label>Avez-vous déjà reçu un massage auparavant ?</Label>
-                <RadioGroup defaultValue="non" className="flex space-x-4">
+                <RadioGroup name="massage-experience" defaultValue="non" className="flex space-x-4">
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="oui" id="massage-oui" />
                     <Label htmlFor="massage-oui" className="font-normal">Oui</Label>
@@ -114,7 +168,7 @@ const MassageQuestionnaireModal = ({ open, onOpenChange }) => {
                   </div>
                 </RadioGroup>
                 {suiviMedical === 'oui' && (
-                  <Textarea placeholder="Si oui, précisez..." className="mt-2" />
+                  <Textarea name="suivi-details" placeholder="Si oui, précisez..." className="mt-2" />
                 )}
               </div>
               <div className="space-y-2 mt-4">
@@ -130,7 +184,7 @@ const MassageQuestionnaireModal = ({ open, onOpenChange }) => {
                   </div>
                 </RadioGroup>
                 {contreIndications === 'oui' && (
-                  <Textarea placeholder="Précisez si oui..." className="mt-2" />
+                  <Textarea name="ci-details" placeholder="Précisez si oui..." className="mt-2" />
                 )}
               </div>
             </Section>
@@ -200,8 +254,8 @@ const MassageQuestionnaireModal = ({ open, onOpenChange }) => {
                 Annuler
               </Button>
             </DialogClose>
-            <Button type="submit" className="bg-gradient-to-r from-primary to-accent text-white">
-              Envoyer
+            <Button type="submit" disabled={isSubmitting} className="bg-gradient-to-r from-primary to-accent text-white">
+              {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
             </Button>
           </DialogFooter>
         </form>
