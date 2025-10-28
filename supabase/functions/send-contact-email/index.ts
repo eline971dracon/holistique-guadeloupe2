@@ -28,10 +28,10 @@ Deno.serve(async (req: Request) => {
     const body: EmailRequest = await req.json();
     const { name, email, phone, discipline, message, journeyDetails, type } = body;
 
-    const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
-    
-    if (!SENDGRID_API_KEY) {
-      throw new Error("SENDGRID_API_KEY is not configured");
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
     }
 
     let emailSubject = "";
@@ -61,33 +61,24 @@ ${journeyDetails || ""}
       `;
     }
 
-    const sendGridResponse = await fetch("https://api.sendgrid.com/v3/mail/send", {
+    const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${SENDGRID_API_KEY}`,
+        "Authorization": `Bearer ${RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        personalizations: [
-          {
-            to: [{ email: "terranova.gwada@gmail.com" }],
-            subject: emailSubject,
-          },
-        ],
-        from: { email: "noreply@terranova.com", name: "Terra Nova" },
-        content: [
-          {
-            type: "text/plain",
-            value: emailBody,
-          },
-        ],
+        from: "Terra Nova <contact@holistique-guadeloupe.com>",
+        to: ["terranova.gwada@gmail.com"],
+        subject: emailSubject,
+        text: emailBody,
       }),
     });
 
-    if (!sendGridResponse.ok) {
-      const errorText = await sendGridResponse.text();
-      console.error("SendGrid error:", errorText);
-      throw new Error(`SendGrid API error: ${sendGridResponse.status}`);
+    if (!resendResponse.ok) {
+      const errorText = await resendResponse.text();
+      console.error("Resend error:", errorText);
+      throw new Error(`Resend API error: ${resendResponse.status}`);
     }
 
     return new Response(
