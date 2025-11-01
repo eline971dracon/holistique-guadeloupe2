@@ -16,7 +16,7 @@ const ElineServicesSection = ({
       description: "🚧 Cette fonctionnalité n'est pas encore implémentée—mais ne t'inquiète pas ! Tu peux la demander dans ton prochain message ! 🚀"
     });
   };
-  return <section className="py-20">
+  return <section id="services-section" className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div initial={{
         opacity: 0,

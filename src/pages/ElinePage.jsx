@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Heart, Waves, Sparkles, Droplets } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import ElineHeroSection from '@/components/eline/ElineHeroSection';
 import ElineServicesSection from '@/components/eline/ElineServicesSection';
 import ElineAboutSection from '@/components/eline/ElineAboutSection';
@@ -17,6 +18,7 @@ const iconMap = {
 const ElinePage = () => {
   const [services, setServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -47,6 +49,17 @@ const ElinePage = () => {
 
     fetchServices();
   }, []);
+
+  useEffect(() => {
+    if (location.hash === '#services-section' && !isLoading) {
+      setTimeout(() => {
+        const element = document.getElementById('services-section');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [location, isLoading]);
 
   const elineData = {
     name: "Éline",
