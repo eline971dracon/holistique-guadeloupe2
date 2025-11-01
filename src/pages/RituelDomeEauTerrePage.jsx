@@ -93,7 +93,15 @@ const RituelDomeEauTerrePage = () => {
         }} transition={{
           duration: 0.5
         }} className="mb-8">
-          <Button onClick={() => navigate(-1)} variant="ghost" className="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors duration-300 group">
+          <Button onClick={() => {
+              navigate('/eline');
+              setTimeout(() => {
+                const element = document.getElementById('services-section');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'instant', block: 'start' });
+                }
+              }, 50);
+            }} variant="ghost" className="inline-flex items-center text-emerald-400 hover:text-emerald-300 transition-colors duration-300 group">
             <ChevronLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
             Retour aux soins d'Éline
           </Button>
