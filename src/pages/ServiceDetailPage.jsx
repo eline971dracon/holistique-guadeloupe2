@@ -31,9 +31,9 @@ const ServiceDetailPage = () => {
         if (data) {
           const longDescription = data.full_description ? data.full_description.split('|') : [];
 
-          let imageUrl = "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/f35f1a5e3103402376c29b1fd160da11.jpg";
+          let imageUrl = data.image_url || "https://horizons-cdn.hostinger.com/31d0e86a-732d-4c00-87e3-8bc851042c67/f35f1a5e3103402376c29b1fd160da11.jpg";
 
-          if (serviceKey === 'rituel_terre_vagues_feu') {
+          if (serviceKey === 'rituel_terre_vagues_feu' && !data.image_url) {
             imageUrl = "/plage.JPG";
           }
 
